@@ -5,7 +5,7 @@ bin = DisableMonitor
 src = DisableMonitor.c
 
 # flags 
-flags = -Wall -framework ApplicationServices
+flags = -Wall -framework ApplicationServices -framework IOKit
 
 
 DisableMonitor:

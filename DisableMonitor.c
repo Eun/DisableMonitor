@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <libgen.h>
 #include <ApplicationServices/ApplicationServices.h>
+#include <IOKit/graphics/IOGraphicsLib.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,6 +33,106 @@ extern "C" {
 }
 #endif
 
+io_service_t IOServicePortFromCGDisplayID(CGDirectDisplayID displayID)
+{
+    io_iterator_t iter;
+    io_service_t serv, servicePort = 0;
+    
+    CFMutableDictionaryRef matching = IOServiceMatching("IODisplayConnect");
+    
+    // releases matching for us
+    kern_return_t err = IOServiceGetMatchingServices(kIOMasterPortDefault,
+                             matching,
+                             &iter);
+    if (err)
+    {
+        return 0;
+    }
+    
+    while ((serv = IOIteratorNext(iter)) != 0)
+    {
+        CFDictionaryRef info;
+        CFIndex vendorID, productID;
+        CFNumberRef vendorIDRef, productIDRef;
+        Boolean success;
+        
+        info = IODisplayCreateInfoDictionary(serv,
+                             kIODisplayOnlyPreferredName);
+        
+        vendorIDRef = CFDictionaryGetValue(info,
+                           CFSTR(kDisplayVendorID));
+        productIDRef = CFDictionaryGetValue(info,
+                            CFSTR(kDisplayProductID));
+        
+        success = CFNumberGetValue(vendorIDRef, kCFNumberCFIndexType,
+                                   &vendorID);
+        success &= CFNumberGetValue(productIDRef, kCFNumberCFIndexType,
+                                    &productID);
+
+        if (!success)
+        {
+            CFRelease(info);
+            continue;
+        }
+        
+        if (CGDisplayVendorNumber(displayID) != vendorID ||
+            CGDisplayModelNumber(displayID) != productID)
+        {
+            CFRelease(info);
+            continue;
+        }
+        
+        // we're a match
+        servicePort = serv;
+        CFRelease(info);
+        break;
+    }
+    
+    IOObjectRelease(iter);
+    return servicePort;
+}
+
+// Get the name of the specified display
+//
+char* getDisplayName(CGDirectDisplayID displayID)
+{
+    char* name;
+    CFDictionaryRef info, names;
+    CFStringRef value;
+    CFIndex size;
+    
+    io_service_t serv = IOServicePortFromCGDisplayID(displayID);
+    if (!serv)
+    {
+        return strdup("Unknown");
+    }
+    
+    info = IODisplayCreateInfoDictionary(serv,
+                         kIODisplayOnlyPreferredName);
+    
+    IOObjectRelease(serv);
+    
+    names = CFDictionaryGetValue(info, CFSTR(kDisplayProductName));
+    
+    if (!names || !CFDictionaryGetValueIfPresent(names, CFSTR("en_US"),
+                             (const void**) &value))
+    {
+        //_glfwInputError(GLFW_PLATFORM_ERROR, "Failed to retrieve display name");
+        CFRelease(info);
+        return strdup("Unknown");
+    }
+    
+    size = CFStringGetMaximumSizeForEncoding(CFStringGetLength(value),
+                         kCFStringEncodingUTF8);
+    name = calloc(size + 1, sizeof(char));
+    CFStringGetCString(value, name, size, kCFStringEncodingUTF8);
+    
+    CFRelease(info);
+    
+    return name;
+}
+
+
 int main(int argc, const char * argv[])
 {
     
@@ -41,14 +142,17 @@ int main(int argc, const char * argv[])
         uint32_t nDisplays;
         CGGetOnlineDisplayList(0x10, displays, &nDisplays);
         
-        printf("DisableMonitor - http://github.com/Eun/DisableMonitor\n\nusage: %s <display id>\n\n", basename((char*)argv[0]));
+        printf("DisableMonitor 1.1 - http://github.com/Eun/DisableMonitor\n\nusage: %s <display id>\n\n", basename((char*)argv[0]));
         
-        printf("Display ID | Metrics   | Main Display? | Active?\n");
+        printf("Name       | Display ID | Metrics   | Main Display? | Active?\n");
         if (nDisplays > 0)
         {
             for (int i = 0; i < nDisplays; i++)
             {
-                printf("%10d | %4dx%-4d | %-13s | %-s\n", displays[i], (int)CGDisplayPixelsWide(displays[i]), (int)CGDisplayPixelsHigh(displays[i]), CGDisplayIsMain(displays[i]) ? "Yes" : "No", CGDisplayIsActive(displays[i]) ? "Yes" : "No");
+                char *name = getDisplayName(displays[i]);
+                if (strlen(name) > 10)
+                    name[9] = 0;
+                printf("%-10s | %10d | %4dx%-4d | %-13s | %-s\n", name, displays[i], (int)CGDisplayPixelsWide(displays[i]), (int)CGDisplayPixelsHigh(displays[i]), CGDisplayIsMain(displays[i]) ? "Yes" : "No", CGDisplayIsActive(displays[i]) ? "Yes" : "No");
             }
         }
         else
