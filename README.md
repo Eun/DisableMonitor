@@ -1,6 +1,7 @@
 DisableMonitor
 ==============
-Disables a Monitor on your Mac Computer
+Disables / Enables a Monitor on your Mac Computer.
 
 
 
+![](https://raw.githubusercontent.com/Eun/DisableMonitor/res/screenshot1.png)
