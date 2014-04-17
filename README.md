@@ -1,6 +1,8 @@
 DisableMonitor
 ==============
-Disables / Enables a Monitor on your Mac Computer.
+Adds the mission Feature to disable a monitor to your Mac!
+
+Easily disable or enable a monitor on your Mac!
 
 
 
