@@ -1,0 +1,11 @@
+/* Localized versions of Info.plist keys */
+"MENU_DISABLE" = "Disable";
+"MENU_ENABLE" = "Enable";
+"MENU_DETECT" = "Detect Monitors";
+"MENU_NO_MONITOS" = "No displays detected";
+"ALERT_OK" = "OK";
+"ALERT_CANCEL" = "Cancel";
+"ALERT_ERROR" = "Error";
+"ALERT_WARNING" = "Warning";
+"ALERT_MONITOR_NOT_ACTIVE" = "Monitor is not active!\nThe monitor needs to be active to change the resolution!";
+"ALERT_LAST_MONITOR" = "You are disabling your last active monitor, you wont be able to see anything continue?";

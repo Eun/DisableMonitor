@@ -14,3 +14,4 @@ Changelog
 * Resolution can now be changed!
 * Bugfixes
 * improved stability
+* added German language
