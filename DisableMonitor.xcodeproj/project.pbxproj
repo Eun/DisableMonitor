@@ -11,6 +11,7 @@
 		592CED7E18FEB66E00FDDF65 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 592CED7D18FEB66E00FDDF65 /* IOKit.framework */; };
 		592CED8118FEBDB300FDDF65 /* GLFW.m in Sources */ = {isa = PBXBuildFile; fileRef = 592CED8018FEBDB300FDDF65 /* GLFW.m */; };
 		592CED8718FEC42800FDDF65 /* status_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 592CED8618FEC42800FDDF65 /* status_icon.png */; };
+		598E9892193DC99B005DEB10 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 598E9891193DC99B005DEB10 /* MainMenu.xib */; };
 		59B5766718FFDC6700B57E77 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 59B5766618FFDC6700B57E77 /* icon.icns */; };
 		8D11072B0486CEB800E47090 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* Localizable.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -30,7 +31,8 @@
 		592CED7D18FEB66E00FDDF65 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		592CED8018FEBDB300FDDF65 /* GLFW.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLFW.m; sourceTree = "<group>"; };
 		592CED8618FEC42800FDDF65 /* status_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_icon.png; sourceTree = "<group>"; };
-		595F6F28193DC2ED00B7323D /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		598E9891193DC99B005DEB10 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		598E9893193DC9DD005DEB10 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		59B5766618FFDC6700B57E77 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* DisableMonitor-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "DisableMonitor-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* DisableMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DisableMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,6 +90,7 @@
 		29B97314FDCFA39411CA2CEA /* DisableMonitor */ = {
 			isa = PBXGroup;
 			children = (
+				598E9891193DC99B005DEB10 /* MainMenu.xib */,
 				59B5766618FFDC6700B57E77 /* icon.icns */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -181,6 +184,7 @@
 				8D11072B0486CEB800E47090 /* Localizable.strings in Resources */,
 				59B5766718FFDC6700B57E77 /* icon.icns in Resources */,
 				592CED8718FEC42800FDDF65 /* status_icon.png in Resources */,
+				598E9892193DC99B005DEB10 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +208,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				089C165DFE840E0CC02AAC07 /* English */,
-				595F6F28193DC2ED00B7323D /* de */,
+				598E9893193DC9DD005DEB10 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
