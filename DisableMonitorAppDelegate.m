@@ -26,6 +26,7 @@
 
 extern io_service_t IOServicePortFromCGDisplayID(CGDirectDisplayID displayID);
 extern CGError CGSConfigureDisplayEnabled(CGDisplayConfigRef, CGDirectDisplayID, bool);
+extern CGDisplayErr CGSGetDisplayList(CGDisplayCount maxDisplays, CGDirectDisplayID * onlineDspys, CGDisplayCount * dspyCnt);
 
 
 NSMutableArray *monitorConfigs;
@@ -253,8 +254,9 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
 {
     CGDirectDisplayID    displays[0x10];
     CGDisplayCount  dspCount = 0;
+    CGDisplayErr err = CGSGetDisplayList(0x10, displays, &dspCount);
     
-    if (CGSGetDisplayList(0x10, displays, &dspCount) == noErr)
+    if (err == 0)
     {
         for(int i = 0; i < dspCount; i++)
         {
