@@ -2,8 +2,7 @@ DisableMonitor
 ==============
 Adds the missing feature to disable a monitor on your Mac!
 
-Easily disable or enable a monitor on your Mac!
-
+Easily disable, enable or change the resolution of a monitor! 
 
 
 ![](https://raw.githubusercontent.com/Eun/DisableMonitor/res/screenshot1.png)
