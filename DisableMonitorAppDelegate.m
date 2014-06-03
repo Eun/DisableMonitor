@@ -67,9 +67,9 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
     
     NSAlert *alert = [[NSAlert alloc] init];
     [alert setInformativeText:error];
-    [alert addButtonWithTitle:@"OK"];
+    [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK",@"ALERT_OK")];
     [alert setAlertStyle:NSCriticalAlertStyle];
-    [alert setMessageText:@"Error"];
+    [alert setMessageText:NSLocalizedString(@"ALERT_ERROR",@"ALERT_ERROR")];
     [alert runModal];
     [alert release];
 }
@@ -207,11 +207,11 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
         if (err == 0 && nDisplays - 1 == 0)
         {
             NSAlert *alert = [[NSAlert alloc] init];
-            [alert setInformativeText:@"You are disabling your last active monitor, you wont be able to see anything continue?"];
-            [alert addButtonWithTitle:@"OK"];
-            [alert addButtonWithTitle:@"Cancel"];
+            [alert setInformativeText:NSLocalizedString(@"ALERT_LAST_MONITOR",@"ALERT_LAST_MONITOR")];
+            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK",@"ALERT_OK")];
+            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_CANCEL",@"ALERT_CANCEL")];
             [alert setAlertStyle:NSCriticalAlertStyle];
-            [alert setMessageText:@"Warning"];
+            [alert setMessageText:NSLocalizedString(@"ALERT_WARNING",@"ALERT_WARNING")];
             if ([alert runModal] != NSAlertFirstButtonReturn)
             {
                 [alert release];
@@ -240,10 +240,10 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
     else
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText:@"Monitor is not active!\nThe monitor needs to be active to change the resolution!"];
-        [alert addButtonWithTitle:@"OK"];
+        [alert setInformativeText:NSLocalizedString(@"ALERT_MONITOR_NOT_ACTIVE",@"ALERT_MONITOR_NOT_ACTIVE")];
+        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK",@"ALERT_OK")];
         [alert setAlertStyle:NSCriticalAlertStyle];
-        [alert setMessageText:@"Warning"];
+        [alert setMessageText:NSLocalizedString(@"ALERT_WARNING",@"ALERT_WARNING")];
         [alert runModal];
         [alert release];
     }
@@ -409,14 +409,14 @@ size_t bitDepth(CGDisplayModeRef mode) {
 
             if (bActive)
             {
-                subItem = [[NSMenuItem alloc] initWithTitle:@"Disable" action:@selector(MonitorClicked:)  keyEquivalent:@""];
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_DISABLE",@"MENU_DISABLE") action:@selector(MonitorClicked:)  keyEquivalent:@""];
                 [subItem setTag:displays[i]];
                 [subMenu insertItem:subItem atIndex:0];
                 [subItem release];
             }
             else
             {
-                subItem = [[NSMenuItem alloc] initWithTitle:@"Enable" action:@selector(MonitorClicked:)  keyEquivalent:@""];
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_ENABLE",@"MENU_ENABLE") action:@selector(MonitorClicked:)  keyEquivalent:@""];
                 [subItem setTag:displays[i]];
                 [subMenu insertItem:subItem atIndex:0];
                 [subItem release];
@@ -445,14 +445,14 @@ size_t bitDepth(CGDisplayModeRef mode) {
     }
     else
     {
-        NSMenuItem *noDisplays = [[NSMenuItem alloc] initWithTitle: @"No Displays Detected" action:nil keyEquivalent:@""];
+        NSMenuItem *noDisplays = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_NO_MONITOS",@"MENU_NO_MONITOS") action:nil keyEquivalent:@""];
         [statusMenu addItem:noDisplays];
         [noDisplays release];
     }
     
     [statusMenu addItem:[NSMenuItem separatorItem]];
     
-    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle: @"Detect Monitors" action:@selector(DetectMonitors:) keyEquivalent:@""];
+    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_DETECT",@"MENU_DETECT") action:@selector(DetectMonitors:) keyEquivalent:@""];
     [statusMenu addItem:menuItem];
     [menuItem release];
 }
