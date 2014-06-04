@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[DisableMonitorAppDelegate MoveAllWindows:to:]:DisableMonitorAppDelegate.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[app processIdentifier]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
