@@ -23,7 +23,7 @@
 
 @synthesize window;
 
-
+extern AXError _AXUIElementGetWindow(AXUIElementRef, CGWindowID* out);
 extern io_service_t IOServicePortFromCGDisplayID(CGDirectDisplayID displayID);
 extern CGError CGSConfigureDisplayEnabled(CGDisplayConfigRef, CGDirectDisplayID, bool);
 extern CGDisplayErr CGSGetDisplayList(CGDisplayCount maxDisplays, CGDirectDisplayID * onlineDspys, CGDisplayCount * dspyCnt);
@@ -35,9 +35,6 @@ NSMutableArray *monitorConfigs;
     monitorConfigs = NULL;
 }
 
-
-
-static void KeyArrayCallback(const void* key, const void* value, void* context) { CFArrayAppendValue(context, key);  }
 
 NSString* screenNameForDisplay(CGDirectDisplayID displayID)
 {
@@ -77,11 +74,94 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
 
 #define ShowError(...) [self ShowError:[NSString stringWithFormat:__VA_ARGS__]];
 
+-(void)MoveAllWindows:(CGDirectDisplayID) display to:(CGDirectDisplayID*)todisplay
+{
+    CFArrayRef windowList = CGWindowListCopyWindowInfo(kCGWindowListExcludeDesktopElements, kCGNullWindowID);
+    CGRect bounds = CGDisplayBounds(display);
+    CGRect dstbounds = CGDisplayBounds(todisplay);
+    for (NSDictionary *windowItem in ((NSArray *)windowList))
+    {
+        NSNumber *windowLayer = (NSNumber*)[windowItem objectForKey:(id)kCGWindowLayer];
+        if ([windowLayer intValue] == 0)
+        {
+            CGRect windowBounds;
+            CGRectMakeWithDictionaryRepresentation((CFDictionaryRef)[windowItem objectForKey:(id)kCGWindowBounds], &windowBounds);
+            if (CGRectContainsRect(bounds, windowBounds))
+            {
+                BOOL bSuccess = false;
+                NSNumber *windowNumber = (NSNumber*)[windowItem objectForKey:(id)kCGWindowNumber];
+                NSNumber *windowOwnerPid = (NSNumber*)[windowItem objectForKey:(id)kCGWindowOwnerPID];
+                AXUIElementRef appRef = AXUIElementCreateApplication([windowOwnerPid longValue]);
+                if (appRef != nil) {
+                    
+                    CFArrayRef _windows;
+                    if (AXUIElementCopyAttributeValues(appRef, kAXWindowsAttribute, 0, 100, &_windows) == kAXErrorSuccess)
+                    {
+                        for (int i = 0, len = CFArrayGetCount(_windows); i < len; i++)
+                        {
+                            AXUIElementRef _windowItem = CFArrayGetValueAtIndex(_windows,i);
+                            CGWindowID windowID;
+                            if (_AXUIElementGetWindow(_windowItem, &windowID) == kAXErrorSuccess)
+                            {
+                                if (windowID == windowNumber.longValue)
+                                {
+                                    NSPoint tmpPos;
+                                    tmpPos.x = dstbounds.origin.x;
+                                    tmpPos.y = dstbounds.origin.y;
+                                    CFTypeRef _position = (CFTypeRef)(AXValueCreate(kAXValueCGPointType, (const void *)&tmpPos));
+                                    if(AXUIElementSetAttributeValue(_windowItem,kAXPositionAttribute,(CFTypeRef*)_position) == kAXErrorSuccess){
+                                            bSuccess = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    CFRelease(appRef);
+                }
+                
+                if (!bSuccess)
+                {
+                    NSLog(@"Could not move window %ld of %ld", windowNumber.longValue, windowOwnerPid.longValue);
+                }
+            }
+        }
+        
+    }
+    CFRelease(windowList);
+}
+
 -(void)ToggleMonitor:(CGDirectDisplayID) display enabled:(Boolean) enabled
 {
+    
+
     CGError err;
     CGDisplayConfigRef config;
     @try {
+        
+        if (enabled == false)
+        {
+            CGDirectDisplayID    displays[0x10];
+            CGDisplayCount  nDisplays = 0;
+            
+            CGDisplayErr err = CGSGetDisplayList(0x10, displays, &nDisplays);
+            
+            if (err == 0 && nDisplays > 0)
+            {
+                for (int i = 0; i < nDisplays; i++)
+                {
+                    if (displays[i] == display)
+                        continue;
+                    if (!CGDisplayIsOnline(displays[i]))
+                        continue;
+                    if (!CGDisplayIsActive(displays[i]))
+                        continue;
+                    [self MoveAllWindows:display to:displays[i]];
+                    break;
+                }
+            }
+        }
+
+        
         err = CGBeginDisplayConfiguration (&config);
         if (err != 0)
         {
@@ -100,6 +180,8 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
             ShowError(@"Error in CGCompleteDisplayConfiguration: %d", err);
             return;
         }
+        
+        
     }
     @catch (NSException *exception) {
         

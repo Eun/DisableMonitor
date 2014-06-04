@@ -10,6 +10,9 @@ Easily disable or enable a monitor on your Mac!
 
 Changelog
 =========
+1.2:
+* Move windows from disabled monitor to an active one
+
 1.1: 
 * Resolution can now be changed!
 * Bugfixes
