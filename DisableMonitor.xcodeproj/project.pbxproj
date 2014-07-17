@@ -33,6 +33,7 @@
 		592CED8618FEC42800FDDF65 /* status_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_icon.png; sourceTree = "<group>"; };
 		598E9891193DC99B005DEB10 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		59B5766618FFDC6700B57E77 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
+		59E41D2A1977C71F00FD45A6 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* DisableMonitor-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "DisableMonitor-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* DisableMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DisableMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -122,6 +123,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				59E41D2A1977C71F00FD45A6 /* CoreServices.framework */,
 				592CED7D18FEB66E00FDDF65 /* IOKit.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
@@ -218,6 +220,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -229,7 +232,7 @@
 				INFOPLIST_FILE = "DisableMonitor-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = DisableMonitor;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -237,6 +240,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
@@ -245,31 +249,33 @@
 				INFOPLIST_FILE = "DisableMonitor-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = DisableMonitor;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_LINK_OBJC_RUNTIME = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_LINK_OBJC_RUNTIME = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};

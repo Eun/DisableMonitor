@@ -412,7 +412,7 @@ size_t bitDepth(CGDisplayModeRef mode) {
             
             for (int j = 0; j < monitors.count; j++)
             {
-                if ([monitors[j] caseInsensitiveCompare:monitors[i]] == NSOrderedSame)
+                if ([[monitors objectAtIndex:j] caseInsensitiveCompare:[monitors objectAtIndex:i]] == NSOrderedSame)
                 {
                     num++;
                     if (j < i)
@@ -424,9 +424,9 @@ size_t bitDepth(CGDisplayModeRef mode) {
             
             NSString *name;
             if (num > 1)
-                name = [NSString stringWithFormat:@"%@ (%d)", monitors[i], index];
+                name = [NSString stringWithFormat:@"%@ (%d)", [monitors objectAtIndex:i], index];
             else
-                name = monitors[i];
+                name = [monitors objectAtIndex:i];
             
             //NSMenuItem *displayItem = [[NSMenuItem alloc] initWithTitle: name  action:@selector(MonitorClicked:) keyEquivalent:@""];
             NSMenuItem *displayItem = [[NSMenuItem alloc] initWithTitle: name  action:nil keyEquivalent:@""];
