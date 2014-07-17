@@ -9,6 +9,9 @@ Easily disable, enable or change the resolution of a monitor!
 
 Changelog
 =========
+1.3:
+* Support for 10.6
+
 1.2:
 * Move windows from disabled monitor to an active one
 
