@@ -18,13 +18,17 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface DisableMonitorAppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate> {
-    NSWindow *window;
+@interface DisableMonitorAppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate, NSWindowDelegate> {
     IBOutlet NSMenu *statusMenu;
     NSStatusItem * statusItem;
 
 }
 
 @property (assign) IBOutlet NSWindow *window;
+@property (assign) IBOutlet NSTextField *window_label;
+@property (assign) IBOutlet NSButton *window_btnadd;
+@property (assign) IBOutlet NSButton *window_btndel;
+@property (assign) IBOutlet NSButton *window_btnclose;
+@property (assign) IBOutlet NSOutlineView *window_list;
 
 @end
