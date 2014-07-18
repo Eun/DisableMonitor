@@ -3,12 +3,39 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "-[ResolutionDataSource LoadData:]:ResolutionDataSource.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "sysitem.mode.width">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[DisableMonitorAppDelegate MoveAllWindows:to:]:DisableMonitorAppDelegate.m">
          <PersistentStrings>
             <PersistentString
                value = "[app processIdentifier]">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[DisableMonitorAppDelegate bitDepthCGS:]:DisableMonitorAppDelegate.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "sizeof(buffer)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[DisableMonitorAppDelegate menuNeedsUpdate:]:DisableMonitorAppDelegate.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "&amp;((char*)mode.pixelEncoding[28])">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ResolutionDataItem encodeWithCoder:]:ResolutionDataItem.m">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

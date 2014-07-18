@@ -18,21 +18,28 @@
 
 #import "DisableMonitorAppDelegate.h"
 #import <IOKit/graphics/IOGraphicsLib.h>
+#import "DisplayData.h"
+#import "ResolutionDataSource.h"
+#import "ResolutionDataItem.h"
+
+#include <stdlib.h>
 
 @implementation DisableMonitorAppDelegate
 
+@synthesize window_label;
+@synthesize window_list;
 @synthesize window;
 
-extern AXError _AXUIElementGetWindow(AXUIElementRef, CGWindowID* out);
-extern io_service_t IOServicePortFromCGDisplayID(CGDirectDisplayID displayID);
-extern CGError CGSConfigureDisplayEnabled(CGDisplayConfigRef, CGDirectDisplayID, bool);
-extern CGDisplayErr CGSGetDisplayList(CGDisplayCount maxDisplays, CGDirectDisplayID * onlineDspys, CGDisplayCount * dspyCnt);
+// CoreGraphics DisplayMode struct used in private APIs
 
 
-NSMutableArray *monitorConfigs;
+
+
+
+
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    monitorConfigs = NULL;
+
 }
 
 
@@ -132,8 +139,6 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
 
 -(void)ToggleMonitor:(CGDirectDisplayID) display enabled:(Boolean) enabled
 {
-    
-
     CGError err;
     CGDisplayConfigRef config;
     @try {
@@ -189,96 +194,36 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
 }
 
 
--(void)SetMonitorRes:(CGDirectDisplayID) display title:(NSString*) title
+-(void)SetMonitorRes:(CGDirectDisplayID) display mode:(CGSDisplayMode) mode
 {
     CGError err;
     CGDisplayConfigRef config;
-    
-    
-    size_t w;
-    size_t h;
-    size_t d;
-    int r;
-    int numConverted = sscanf([title UTF8String], "%lux%lux%lu@%d", &w, &h, &d, &r);
-    if (numConverted != 4) {
-        numConverted = sscanf([title UTF8String], "%lux%lux%lu", &w, &h, &d);
-        if (numConverted != 3) {
-            ShowError(@"Error: the mode '%s' couldn't be parsed", [title UTF8String]);
-            return;
-        } else {
-            r=60.0;
-        }
+    err = CGBeginDisplayConfiguration (&config);
+    if (err != 0)
+    {
+        ShowError(@"Error in CGBeginDisplayConfiguration: %d\n", err);
+        return;
     }
+
     
-    @try {
-        
-        
-        CFArrayRef allModes = CGDisplayCopyAllDisplayModes(display, NULL);
-        if (allModes == NULL) {
-            ShowError(@"Error: failed trying to look up modes for display %u", display);
-            return;
-        }
-        
-        CGDisplayModeRef newMode = NULL;
-        CGDisplayModeRef possibleMode;
-        size_t pw;
-        size_t ph;
-        size_t pd;
-        int pr;
-        int looking = 1;
-        int i;
-        for (i = 0 ; i < CFArrayGetCount(allModes) && looking; i++) {
-            possibleMode = (CGDisplayModeRef)CFArrayGetValueAtIndex(allModes, i);
-            pw = CGDisplayModeGetWidth(possibleMode);
-            ph = CGDisplayModeGetHeight(possibleMode);
-            pd = bitDepth(possibleMode);
-            pr = (int)CGDisplayModeGetRefreshRate(possibleMode);
-            if (pw == w &&
-                ph == h &&
-                pd == d &&
-                pr == r) {
-                looking = 0;
-                newMode = possibleMode;
-            }
-        }
-        CFRelease(allModes);
-        
-        if (newMode == NULL) {
-            ShowError(@"Error: mode %lux%lux%lu@%d not available on display %u",
-                  w, h, d, r, display);
-            return;
-        }
-        
-        err = CGBeginDisplayConfiguration (&config);
-        if (err != 0)
-        {
-            ShowError(@"Error in CGBeginDisplayConfiguration: %d\n", err);
-            return;
-        }
-    
-        
-        err = CGConfigureDisplayWithDisplayMode(config, display, newMode, NULL);
-        if (err != 0)
-        {
-            ShowError(@"Error in CGConfigureDisplayWithDisplayMode: %d\n", err);
-            return;
-        }
-        err = CGCompleteDisplayConfiguration(config, kCGConfigurePermanently);
-        if (err != 0)
-        {
-            ShowError(@"Error in CGCompleteDisplayConfiguration: %d\n", err);
-            return;
-        }
+    err = CGSConfigureDisplayMode(config, display, mode.modeNumber);
+    if (err != 0)
+    {
+        ShowError(@"Error in CGConfigureDisplayWithDisplayMode: %d\n", err);
+        return;
     }
-    @catch (NSException *exception) {
-        
+    err = CGCompleteDisplayConfiguration(config, kCGConfigurePermanently);
+    if (err != 0)
+    {
+        ShowError(@"Error in CGCompleteDisplayConfiguration: %d\n", err);
+        return;
     }
 }
 
 -(void)MonitorClicked:(id) sender
 {
     NSMenuItem * item = (NSMenuItem*)sender;
-    CGDirectDisplayID display = (CGDirectDisplayID)[item tag];
+    CGDirectDisplayID display = [(DisplayData*)[item representedObject] display];
     BOOL active = CGDisplayIsActive(display);
     
     if (active == true)
@@ -312,12 +257,13 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
 -(void)MonitorResolution:(id) sender
 {
     NSMenuItem * item = (NSMenuItem*)sender;
-    BOOL active = CGDisplayIsActive([item tag]);
+    DisplayData *data = [item representedObject];
+    BOOL active = CGDisplayIsActive([data display]);
     
     if (active == true)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self SetMonitorRes:[item tag] title:[item title]];
+            [self SetMonitorRes:[data display] mode:[data mode]];
         });
     }
     else
@@ -350,9 +296,95 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
 }
 
 
-size_t bitDepth(CGDisplayModeRef mode) {
+-(void)ManageResolution:(id) sender
+{
+    NSMenuItem * item = (NSMenuItem*)sender;
+    
+    CGDirectDisplayID display = [(DisplayData*)[item representedObject] display];
+    
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+	TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+    
+    
+    CGDirectDisplayID    displays[0x10];
+    CGDisplayCount  nDisplays = 0;
+    
+    CGDisplayErr err = CGSGetDisplayList(0x10, displays, &nDisplays);
+    
+    if (err == 0 && nDisplays > 0)
+    {
+        NSString *displayName = NULL;
+        NSMutableArray *monitors = [[NSMutableArray alloc] init];
+        for (int i = 0; i < nDisplays; i++)
+        {
+            NSString *name = screenNameForDisplay(displays[i]);
+            if (name != nil)
+            {
+                [monitors addObject: name];
+            }
+            
+            else
+            {
+                [monitors addObject: [NSString stringWithFormat:@"Display #%d", i + 1]];
+            }
+        }
+        
+        for (int i = 0; i < monitors.count; i++)
+        {
+            int num = 0;
+            int index = 1;
+            
+            if (!CGDisplayIsOnline(displays[i]))
+                continue;
+            
+            for (int j = 0; j < monitors.count; j++)
+            {
+                if ([[monitors objectAtIndex:j] caseInsensitiveCompare:[monitors objectAtIndex:i]] == NSOrderedSame)
+                {
+                    num++;
+                    if (j < i)
+                    {
+                        index++;
+                    }
+                }
+            }
+            
+            NSString *name;
+            if (num > 1)
+                name = [NSString stringWithFormat:@"%@ (%d)", [monitors objectAtIndex:i], index];
+            else
+                name = [monitors objectAtIndex:i];
+            
+            
+            if (displays[i] == display)
+            {
+                displayName = name;
+                break;
+            }
+            
+        }
+        
+        assert(displayName);
+        
+        [window setTitle:displayName];
+        [window setDelegate:self];
+        [window makeKeyAndOrderFront:self];
+        [window_list setDataSource:[[ResolutionDataSource alloc] initWithDisplay:display]];
+        [window makeFirstResponder: nil];
+        [monitors release];
+    }
+    
+}
+
+- (void)windowWillClose:(NSNotification *)notification {
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+	TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+}
+
+
+-(size_t) getDepthFromPixelEncoding:(CFStringRef) pixelEncoding
+{
     size_t depth = 0;
-	CFStringRef pixelEncoding = CGDisplayModeCopyPixelEncoding(mode);
     // my numerical representation for kIO16BitFloatPixels and kIO32bitFloatPixels
     // are made up and possibly non-sensical
     if (kCFCompareEqualTo == CFStringCompare(pixelEncoding, CFSTR(kIO32BitFloatPixels), kCFCompareCaseInsensitive)) {
@@ -370,16 +402,36 @@ size_t bitDepth(CGDisplayModeRef mode) {
     } else if (kCFCompareEqualTo == CFStringCompare(pixelEncoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive)) {
         depth = 8;
     }
+    return depth;
+    
+}
+
+-(size_t) bitDepthCG:(CGDisplayModeRef) mode
+{
+    size_t depth = 0;
+	CFStringRef pixelEncoding = CGDisplayModeCopyPixelEncoding(mode);
+    depth = [self getDepthFromPixelEncoding:pixelEncoding];
     CFRelease(pixelEncoding);
     return depth;
 }
 
+
+-(size_t) bitDepthCGS:(CGDirectDisplayID) display
+{
+    size_t depth = 0;
+    char *buffer = (char*)calloc(33, sizeof(char*));
+    CGSGetDisplayPixelEncodingOfLength(display, buffer, 32);
+    depth = [self getDepthFromPixelEncoding:(CFStringRef)[NSString stringWithFormat:@"%s", buffer]];
+    free(buffer);
+    return depth;
+}
+
+
+
 - (void)menuNeedsUpdate:(NSMenu *)menu
 {
-    if (menu != statusMenu)
-        return;
+    [self releaseMenu:menu];
     
-    [statusMenu removeAllItems];
     CGDirectDisplayID    displays[0x10];
     CGDisplayCount  nDisplays = 0;
     
@@ -428,7 +480,6 @@ size_t bitDepth(CGDisplayModeRef mode) {
             else
                 name = [monitors objectAtIndex:i];
             
-            //NSMenuItem *displayItem = [[NSMenuItem alloc] initWithTitle: name  action:@selector(MonitorClicked:) keyEquivalent:@""];
             NSMenuItem *displayItem = [[NSMenuItem alloc] initWithTitle: name  action:nil keyEquivalent:@""];
             BOOL bActive = CGDisplayIsActive(displays[i]);
             if (bActive)
@@ -437,91 +488,73 @@ size_t bitDepth(CGDisplayModeRef mode) {
                 [displayItem setState:NSOffState];
             
             NSMenu *subMenu = [[NSMenu alloc] init];
+            
             NSMenuItem *subItem;
 
-            
-
-
-            
-            CFArrayRef allModes = CGDisplayCopyAllDisplayModes(displays[i], NULL);
-            
-            if (allModes != NULL)
+            ResolutionDataSource *dataSource = [[ResolutionDataSource alloc] initWithDisplay:displays[i]];
+            int numberOfDisplayModes = [dataSource outlineView:nil numberOfChildrenOfItem:nil];
+            if (numberOfDisplayModes > 0)
             {
-                CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(displays[i]);
-                
-                
-                size_t current_w = CGDisplayModeGetWidth(currentMode);
-                size_t current_h = CGDisplayModeGetHeight(currentMode);
-                size_t current_d = bitDepth(currentMode);
-                int current_r = (int)CGDisplayModeGetRefreshRate(currentMode);
-                
-                
-                for (int j = 0, len = CFArrayGetCount(allModes); j < len; j++) {
-                    CGDisplayModeRef mode = (CGDisplayModeRef)CFArrayGetValueAtIndex(allModes, j);
-                    
-                    
-
-                    size_t w = CGDisplayModeGetWidth(mode);
-                    size_t h = CGDisplayModeGetHeight(mode);
-                    size_t d = bitDepth(mode);
-                    int r = (int)CGDisplayModeGetRefreshRate(mode);
-                    
-                    
-                    subItem = [[NSMenuItem alloc] initWithTitle: [NSString stringWithFormat:@"%lux%lux%lu@%d", w, h, d, r] action:@selector(MonitorResolution:)  keyEquivalent:@""];
-                    [subItem setTag: displays[i]];
-                    NSUInteger newIndex = [[subMenu itemArray] indexOfObject:subItem
-                                                 inSortedRange:(NSRange){0, [[subMenu itemArray] count]}
-                                                       options:NSBinarySearchingInsertionIndex
-                                                     usingComparator:^(id a, id b) {
-                                                         return [[b title] compare: [a title] options:NSNumericSearch];
-                                                     }];
-                    
-                    
-                    if (current_w == w && current_h == h && current_d == d && current_r == r)
-                        [subItem setState:NSOnState];
-                    else
-                        [subItem setState:NSOffState];
-                    [subMenu insertItem:subItem atIndex:newIndex];
-                    [subItem release];
-                    
+                int currentDisplayModeNumber;
+                CGSGetCurrentDisplayMode(displays[i], &currentDisplayModeNumber);
+                NSTableColumn *tableColumn = [[NSTableColumn alloc] init];
+                [tableColumn setIdentifier:@"Name"];
+                for (int j = 0; j < numberOfDisplayModes; j++)
+                {
+                    ResolutionDataItem *dataItem = [dataSource outlineView:nil child:j ofItem:nil];
+                    if ([dataItem visible])
+                    {
+                        subItem = [[NSMenuItem alloc] initWithTitle: [dataSource outlineView:nil objectValueForTableColumn:tableColumn byItem:dataItem] action:@selector(MonitorResolution:)  keyEquivalent:@""];
+                        
+                        DisplayData *data = [[DisplayData alloc] init];
+                        [data setMode:[dataItem mode]];
+                        [data setDisplay:displays[i]];
+                        [subItem setRepresentedObject: data];
+                        if (currentDisplayModeNumber == dataItem.mode.modeNumber)
+                            [subItem setState:NSOnState];
+                        else
+                            [subItem setState:NSOffState];
+                        [subMenu addItem:subItem];
+                    }
                 }
-
-                
-                CFRelease(allModes);
+                [tableColumn release];
             }
+            [dataSource release];
             
 
             if (bActive)
             {
-                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_DISABLE",@"MENU_DISABLE") action:@selector(MonitorClicked:)  keyEquivalent:@""];
-                [subItem setTag:displays[i]];
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_DISABLE",@"") action:@selector(MonitorClicked:)  keyEquivalent:@""];
+                DisplayData *data = [[DisplayData alloc] init];
+                [data setDisplay:displays[i]];
+                [subItem setRepresentedObject: data];
                 [subMenu insertItem:subItem atIndex:0];
-                [subItem release];
             }
             else
             {
-                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_ENABLE",@"MENU_ENABLE") action:@selector(MonitorClicked:)  keyEquivalent:@""];
-                [subItem setTag:displays[i]];
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_ENABLE",@"") action:@selector(MonitorClicked:)  keyEquivalent:@""];
+                DisplayData *data = [[DisplayData alloc] init];
+                [data setDisplay:displays[i]];
+                [subItem setRepresentedObject: data];
                 [subMenu insertItem:subItem atIndex:0];
-                [subItem release];
             }
+            ;
             
-            [subMenu insertItem:[NSMenuItem separatorItem] atIndex:1];
-
-            /*
-            [subMenu insertItem:[NSMenuItem separatorItem] atIndex:[[subMenu itemArray] count]];
+           
             
-            subItem = [[NSMenuItem alloc] initWithTitle:@"Custom" action:@selector(MonitorCustomResolution:)  keyEquivalent:@""];
-            [subItem setTag:displays[i]];
+            
+            [subMenu insertItem:[[NSMenuItem separatorItem] copy] atIndex:1];
+            
+            [subMenu insertItem:[[NSMenuItem separatorItem] copy] atIndex:[[subMenu itemArray] count]];
+             
+            subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_MANAGE",@"")  action:@selector(ManageResolution:)  keyEquivalent:@""];
+            DisplayData *data = [[DisplayData alloc] init];
+            [data setDisplay:displays[i]];
+            [subItem setRepresentedObject: data];
             [subMenu insertItem:subItem atIndex:[[subMenu itemArray] count]];
-            [subItem release];
-             */
-            
-            [subMenu setDelegate:self];
             
             [displayItem setSubmenu:subMenu];
             [statusMenu addItem:displayItem];
-            [displayItem release];
 
         }
         [monitors release];
@@ -534,19 +567,41 @@ size_t bitDepth(CGDisplayModeRef mode) {
         [noDisplays release];
     }
     
-    [statusMenu addItem:[NSMenuItem separatorItem]];
+    [statusMenu addItem:[[NSMenuItem separatorItem] copy]];
     
     NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_DETECT",@"MENU_DETECT") action:@selector(DetectMonitors:) keyEquivalent:@""];
     [statusMenu addItem:menuItem];
-    [menuItem release];
 }
 
+- (void) releaseMenu:(NSMenu*)menu
+{
+    NSArray *items = [menu itemArray];
+    
+    if (items != NULL)
+    {
+        for (int i = [items count] - 1; i >= 0; --i)
+        {
+            NSMenuItem *item = [items objectAtIndex:i];
+            if ([item submenu] != NULL)
+            {
+                [self releaseMenu:[item submenu]];
+                [[item submenu] release];
+            }
+            
+            id representedObject = [item representedObject];
+            if (representedObject != NULL)
+            {
+                [representedObject release];
+            }
+            [item release];
+           
+        }
+        [menu removeAllItems];
+    }
+}
 
 -(void)awakeFromNib{
-    
-    
     statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
-
     [statusMenu setDelegate:self];
     [statusItem setMenu:statusMenu];
     [statusItem setImage:[NSImage imageNamed:@"status_icon.png"]];
