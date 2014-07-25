@@ -27,6 +27,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "+[CustomResolution GetDisplayPrefsKey:]:CustomResolution.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[deviceInfo objectForKey:@&quot;IODisplayEDID&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[DisableMonitorAppDelegate menuNeedsUpdate:]:DisableMonitorAppDelegate.m">
          <PersistentStrings>
             <PersistentString

@@ -44,4 +44,10 @@
     return self;
 }
 
++ (int) gcd:(int)width height:(int)height
+{
+    return (height == 0) ? width : [self gcd:height height:width%height];
+}
+
+
 @end
