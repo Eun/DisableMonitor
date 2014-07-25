@@ -15,4 +15,5 @@
 @property Boolean custom;
 @property uint32_t width, height, freq, depth;
 - (id)initWithMode:(CGSDisplayMode)mode;
++ (int) gcd:(int)width height:(int)height;
 @end

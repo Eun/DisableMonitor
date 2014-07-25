@@ -30,5 +30,6 @@
 @property (assign) IBOutlet NSButton *window_btndel;
 @property (assign) IBOutlet NSButton *window_btnclose;
 @property (assign) IBOutlet NSOutlineView *window_list;
+@property (assign) CGDirectDisplayID window_display;
 
 @end

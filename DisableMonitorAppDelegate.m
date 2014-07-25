@@ -21,7 +21,7 @@
 #import "DisplayData.h"
 #import "ResolutionDataSource.h"
 #import "ResolutionDataItem.h"
-
+#import "CustomResolution.h"
 #include <stdlib.h>
 
 @implementation DisableMonitorAppDelegate
@@ -29,6 +29,7 @@
 @synthesize window_label;
 @synthesize window_list;
 @synthesize window;
+@synthesize window_display;
 
 // CoreGraphics DisplayMode struct used in private APIs
 
@@ -366,10 +367,13 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
         
         assert(displayName);
         
+        window_display = display;
+        
         [window setTitle:displayName];
         [window setDelegate:self];
         [window makeKeyAndOrderFront:self];
         [window_list setDataSource:[[ResolutionDataSource alloc] initWithDisplay:display]];
+       
         [window makeFirstResponder: nil];
         [monitors release];
     }
@@ -379,6 +383,19 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
 - (void)windowWillClose:(NSNotification *)notification {
     ProcessSerialNumber psn = { 0, kCurrentProcess };
 	TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+}
+
+- (IBAction)AddCustomResoultion:(id)sender
+{
+    CustomResolution* cr = [[CustomResolution alloc] initWithDisplayID:window_display];
+    
+    
+    [cr release];
+}
+
+- (IBAction)RemoveCustomResoultion:(id)sender
+{
+  
 }
 
 
@@ -504,7 +521,7 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
                     ResolutionDataItem *dataItem = [dataSource outlineView:nil child:j ofItem:nil];
                     if ([dataItem visible])
                     {
-                        subItem = [[NSMenuItem alloc] initWithTitle: [dataSource outlineView:nil objectValueForTableColumn:tableColumn byItem:dataItem] action:@selector(MonitorResolution:)  keyEquivalent:@""];
+                        subItem = [[NSMenuItem alloc] initWithTitle: @"" action:@selector(MonitorResolution:)  keyEquivalent:@""];
                         
                         DisplayData *data = [[DisplayData alloc] init];
                         [data setMode:[dataItem mode]];
@@ -514,6 +531,7 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
                             [subItem setState:NSOnState];
                         else
                             [subItem setState:NSOffState];
+                        [subItem setAttributedTitle:[dataSource outlineView:nil objectValueForTableColumn:tableColumn byItem:dataItem]];
                         [subMenu addItem:subItem];
                     }
                 }

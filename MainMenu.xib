@@ -41,6 +41,9 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="AddCustomResoultion:" target="494" id="xK2-IO-pht"/>
+                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="fKC-1E-Bml">
                         <rect key="frame" x="58" y="13" width="44" height="32"/>
@@ -49,6 +52,9 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="RemoveCustomResoultion:" target="494" id="QfX-Zc-4pj"/>
+                        </connections>
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="egV-01-WL5">
                         <rect key="frame" x="20" y="52" width="286" height="201"/>

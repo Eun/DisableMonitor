@@ -90,7 +90,28 @@ NSArray *sortedArray;
         // size_t d = mode.depth;
         int r = (int)mode.freq;
         
-        return [NSString stringWithFormat:@"%lux%lux%lu@%d", w, h, d, r];
+        int gcd = [ResolutionDataItem gcd:w height:h];
+        
+        
+        int fontSize = [NSFont systemFontSize];
+        
+        NSMutableString *res = [NSMutableString stringWithFormat:@"%lux%lux%lu@%d ", w, h, d, r];
+        int lres = [res length];
+        [res appendFormat:@"[%d:%d]", (int)w/gcd, (int)h/gcd];
+        int lrat = [res length] - lres;
+        
+        NSMutableAttributedString *titleText = [[NSMutableAttributedString alloc] initWithString:res];
+        [titleText addAttributes:[NSDictionary dictionaryWithObject:[NSFont systemFontOfSize:fontSize] forKey:NSFontAttributeName] range:NSMakeRange(0, lres)];
+        
+        
+        [titleText addAttributes:[NSDictionary dictionaryWithObject:[NSFont boldSystemFontOfSize:fontSize*.7] forKey:NSFontAttributeName] range:NSMakeRange(lres, lrat)];
+        [titleText addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:fontSize/(fontSize*.7)] range:NSMakeRange(lres, lrat)];
+        
+        return titleText;
+        
+        
+        
+        //return [NSString stringWithFormat:@"%lux%lux%lu@%d", w, h, d, r];
     }
     else if ([[tableColumn identifier] isEqualToString:@"CheckBox"])
     {
