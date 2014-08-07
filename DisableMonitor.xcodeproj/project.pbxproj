@@ -12,7 +12,9 @@
 		592CED7E18FEB66E00FDDF65 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 592CED7D18FEB66E00FDDF65 /* IOKit.framework */; };
 		592CED8118FEBDB300FDDF65 /* GLFW.m in Sources */ = {isa = PBXBuildFile; fileRef = 592CED8018FEBDB300FDDF65 /* GLFW.m */; };
 		592CED8718FEC42800FDDF65 /* status_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 592CED8618FEC42800FDDF65 /* status_icon.png */; };
+		594D69681988D0F500D48AD7 /* OnlyIntegerValueFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */; };
 		598E9892193DC99B005DEB10 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 598E9891193DC99B005DEB10 /* MainMenu.xib */; };
+		5997614F19864C25008D8C44 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5997614E19864C25008D8C44 /* Security.framework */; };
 		59B5766718FFDC6700B57E77 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 59B5766618FFDC6700B57E77 /* icon.icns */; };
 		59B8717A1979605C0021932B /* ResolutionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B871791979605C0021932B /* ResolutionDataSource.m */; };
 		59B8717D197960D40021932B /* ResolutionDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B8717C197960D40021932B /* ResolutionDataItem.m */; };
@@ -38,7 +40,11 @@
 		592CED7D18FEB66E00FDDF65 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		592CED8018FEBDB300FDDF65 /* GLFW.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLFW.m; sourceTree = "<group>"; };
 		592CED8618FEC42800FDDF65 /* status_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_icon.png; sourceTree = "<group>"; };
+		594D69661988D0F500D48AD7 /* OnlyIntegerValueFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlyIntegerValueFormatter.h; sourceTree = "<group>"; };
+		594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnlyIntegerValueFormatter.m; sourceTree = "<group>"; };
 		598E9891193DC99B005DEB10 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		5997614E19864C25008D8C44 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		5997615019865637008D8C44 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = DEVELOPER_DIR; };
 		59B5766618FFDC6700B57E77 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		59B871781979605C0021932B /* ResolutionDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResolutionDataSource.h; sourceTree = "<group>"; };
 		59B871791979605C0021932B /* ResolutionDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResolutionDataSource.m; sourceTree = "<group>"; };
@@ -58,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5997614F19864C25008D8C44 /* Security.framework in Frameworks */,
 				592CED7E18FEB66E00FDDF65 /* IOKit.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 			);
@@ -82,6 +89,8 @@
 				59B87182197986BF0021932B /* ResOutlineView.m */,
 				59DCF63119827F4C00FA3A21 /* CustomResolution.h */,
 				59DCF63219827F4C00FA3A21 /* CustomResolution.m */,
+				594D69661988D0F500D48AD7 /* OnlyIntegerValueFormatter.h */,
+				594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -148,6 +157,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5997615019865637008D8C44 /* Carbon.framework */,
+				5997614E19864C25008D8C44 /* Security.framework */,
 				59E41D2A1977C71F00FD45A6 /* CoreServices.framework */,
 				592CED7D18FEB66E00FDDF65 /* IOKit.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
@@ -225,6 +236,7 @@
 				59B8717D197960D40021932B /* ResolutionDataItem.m in Sources */,
 				591AEFF7197924CA00277858 /* DisplayData.m in Sources */,
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				594D69681988D0F500D48AD7 /* OnlyIntegerValueFormatter.m in Sources */,
 				59DCF63319827F4C00FA3A21 /* CustomResolution.m in Sources */,
 				59B8717A1979605C0021932B /* ResolutionDataSource.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* DisableMonitorAppDelegate.m in Sources */,

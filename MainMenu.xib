@@ -15,6 +15,14 @@
         <menu id="533"/>
         <customObject id="494" customClass="DisableMonitorAppDelegate">
             <connections>
+                <outlet property="panel_btncancel" destination="rPa-be-MVg" id="zRa-Oa-z8i"/>
+                <outlet property="panel_btnok" destination="E8P-1T-XY2" id="GTc-cU-UyM"/>
+                <outlet property="panel_lblheight" destination="mU1-Lz-s4F" id="SRZ-zK-PTv"/>
+                <outlet property="panel_lblratio" destination="dAI-ns-hE8" id="i5g-9y-SEm"/>
+                <outlet property="panel_lblwidth" destination="AFW-lY-qxP" id="YKl-Se-y8w"/>
+                <outlet property="panel_txtheight" destination="bTT-87-GQy" id="n4b-lR-5OX"/>
+                <outlet property="panel_txtwidth" destination="8aC-lG-uMB" id="2i1-yF-sxP"/>
+                <outlet property="panel_width" destination="AFW-lY-qxP" id="3ud-ho-E9Y"/>
                 <outlet property="statusMenu" destination="533" id="537"/>
                 <outlet property="window" destination="B4q-iO-a3J" id="JQS-QZ-C3w"/>
                 <outlet property="window_btnadd" destination="I3n-Kc-7oN" id="Xjq-PY-QkV"/>
@@ -22,6 +30,7 @@
                 <outlet property="window_btndel" destination="fKC-1E-Bml" id="gpD-99-HbY"/>
                 <outlet property="window_label" destination="55r-cD-Tlh" id="QQh-G1-Fed"/>
                 <outlet property="window_list" destination="cMr-0V-T92" id="pnq-c2-cj4"/>
+                <outlet property="window_panel" destination="k4x-Qz-rOG" id="gFN-LK-tZv"/>
             </connections>
         </customObject>
         <customObject id="420" customClass="NSFontManager"/>
@@ -48,7 +57,7 @@
                     <button verticalHuggingPriority="750" id="fKC-1E-Bml">
                         <rect key="frame" x="58" y="13" width="44" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ckk-uz-lDv">
+                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSRemoveTemplate" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ckk-uz-lDv">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -120,6 +129,91 @@
                         <rect key="frame" x="18" y="261" width="290" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="1UV-qB-pMi">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+            </view>
+        </window>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="k4x-Qz-rOG" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" utility="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="211" y="124" width="291" height="128"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1130"/>
+            <view key="contentView" id="id3-ic-Cm9">
+                <rect key="frame" x="0.0" y="0.0" width="291" height="128"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" id="rPa-be-MVg">
+                        <rect key="frame" x="195" y="13" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="X4h-6g-pO6">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="PanelCancel:" target="494" id="X7d-jU-Ui1"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="E8P-1T-XY2">
+                        <rect key="frame" x="104" y="13" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ugO-5C-3nS">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="PanelOk:" target="494" id="IAV-Gi-LWN"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="dAI-ns-hE8">
+                        <rect key="frame" x="18" y="24" width="86" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="2w3-Xb-Bme">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" id="8aC-lG-uMB">
+                        <rect key="frame" x="20" y="61" width="96" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="wuu-pu-LVf">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <action selector="PaneltTXTChanged:" target="494" id="ofa-wz-TLI"/>
+                        </connections>
+                    </textField>
+                    <textField verticalHuggingPriority="750" id="bTT-87-GQy">
+                        <rect key="frame" x="175" y="61" width="96" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="LPG-Va-xKB">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <action selector="PaneltTXTChanged:" target="494" id="gC7-8D-mWm"/>
+                        </connections>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="AFW-lY-qxP">
+                        <rect key="frame" x="18" y="91" width="100" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="oqq-12-zdV">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="mU1-Lz-s4F">
+                        <rect key="frame" x="173" y="91" width="100" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="lgL-Fu-4L0">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

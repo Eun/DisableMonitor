@@ -3,22 +3,6 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[ResolutionDataSource LoadData:]:ResolutionDataSource.m">
-         <PersistentStrings>
-            <PersistentString
-               value = "sysitem.mode.width">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "-[DisableMonitorAppDelegate MoveAllWindows:to:]:DisableMonitorAppDelegate.m">
-         <PersistentStrings>
-            <PersistentString
-               value = "[app processIdentifier]">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "-[DisableMonitorAppDelegate bitDepthCGS:]:DisableMonitorAppDelegate.m">
          <PersistentStrings>
             <PersistentString
@@ -27,10 +11,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "+[CustomResolution GetDisplayPrefsKey:]:CustomResolution.m">
+         contextName = "-[DisableMonitorAppDelegate MoveAllWindows:to:]:DisableMonitorAppDelegate.m">
          <PersistentStrings>
             <PersistentString
-               value = "[deviceInfo objectForKey:@&quot;IODisplayEDID&quot;]">
+               value = "[app processIdentifier]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -44,6 +28,33 @@
       </ContextState>
       <ContextState
          contextName = "-[ResolutionDataItem encodeWithCoder:]:ResolutionDataItem.m">
+      </ContextState>
+      <ContextState
+         contextName = "+[CustomResolution GetDisplayPrefsKey:]:CustomResolution.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[deviceInfo objectForKey:@&quot;IODisplayEDID&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[ResolutionDataSource LoadData:]:ResolutionDataSource.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "sysitem.mode.width">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[CustomResolution addCustomResolution:]:CustomResolution.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[item mode].width">
+            </PersistentString>
+            <PersistentString
+               value = "item">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>
