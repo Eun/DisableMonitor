@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CustomResolution.h"
 
 @interface ResolutionDataSource : NSObject  <NSOutlineViewDataSource>
 {
@@ -14,4 +15,5 @@
 }
 @property CGDirectDisplayID display;
 - (id) initWithDisplay:(CGDirectDisplayID)aDisplay;
+
 @end

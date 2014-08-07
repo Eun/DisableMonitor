@@ -187,6 +187,8 @@ NSArray *sortedArray;
 
 - (void) LoadData:(NSMutableArray*)system_items
 {
+    
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSMutableArray *items = [userDefaults objectForKey:[NSString stringWithFormat:@"%u", display]];
     if (items != nil)
@@ -199,10 +201,9 @@ NSArray *sortedArray;
             {
                 ResolutionDataItem *sysitem = system_items[j];
                 
-                if (sysitem.mode.width == item.width && sysitem.mode.height == item.height && sysitem.mode.depth == item.depth && sysitem.mode.freq == item.freq)
+                if (sysitem.mode.width == item.mode.width && sysitem.mode.height == item.mode.height && sysitem.mode.depth == item.mode.depth && sysitem.mode.freq == item.mode.freq)
                 {
                     [sysitem setVisible:[item visible]];
-                    [sysitem setCustom:[item custom]];
                     break;
                 }
             }

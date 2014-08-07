@@ -18,8 +18,8 @@ typedef struct {
     uint16_t freq;
     uint8_t more_unknown[16];
     float density;
-} CGSDisplayMode;
-
+} CGSDisplayMode
+;
 
 extern AXError _AXUIElementGetWindow(AXUIElementRef, CGWindowID* out);
 extern io_service_t IOServicePortFromCGDisplayID(CGDirectDisplayID displayID);

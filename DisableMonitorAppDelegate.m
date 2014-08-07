@@ -22,6 +22,7 @@
 #import "ResolutionDataSource.h"
 #import "ResolutionDataItem.h"
 #import "CustomResolution.h"
+#import "OnlyIntegerValueFormatter.h"
 #include <stdlib.h>
 
 @implementation DisableMonitorAppDelegate
@@ -30,12 +31,17 @@
 @synthesize window_list;
 @synthesize window;
 @synthesize window_display;
+@synthesize window_btndel;
+@synthesize window_btnclose;
+@synthesize window_panel;
 
-// CoreGraphics DisplayMode struct used in private APIs
-
-
-
-
+@synthesize panel_lblwidth;
+@synthesize panel_lblheight;
+@synthesize panel_txtwidth;
+@synthesize panel_txtheight;
+@synthesize panel_lblratio;
+@synthesize panel_btnok;
+@synthesize panel_btncancel;
 
 
 
@@ -73,9 +79,9 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
     
     NSAlert *alert = [[NSAlert alloc] init];
     [alert setInformativeText:error];
-    [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK",@"ALERT_OK")];
+    [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
     [alert setAlertStyle:NSCriticalAlertStyle];
-    [alert setMessageText:NSLocalizedString(@"ALERT_ERROR",@"ALERT_ERROR")];
+    [alert setMessageText:NSLocalizedString(@"ALERT_ERROR", NULL)];
     [alert runModal];
     [alert release];
 }
@@ -236,11 +242,11 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
         if (err == 0 && nDisplays - 1 == 0)
         {
             NSAlert *alert = [[NSAlert alloc] init];
-            [alert setInformativeText:NSLocalizedString(@"ALERT_LAST_MONITOR",@"ALERT_LAST_MONITOR")];
-            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK",@"ALERT_OK")];
-            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_CANCEL",@"ALERT_CANCEL")];
+            [alert setInformativeText:NSLocalizedString(@"ALERT_LAST_MONITOR", NULL)];
+            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
+            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
             [alert setAlertStyle:NSCriticalAlertStyle];
-            [alert setMessageText:NSLocalizedString(@"ALERT_WARNING",@"ALERT_WARNING")];
+            [alert setMessageText:NSLocalizedString(@"ALERT_WARNING", NULL)];
             if ([alert runModal] != NSAlertFirstButtonReturn)
             {
                 [alert release];
@@ -270,17 +276,33 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
     else
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText:NSLocalizedString(@"ALERT_MONITOR_NOT_ACTIVE",@"ALERT_MONITOR_NOT_ACTIVE")];
-        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK",@"ALERT_OK")];
+        [alert setInformativeText:NSLocalizedString(@"ALERT_MONITOR_NOT_ACTIVE", NULL)];
+        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
         [alert setAlertStyle:NSCriticalAlertStyle];
-        [alert setMessageText:NSLocalizedString(@"ALERT_WARNING",@"ALERT_WARNING")];
+        [alert setMessageText:NSLocalizedString(@"ALERT_WARNING", NULL)];
         [alert runModal];
         [alert release];
     }
 }
+/*
+void* IOFBConnectToRef( io_connect_t connect )
+{
+    return((void* ) CFDictionaryGetValue( gConnectRefDict, (void *) (uintptr_t) connect ));
+}
 
+
+extern void IOFBCreateOverrides(void* connectRef);*/
 -(void)DetectMonitors:(id) sender
 {
+    
+    /*
+    io_connect_t			masterPort;
+    IOMasterPort(MACH_PORT_NULL, &masterPort);
+    void* connectRef = IOFBConnectToRef( masterPort );
+    IOFBCreateOverrides(connectRef);*/
+    
+   // IOFramebufferServerOpen(MACH_PORT_NULL);
+    
     CGDirectDisplayID    displays[0x10];
     CGDisplayCount  dspCount = 0;
     CGDisplayErr err = CGSGetDisplayList(0x10, displays, &dspCount);
@@ -291,9 +313,15 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
         {
             io_service_t service = IOServicePortFromCGDisplayID(displays[i]);
             if (service)
+            {
                 IOServiceRequestProbe(service, kIOFBUserRequestProbe);
+            }
+  
         }
     }
+    
+
+    
 }
 
 
@@ -369,11 +397,14 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
         
         window_display = display;
         
+        customResolution = [[CustomResolution alloc] initWithDisplayID:window_display];
         [window setTitle:displayName];
         [window setDelegate:self];
         [window makeKeyAndOrderFront:self];
         [window_list setDataSource:[[ResolutionDataSource alloc] initWithDisplay:display]];
-       
+        [window_list setDelegate:self];
+        [window_label setStringValue:NSLocalizedString(@"CUSTOM_LABEL", NULL)];
+        [window_btnclose setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
         [window makeFirstResponder: nil];
         [monitors release];
     }
@@ -383,19 +414,146 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
 - (void)windowWillClose:(NSNotification *)notification {
     ProcessSerialNumber psn = { 0, kCurrentProcess };
 	TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+    [customResolution release];
 }
 
 - (IBAction)AddCustomResoultion:(id)sender
 {
-    CustomResolution* cr = [[CustomResolution alloc] initWithDisplayID:window_display];
+    OnlyIntegerValueFormatter *formatter = [[OnlyIntegerValueFormatter alloc] init];
+
+    [NSApp beginSheet:window_panel modalForWindow:window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    [panel_lblwidth setStringValue:NSLocalizedString(@"CUSTOM_WIDTH", NULL)];
+    [panel_lblheight setStringValue:NSLocalizedString(@"CUSTOM_HEIGHT", NULL)];
+    [panel_btnok setTitle:NSLocalizedString(@"ALERT_OK", NULL)];
+    [panel_btncancel setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
+    [panel_lblratio setStringValue:@""];
+    [panel_txtheight setStringValue:@""];
+    [panel_txtwidth setStringValue:@""];
+    [panel_txtwidth setFormatter:formatter];
+    [panel_txtheight setFormatter:formatter];
+ 
+    [window_panel setDefaultButtonCell:[panel_btncancel cell]];
+     [window_panel makeFirstResponder:panel_txtwidth];
+    [NSApp runModalForWindow:window_panel];   //This call blocks the execution until [NSApp stopModal] is called
+    [NSApp endSheet:window_panel];
+    [window_panel orderOut:self];
+    
+    [formatter release];
+    
+    NSString *sHeight = [panel_txtheight stringValue];
+    if ([sHeight length] == 0)
+    {
+        return;
+    }
+    
+    NSString *sWidth = [panel_txtwidth stringValue];
+    if ([sWidth length] == 0)
+    {
+        return;
+    }
+    
+    //todo: allready exists?
     
     
-    [cr release];
+
+
+    ResolutionDataItem *rdi = [[ResolutionDataItem alloc] init];
+    [rdi setWidth:[sWidth intValue]];
+    [rdi setHeight:[sHeight intValue]];
+    
+    if (![customResolution addCustomResolution: rdi])
+    {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setInformativeText: NSLocalizedString(@"ERROR_ADD", NULL)];
+        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setMessageText:NSLocalizedString(@"ALERT_ERROR",NULL)];
+        [alert runModal];
+        [alert release];
+    }
+    else
+    {
+        // todo:
+        // Force monitor to reload overrides
+        
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setInformativeText: NSLocalizedString(@"CUSTOM_ADD", NULL)];
+        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setMessageText:NSLocalizedString(@"ALERT_WARNING", NULL)];
+        [alert runModal];
+        [alert release];
+        
+        [window_list reloadData];
+    }
+    
+    [rdi release];
 }
 
 - (IBAction)RemoveCustomResoultion:(id)sender
 {
-  
+    if ([customResolution removeCustomResolution:[window_list itemAtRow:[window_list selectedRow]]] == false)
+    {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setInformativeText: NSLocalizedString(@"ERROR_DEL", NULL)];
+        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setMessageText:NSLocalizedString(@"ALERT_ERROR", NULL)];
+        [alert runModal];
+        [alert release];
+    }
+    else
+    {
+        // todo:
+        // Force monitor to reload overrides
+        
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setInformativeText: NSLocalizedString(@"CUSTOM_DEL", NULL)];
+        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setMessageText:NSLocalizedString(@"ALERT_WARNING", NULL)];
+        [alert runModal];
+        [alert release];
+        
+        [window_list reloadData];
+    }
+}
+
+- (IBAction)PanelOk:(id)sender
+{
+    [NSApp stopModal];
+}
+
+- (IBAction)PanelCancel:(id)sender
+{
+    [panel_lblratio setStringValue:@""];
+    [panel_txtheight setStringValue:@""];
+    [panel_txtwidth setStringValue:@""];
+    [NSApp stopModal];
+}
+
+- (IBAction)PaneltTXTChanged:(id)sender
+{
+    NSString *sHeight = [panel_txtheight stringValue];
+     NSString *sWidth = [panel_txtwidth stringValue];
+    if ([sHeight length] == 0 || [sWidth length] == 0)
+    {
+        [panel_lblratio setStringValue:@""];
+        return;
+    }
+    
+   
+    int nWidth = [sWidth intValue];
+    int nHeight = [sHeight intValue];
+    
+    int gcd = [ResolutionDataItem gcd:nWidth height:nHeight];
+    [panel_lblratio setStringValue:[NSString stringWithFormat:@"%d:%d", nWidth/gcd, nHeight/gcd]];
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item
+{
+    [window_btndel setEnabled: ([customResolution isCustomItem: item])];
+    return true;
 }
 
 
