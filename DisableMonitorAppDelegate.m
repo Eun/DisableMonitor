@@ -167,7 +167,13 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
                         continue;
                     if (!CGDisplayIsActive(displays[i]))
                         continue;
-                    [self MoveAllWindows:display to:displays[i]];
+                    @try {
+                        [self MoveAllWindows:display to:displays[i]];
+                    }
+                    @catch (NSException *e)
+                    {
+                        NSLog(@"Problems in moving windows");
+                    }
                     break;
                 }
             }
@@ -401,10 +407,12 @@ extern void IOFBCreateOverrides(void* connectRef);*/
         [window setTitle:displayName];
         [window setDelegate:self];
         [window makeKeyAndOrderFront:self];
+        [window setLevel:NSFloatingWindowLevel];
         [window_list setDataSource:[[ResolutionDataSource alloc] initWithDisplay:display]];
         [window_list setDelegate:self];
         [window_label setStringValue:NSLocalizedString(@"CUSTOM_LABEL", NULL)];
         [window_btnclose setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
+        [window_btnclose sizeToFit];
         [window makeFirstResponder: nil];
         [monitors release];
     }
