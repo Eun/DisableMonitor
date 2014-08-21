@@ -1,4 +1,4 @@
-DisableMonitor
+DisableMonitor [![Build Status](https://api.travis-ci.org/Eun/DisableMonitor.svg)](https://github.com/Eun/DisableMonitor/)
 ==============
 Adds the missing feature to disable a monitor on your Mac!
 
