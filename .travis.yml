@@ -1,0 +1,3 @@
+language: objective-c
+xcode_project: DisableMonitor.xcodeproj
+xcode_scheme: DisableMonitor
