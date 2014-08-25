@@ -413,6 +413,13 @@ extern void IOFBCreateOverrides(void* connectRef);*/
         [window_label setStringValue:NSLocalizedString(@"CUSTOM_LABEL", NULL)];
         [window_btnclose setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
         [window_btnclose sizeToFit];
+        [window_btnclose setFrameOrigin: NSMakePoint(
+                                                     
+                                                     [window frame].size.width -
+                                                     [window_btnclose frame].size.width
+                                                     - 13
+                                                     , [window_btnclose frame].origin.y)];
+        
         [window makeFirstResponder: nil];
         [monitors release];
     }
@@ -421,7 +428,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
 
 - (void)windowWillClose:(NSNotification *)notification {
     ProcessSerialNumber psn = { 0, kCurrentProcess };
-	TransformProcessType(&psn, kProcessTransformToBackgroundApplication);
+	TransformProcessType(&psn, 2 /*kProcessTransformToBackgroundApplication*/);
     [customResolution release];
 }
 
@@ -538,6 +545,12 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     [panel_txtheight setStringValue:@""];
     [panel_txtwidth setStringValue:@""];
     [NSApp stopModal];
+}
+
+
+- (IBAction)CloseWindow:(id)sender
+{
+    [window close];
 }
 
 - (IBAction)PaneltTXTChanged:(id)sender

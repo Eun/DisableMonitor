@@ -277,7 +277,7 @@
 				INFOPLIST_FILE = "DisableMonitor-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = DisableMonitor;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -295,7 +295,7 @@
 				INFOPLIST_FILE = "DisableMonitor-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = DisableMonitor;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};

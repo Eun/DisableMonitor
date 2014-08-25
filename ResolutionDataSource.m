@@ -199,7 +199,7 @@ NSArray *sortedArray;
             ResolutionDataItem *item =[NSKeyedUnarchiver unarchiveObjectWithData:encodedItem];
             for (int j = [system_items count] - 1; j>= 0; --j)
             {
-                ResolutionDataItem *sysitem = system_items[j];
+                ResolutionDataItem *sysitem = [system_items objectAtIndex:j];
                 
                 if (sysitem.mode.width == item.mode.width && sysitem.mode.height == item.mode.height && sysitem.mode.depth == item.mode.depth && sysitem.mode.freq == item.mode.freq)
                 {
