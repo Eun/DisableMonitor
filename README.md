@@ -1,4 +1,4 @@
-DisableMonitor [![Build Status](https://api.travis-ci.org/Eun/DisableMonitor.svg)](https://github.com/Eun/DisableMonitor/)
+DisableMonitor
 ==============
 Adds the missing feature to disable a monitor on your Mac!
 
@@ -9,6 +9,13 @@ Easily disable, enable or change the resolution of a monitor!
 
 Changelog
 =========
+1.5:
+* Minor Bugfixes
+
+1.4:
+* Manage Resolutions
++ Ratio
+
 1.3:
 * Support for 10.6
 
