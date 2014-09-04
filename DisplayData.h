@@ -35,7 +35,9 @@ extern CGError CGSGetCurrentDisplayMode(CGDirectDisplayID display, int *modeNum)
 {
     CGSDisplayMode mode;
     CGDirectDisplayID display;
+    float brightness;
 }
 @property CGSDisplayMode mode;
 @property CGDirectDisplayID display;
+@property float brightness;
 @end

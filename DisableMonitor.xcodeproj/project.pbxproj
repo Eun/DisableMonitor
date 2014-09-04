@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		256AC3DA0F4B6AC300CF3369 /* DisableMonitorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 256AC3D90F4B6AC300CF3369 /* DisableMonitorAppDelegate.m */; };
-		591AEFF7197924CA00277858 /* DisplayData.m in Sources */ = {isa = PBXBuildFile; fileRef = 591AEFF6197924CA00277858 /* DisplayData.m */; };
+		591A9C2D19B83E3F00848073 /* DisplayServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 591A9BCC19B83E2900848073 /* DisplayServices.framework */; };
+		591A9C2F19B8457A00848073 /* DisplayData.m in Sources */ = {isa = PBXBuildFile; fileRef = 591A9C2E19B8457A00848073 /* DisplayData.m */; };
 		592CED7E18FEB66E00FDDF65 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 592CED7D18FEB66E00FDDF65 /* IOKit.framework */; };
 		592CED8118FEBDB300FDDF65 /* GLFW.m in Sources */ = {isa = PBXBuildFile; fileRef = 592CED8018FEBDB300FDDF65 /* GLFW.m */; };
 		592CED8718FEC42800FDDF65 /* status_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 592CED8618FEC42800FDDF65 /* status_icon.png */; };
@@ -35,8 +36,258 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		591A9B2C19B83E0700848073 /* DesktopServicesPriv.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DesktopServicesPriv.framework; path = System/Library/PrivateFrameworks/DesktopServicesPriv.framework; sourceTree = SDKROOT; };
+		591A9B3019B83E2800848073 /* SystemVersion.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SystemVersion.plist; sourceTree = "<group>"; };
+		591A9B3219B83E2800848073 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Accelerate.framework; sourceTree = "<group>"; };
+		591A9B3319B83E2800848073 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AddressBook.framework; sourceTree = "<group>"; };
+		591A9B3419B83E2800848073 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AGL.framework; sourceTree = "<group>"; };
+		591A9B3519B83E2800848073 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppKit.framework; sourceTree = "<group>"; };
+		591A9B3619B83E2800848073 /* AppKitScripting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppKitScripting.framework; sourceTree = "<group>"; };
+		591A9B3719B83E2800848073 /* AppleScriptKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleScriptKit.framework; sourceTree = "<group>"; };
+		591A9B3819B83E2800848073 /* AppleScriptObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleScriptObjC.framework; sourceTree = "<group>"; };
+		591A9B3919B83E2800848073 /* AppleShareClientCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleShareClientCore.framework; sourceTree = "<group>"; };
+		591A9B3A19B83E2800848073 /* AppleTalk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleTalk.framework; sourceTree = "<group>"; };
+		591A9B3B19B83E2800848073 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ApplicationServices.framework; sourceTree = "<group>"; };
+		591A9B3C19B83E2800848073 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioToolbox.framework; sourceTree = "<group>"; };
+		591A9B3D19B83E2800848073 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioUnit.framework; sourceTree = "<group>"; };
+		591A9B3E19B83E2800848073 /* Automator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Automator.framework; sourceTree = "<group>"; };
+		591A9B3F19B83E2800848073 /* CalendarStore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CalendarStore.framework; sourceTree = "<group>"; };
+		591A9B4019B83E2800848073 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Carbon.framework; sourceTree = "<group>"; };
+		591A9B4119B83E2800848073 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Cocoa.framework; sourceTree = "<group>"; };
+		591A9B4219B83E2800848073 /* Collaboration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Collaboration.framework; sourceTree = "<group>"; };
+		591A9B4319B83E2800848073 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreAudio.framework; sourceTree = "<group>"; };
+		591A9B4419B83E2800848073 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreAudioKit.framework; sourceTree = "<group>"; };
+		591A9B4519B83E2800848073 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreData.framework; sourceTree = "<group>"; };
+		591A9B4619B83E2800848073 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreFoundation.framework; sourceTree = "<group>"; };
+		591A9B4719B83E2800848073 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreLocation.framework; sourceTree = "<group>"; };
+		591A9B4819B83E2800848073 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreMIDI.framework; sourceTree = "<group>"; };
+		591A9B4919B83E2800848073 /* CoreMIDIServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreMIDIServer.framework; sourceTree = "<group>"; };
+		591A9B4A19B83E2800848073 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreServices.framework; sourceTree = "<group>"; };
+		591A9B4B19B83E2800848073 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreVideo.framework; sourceTree = "<group>"; };
+		591A9B4C19B83E2800848073 /* CoreWLAN.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreWLAN.framework; sourceTree = "<group>"; };
+		591A9B4D19B83E2800848073 /* DirectoryService.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DirectoryService.framework; sourceTree = "<group>"; };
+		591A9B4E19B83E2800848073 /* DiscRecording.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DiscRecording.framework; sourceTree = "<group>"; };
+		591A9B4F19B83E2800848073 /* DiscRecordingUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DiscRecordingUI.framework; sourceTree = "<group>"; };
+		591A9B5019B83E2800848073 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DiskArbitration.framework; sourceTree = "<group>"; };
+		591A9B5119B83E2800848073 /* DrawSprocket.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DrawSprocket.framework; sourceTree = "<group>"; };
+		591A9B5219B83E2800848073 /* DVComponentGlue.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DVComponentGlue.framework; sourceTree = "<group>"; };
+		591A9B5319B83E2800848073 /* DVDPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DVDPlayback.framework; sourceTree = "<group>"; };
+		591A9B5419B83E2800848073 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ExceptionHandling.framework; sourceTree = "<group>"; };
+		591A9B5519B83E2800848073 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ForceFeedback.framework; sourceTree = "<group>"; };
+		591A9B5619B83E2800848073 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Foundation.framework; sourceTree = "<group>"; };
+		591A9B5719B83E2800848073 /* FWAUserLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FWAUserLib.framework; sourceTree = "<group>"; };
+		591A9B5819B83E2800848073 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GLUT.framework; sourceTree = "<group>"; };
+		591A9B5919B83E2800848073 /* ICADevices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ICADevices.framework; sourceTree = "<group>"; };
+		591A9B5A19B83E2800848073 /* ImageCaptureCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ImageCaptureCore.framework; sourceTree = "<group>"; };
+		591A9B5B19B83E2800848073 /* IMCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IMCore.framework; sourceTree = "<group>"; };
+		591A9B5C19B83E2800848073 /* InputMethodKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = InputMethodKit.framework; sourceTree = "<group>"; };
+		591A9B5D19B83E2800848073 /* InstallerPlugins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = InstallerPlugins.framework; sourceTree = "<group>"; };
+		591A9B5E19B83E2800848073 /* InstantMessage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = InstantMessage.framework; sourceTree = "<group>"; };
+		591A9B5F19B83E2800848073 /* IOBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOBluetooth.framework; sourceTree = "<group>"; };
+		591A9B6019B83E2800848073 /* IOBluetoothUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOBluetoothUI.framework; sourceTree = "<group>"; };
+		591A9B6119B83E2800848073 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOKit.framework; sourceTree = "<group>"; };
+		591A9B6219B83E2800848073 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOSurface.framework; sourceTree = "<group>"; };
+		591A9B6319B83E2800848073 /* JavaEmbedding.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JavaEmbedding.framework; sourceTree = "<group>"; };
+		591A9B6419B83E2800848073 /* JavaFrameEmbedding.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JavaFrameEmbedding.framework; sourceTree = "<group>"; };
+		591A9B6519B83E2800848073 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JavaScriptCore.framework; sourceTree = "<group>"; };
+		591A9B6619B83E2800848073 /* JavaVM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JavaVM.framework; sourceTree = "<group>"; };
+		591A9B6719B83E2800848073 /* Kerberos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Kerberos.framework; sourceTree = "<group>"; };
+		591A9B6819B83E2800848073 /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Kernel.framework; sourceTree = "<group>"; };
+		591A9B6919B83E2800848073 /* LatentSemanticMapping.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LatentSemanticMapping.framework; sourceTree = "<group>"; };
+		591A9B6A19B83E2800848073 /* LDAP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LDAP.framework; sourceTree = "<group>"; };
+		591A9B6B19B83E2800848073 /* Message.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Message.framework; sourceTree = "<group>"; };
+		591A9B6C19B83E2800848073 /* NetFS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NetFS.framework; sourceTree = "<group>"; };
+		591A9B6D19B83E2800848073 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenAL.framework; sourceTree = "<group>"; };
+		591A9B6E19B83E2800848073 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenCL.framework; sourceTree = "<group>"; };
+		591A9B6F19B83E2800848073 /* OpenDirectory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenDirectory.framework; sourceTree = "<group>"; };
+		591A9B7019B83E2800848073 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenGL.framework; sourceTree = "<group>"; };
+		591A9B7119B83E2800848073 /* OSAKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OSAKit.framework; sourceTree = "<group>"; };
+		591A9B7219B83E2800848073 /* PCSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PCSC.framework; sourceTree = "<group>"; };
+		591A9B7319B83E2800848073 /* PreferencePanes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PreferencePanes.framework; sourceTree = "<group>"; };
+		591A9B7419B83E2800848073 /* PubSub.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PubSub.framework; sourceTree = "<group>"; };
+		591A9B7519B83E2800848073 /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Python.framework; sourceTree = "<group>"; };
+		591A9B7619B83E2800848073 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QTKit.framework; sourceTree = "<group>"; };
+		591A9B7719B83E2800848073 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Quartz.framework; sourceTree = "<group>"; };
+		591A9B7819B83E2800848073 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QuartzCore.framework; sourceTree = "<group>"; };
+		591A9B7919B83E2800848073 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QuickLook.framework; sourceTree = "<group>"; };
+		591A9B7A19B83E2800848073 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QuickTime.framework; sourceTree = "<group>"; };
+		591A9B7B19B83E2900848073 /* Ruby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Ruby.framework; sourceTree = "<group>"; };
+		591A9B7C19B83E2900848073 /* RubyCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RubyCocoa.framework; sourceTree = "<group>"; };
+		591A9B7D19B83E2900848073 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScreenSaver.framework; sourceTree = "<group>"; };
+		591A9B7E19B83E2900848073 /* Scripting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Scripting.framework; sourceTree = "<group>"; };
+		591A9B7F19B83E2900848073 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScriptingBridge.framework; sourceTree = "<group>"; };
+		591A9B8019B83E2900848073 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Security.framework; sourceTree = "<group>"; };
+		591A9B8119B83E2900848073 /* SecurityFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SecurityFoundation.framework; sourceTree = "<group>"; };
+		591A9B8219B83E2900848073 /* SecurityInterface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SecurityInterface.framework; sourceTree = "<group>"; };
+		591A9B8319B83E2900848073 /* ServerNotification.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ServerNotification.framework; sourceTree = "<group>"; };
+		591A9B8419B83E2900848073 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ServiceManagement.framework; sourceTree = "<group>"; };
+		591A9B8519B83E2900848073 /* SyncServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SyncServices.framework; sourceTree = "<group>"; };
+		591A9B8619B83E2900848073 /* System.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = System.framework; sourceTree = "<group>"; };
+		591A9B8719B83E2900848073 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SystemConfiguration.framework; sourceTree = "<group>"; };
+		591A9B8819B83E2900848073 /* Tcl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Tcl.framework; sourceTree = "<group>"; };
+		591A9B8919B83E2900848073 /* Tk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Tk.framework; sourceTree = "<group>"; };
+		591A9B8A19B83E2900848073 /* TWAIN.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TWAIN.framework; sourceTree = "<group>"; };
+		591A9B8B19B83E2900848073 /* vecLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = vecLib.framework; sourceTree = "<group>"; };
+		591A9B8C19B83E2900848073 /* VideoDecodeAcceleration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = VideoDecodeAcceleration.framework; sourceTree = "<group>"; };
+		591A9B8D19B83E2900848073 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebKit.framework; sourceTree = "<group>"; };
+		591A9B8E19B83E2900848073 /* XgridFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XgridFoundation.framework; sourceTree = "<group>"; };
+		591A9B9119B83E2900848073 /* libConverter.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libConverter.dylib; sourceTree = "<group>"; };
+		591A9B9219B83E2900848073 /* libLW8Converter.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o"; path = libLW8Converter.dylib; sourceTree = "<group>"; };
+		591A9B9319B83E2900848073 /* libLW8Utils.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libLW8Utils.dylib; sourceTree = "<group>"; };
+		591A9B9419B83E2900848073 /* libPPDLib.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libPPDLib.dylib; sourceTree = "<group>"; };
+		591A9B9619B83E2900848073 /* Admin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Admin.framework; sourceTree = "<group>"; };
+		591A9B9719B83E2900848073 /* AirPort.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AirPort.framework; sourceTree = "<group>"; };
+		591A9B9819B83E2900848073 /* AOSNotification.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AOSNotification.framework; sourceTree = "<group>"; };
+		591A9B9919B83E2900848073 /* Apple80211.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Apple80211.framework; sourceTree = "<group>"; };
+		591A9B9A19B83E2900848073 /* AppleAppSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleAppSupport.framework; sourceTree = "<group>"; };
+		591A9B9B19B83E2900848073 /* AppleFSCompression.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleFSCompression.framework; sourceTree = "<group>"; };
+		591A9B9C19B83E2900848073 /* AppleGVA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleGVA.framework; sourceTree = "<group>"; };
+		591A9B9D19B83E2900848073 /* AppleProfileFamily.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleProfileFamily.framework; sourceTree = "<group>"; };
+		591A9B9E19B83E2900848073 /* ApplePushService.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ApplePushService.framework; sourceTree = "<group>"; };
+		591A9B9F19B83E2900848073 /* AppleScript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleScript.framework; sourceTree = "<group>"; };
+		591A9BA019B83E2900848073 /* AppleVA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppleVA.framework; sourceTree = "<group>"; };
+		591A9BA119B83E2900848073 /* ARMDisassembler.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ARMDisassembler.framework; sourceTree = "<group>"; };
+		591A9BA219B83E2900848073 /* Assistant.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Assistant.framework; sourceTree = "<group>"; };
+		591A9BA319B83E2900848073 /* AVFoundationCF.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AVFoundationCF.framework; sourceTree = "<group>"; };
+		591A9BA419B83E2900848073 /* BackRow.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BackRow.framework; sourceTree = "<group>"; };
+		591A9BA519B83E2900848073 /* Backup.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Backup.framework; sourceTree = "<group>"; };
+		591A9BA619B83E2900848073 /* BEEP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BEEP.framework; sourceTree = "<group>"; };
+		591A9BA719B83E2900848073 /* BezelServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BezelServices.framework; sourceTree = "<group>"; };
+		591A9BA819B83E2900848073 /* Bom.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bom.framework; sourceTree = "<group>"; };
+		591A9BA919B83E2900848073 /* BrowserKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BrowserKit.framework; sourceTree = "<group>"; };
+		591A9BAA19B83E2900848073 /* ByteRangeLocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ByteRangeLocking.framework; sourceTree = "<group>"; };
+		591A9BAB19B83E2900848073 /* Calculate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Calculate.framework; sourceTree = "<group>"; };
+		591A9BAC19B83E2900848073 /* CHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CHUD.framework; sourceTree = "<group>"; };
+		591A9BAD19B83E2900848073 /* ClockMenuExtraPreferences.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ClockMenuExtraPreferences.framework; sourceTree = "<group>"; };
+		591A9BAE19B83E2900848073 /* Coach.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Coach.framework; sourceTree = "<group>"; };
+		591A9BAF19B83E2900848073 /* CodeCrayon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CodeCrayon.framework; sourceTree = "<group>"; };
+		591A9BB019B83E2900848073 /* CommerceKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CommerceKit.framework; sourceTree = "<group>"; };
+		591A9BB119B83E2900848073 /* CommonCandidateWindow.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CommonCandidateWindow.framework; sourceTree = "<group>"; };
+		591A9BB219B83E2900848073 /* CoreAUC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreAUC.framework; sourceTree = "<group>"; };
+		591A9BB319B83E2900848073 /* CoreChineseEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreChineseEngine.framework; sourceTree = "<group>"; };
+		591A9BB419B83E2900848073 /* CoreFP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreFP.framework; sourceTree = "<group>"; };
+		591A9BB519B83E2900848073 /* CoreKE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreKE.framework; sourceTree = "<group>"; };
+		591A9BB619B83E2900848073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreMedia.framework; sourceTree = "<group>"; };
+		591A9BB719B83E2900848073 /* CoreMediaAuthoring.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreMediaAuthoring.framework; sourceTree = "<group>"; };
+		591A9BB819B83E2900848073 /* CoreMediaIOServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreMediaIOServices.framework; sourceTree = "<group>"; };
+		591A9BB919B83E2900848073 /* CoreMediaIOServicesPrivate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreMediaIOServicesPrivate.framework; sourceTree = "<group>"; };
+		591A9BBA19B83E2900848073 /* CoreMediaPrivate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreMediaPrivate.framework; sourceTree = "<group>"; };
+		591A9BBB19B83E2900848073 /* CorePDF.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CorePDF.framework; sourceTree = "<group>"; };
+		591A9BBC19B83E2900848073 /* CoreProfile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreProfile.framework; sourceTree = "<group>"; };
+		591A9BBD19B83E2900848073 /* CoreRAID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreRAID.framework; sourceTree = "<group>"; };
+		591A9BBE19B83E2900848073 /* CoreSymbolication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreSymbolication.framework; sourceTree = "<group>"; };
+		591A9BBF19B83E2900848073 /* CoreUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreUI.framework; sourceTree = "<group>"; };
+		591A9BC019B83E2900848073 /* CrashReporterSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporterSupport.framework; sourceTree = "<group>"; };
+		591A9BC119B83E2900848073 /* DashboardClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DashboardClient.framework; sourceTree = "<group>"; };
+		591A9BC219B83E2900848073 /* DataDetectors.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DataDetectors.framework; sourceTree = "<group>"; };
+		591A9BC319B83E2900848073 /* DataDetectorsCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DataDetectorsCore.framework; sourceTree = "<group>"; };
+		591A9BC419B83E2900848073 /* DAVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DAVKit.framework; sourceTree = "<group>"; };
+		591A9BC519B83E2900848073 /* DebugSymbols.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DebugSymbols.framework; sourceTree = "<group>"; };
+		591A9BC619B83E2900848073 /* DesktopServicesPriv.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DesktopServicesPriv.framework; sourceTree = "<group>"; };
+		591A9BC719B83E2900848073 /* DeviceLink.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DeviceLink.framework; sourceTree = "<group>"; };
+		591A9BC819B83E2900848073 /* DigiHubPreference.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DigiHubPreference.framework; sourceTree = "<group>"; };
+		591A9BC919B83E2900848073 /* DirectoryServiceCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DirectoryServiceCore.framework; sourceTree = "<group>"; };
+		591A9BCA19B83E2900848073 /* DiskImages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DiskImages.framework; sourceTree = "<group>"; };
+		591A9BCB19B83E2900848073 /* DiskManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DiskManagement.framework; sourceTree = "<group>"; };
+		591A9BCC19B83E2900848073 /* DisplayServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DisplayServices.framework; sourceTree = "<group>"; };
+		591A9BCD19B83E2900848073 /* diStorm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = diStorm.framework; sourceTree = "<group>"; };
+		591A9BCE19B83E2900848073 /* DMNotification.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DMNotification.framework; sourceTree = "<group>"; };
+		591A9BCF19B83E2900848073 /* DotMacLegacy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DotMacLegacy.framework; sourceTree = "<group>"; };
+		591A9BD019B83E2900848073 /* DotMacSyncManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DotMacSyncManager.framework; sourceTree = "<group>"; };
+		591A9BD119B83E2900848073 /* DSObjCWrappers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DSObjCWrappers.framework; sourceTree = "<group>"; };
+		591A9BD219B83E2900848073 /* DVD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DVD.framework; sourceTree = "<group>"; };
+		591A9BD319B83E2900848073 /* EAP8021X.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EAP8021X.framework; sourceTree = "<group>"; };
+		591A9BD419B83E2900848073 /* ExchangeWebServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ExchangeWebServices.framework; sourceTree = "<group>"; };
+		591A9BD519B83E2900848073 /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FamilyControls.framework; sourceTree = "<group>"; };
+		591A9BD619B83E2900848073 /* FileSync.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FileSync.framework; sourceTree = "<group>"; };
+		591A9BD719B83E2900848073 /* FWAVC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FWAVC.framework; sourceTree = "<group>"; };
+		591A9BD819B83E2900848073 /* FWAVCPrivate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FWAVCPrivate.framework; sourceTree = "<group>"; };
+		591A9BD919B83E2900848073 /* GeoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GeoKit.framework; sourceTree = "<group>"; };
+		591A9BDA19B83E2900848073 /* GoogleContactSync.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleContactSync.framework; sourceTree = "<group>"; };
+		591A9BDB19B83E2900848073 /* GraphicsAppSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GraphicsAppSupport.framework; sourceTree = "<group>"; };
+		591A9BDC19B83E2900848073 /* GraphKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GraphKit.framework; sourceTree = "<group>"; };
+		591A9BDD19B83E2900848073 /* GSSRPC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GSSRPC.framework; sourceTree = "<group>"; };
+		591A9BDE19B83E2900848073 /* Heimdal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Heimdal.framework; sourceTree = "<group>"; };
+		591A9BDF19B83E2900848073 /* HelpData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HelpData.framework; sourceTree = "<group>"; };
+		591A9BE019B83E2900848073 /* iCalendar.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iCalendar.framework; sourceTree = "<group>"; };
+		591A9BE119B83E2900848073 /* ICANotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ICANotifications.framework; sourceTree = "<group>"; };
+		591A9BE219B83E2900848073 /* iLifeMediaBrowser.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iLifeMediaBrowser.framework; sourceTree = "<group>"; };
+		591A9BE319B83E2900848073 /* Install.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Install.framework; sourceTree = "<group>"; };
+		591A9BE419B83E2900848073 /* International.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = International.framework; sourceTree = "<group>"; };
+		591A9BE519B83E2900848073 /* IntlPreferences.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IntlPreferences.framework; sourceTree = "<group>"; };
+		591A9BE619B83E2900848073 /* iPhotoAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iPhotoAccess.framework; sourceTree = "<group>"; };
+		591A9BE719B83E2900848073 /* iPod.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iPod.framework; sourceTree = "<group>"; };
+		591A9BE819B83E2900848073 /* iPodSync.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iPodSync.framework; sourceTree = "<group>"; };
+		591A9BE919B83E2900848073 /* ISSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ISSupport.framework; sourceTree = "<group>"; };
+		591A9BEA19B83E2900848073 /* iTunesAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = iTunesAccess.framework; sourceTree = "<group>"; };
+		591A9BEB19B83E2900848073 /* JavaApplicationLauncher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JavaApplicationLauncher.framework; sourceTree = "<group>"; };
+		591A9BEC19B83E2900848073 /* JavaScriptGlue.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JavaScriptGlue.framework; sourceTree = "<group>"; };
+		591A9BED19B83E2900848073 /* KAdminClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KAdminClient.framework; sourceTree = "<group>"; };
+		591A9BEE19B83E2900848073 /* KAdminServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KAdminServer.framework; sourceTree = "<group>"; };
+		591A9BEF19B83E2900848073 /* KDB5.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KDB5.framework; sourceTree = "<group>"; };
+		591A9BF019B83E2900848073 /* KerberosHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KerberosHelper.framework; sourceTree = "<group>"; };
+		591A9BF119B83E2900848073 /* MachineSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MachineSettings.framework; sourceTree = "<group>"; };
+		591A9BF219B83E2900848073 /* ManagedClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ManagedClient.framework; sourceTree = "<group>"; };
+		591A9BF319B83E2900848073 /* MDSChannel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MDSChannel.framework; sourceTree = "<group>"; };
+		591A9BF419B83E2900848073 /* MediaKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MediaKit.framework; sourceTree = "<group>"; };
+		591A9BF519B83E2900848073 /* MediaToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MediaToolbox.framework; sourceTree = "<group>"; };
+		591A9BF619B83E2900848073 /* MeshKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MeshKit.framework; sourceTree = "<group>"; };
+		591A9BF719B83E2900848073 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MobileDevice.framework; sourceTree = "<group>"; };
+		591A9BF819B83E2900848073 /* MonitorPanel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MonitorPanel.framework; sourceTree = "<group>"; };
+		591A9BF919B83E2900848073 /* MPWXmlCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MPWXmlCore.framework; sourceTree = "<group>"; };
+		591A9BFA19B83E2900848073 /* MultitouchSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MultitouchSupport.framework; sourceTree = "<group>"; };
+		591A9BFB19B83E2900848073 /* NetInfo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NetInfo.framework; sourceTree = "<group>"; };
+		591A9BFC19B83E2900848073 /* NetworkDiagnosticsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NetworkDiagnosticsUI.framework; sourceTree = "<group>"; };
+		591A9BFD19B83E2900848073 /* OfficeImport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OfficeImport.framework; sourceTree = "<group>"; };
+		591A9BFE19B83E2900848073 /* OpenDirectoryConfig.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenDirectoryConfig.framework; sourceTree = "<group>"; };
+		591A9BFF19B83E2900848073 /* OpenDirectoryConfigUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenDirectoryConfigUI.framework; sourceTree = "<group>"; };
+		591A9C0019B83E2900848073 /* OpenTransport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenTransport.framework; sourceTree = "<group>"; };
+		591A9C0119B83E2900848073 /* PackageKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PackageKit.framework; sourceTree = "<group>"; };
+		591A9C0219B83E2900848073 /* PasswordServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PasswordServer.framework; sourceTree = "<group>"; };
+		591A9C0319B83E2900848073 /* PerfTool.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PerfTool.framework; sourceTree = "<group>"; };
+		591A9C0419B83E2900848073 /* PlatformHardwareManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PlatformHardwareManagement.framework; sourceTree = "<group>"; };
+		591A9C0519B83E2900848073 /* PodcastProducerCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PodcastProducerCore.framework; sourceTree = "<group>"; };
+		591A9C0619B83E2900848073 /* PodcastProducerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PodcastProducerKit.framework; sourceTree = "<group>"; };
+		591A9C0719B83E2900848073 /* PPCDisasm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PPCDisasm.framework; sourceTree = "<group>"; };
+		591A9C0819B83E2900848073 /* PrintingPrivate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PrintingPrivate.framework; sourceTree = "<group>"; };
+		591A9C0919B83E2900848073 /* ProKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProKit.framework; sourceTree = "<group>"; };
+		591A9C0A19B83E2900848073 /* ProxyHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProxyHelper.framework; sourceTree = "<group>"; };
+		591A9C0B19B83E2900848073 /* PSNormalizer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PSNormalizer.framework; sourceTree = "<group>"; };
+		591A9C0C19B83E2900848073 /* Restore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Restore.framework; sourceTree = "<group>"; };
+		591A9C0D19B83E2900848073 /* Safari.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Safari.framework; sourceTree = "<group>"; };
+		591A9C0E19B83E2900848073 /* ScreenReader.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScreenReader.framework; sourceTree = "<group>"; };
+		591A9C0F19B83E2900848073 /* ScreenSharing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ScreenSharing.framework; sourceTree = "<group>"; };
+		591A9C1019B83E2900848073 /* SecurityTokend.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SecurityTokend.framework; sourceTree = "<group>"; };
+		591A9C1119B83E2900848073 /* ServerFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ServerFoundation.framework; sourceTree = "<group>"; };
+		591A9C1219B83E2900848073 /* ServerKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ServerKit.framework; sourceTree = "<group>"; };
+		591A9C1319B83E2A00848073 /* SetupAssistant.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SetupAssistant.framework; sourceTree = "<group>"; };
+		591A9C1419B83E2A00848073 /* SetupAssistantSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SetupAssistantSupport.framework; sourceTree = "<group>"; };
+		591A9C1519B83E2A00848073 /* Shortcut.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Shortcut.framework; sourceTree = "<group>"; };
+		591A9C1619B83E2A00848073 /* SoftwareUpdate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SoftwareUpdate.framework; sourceTree = "<group>"; };
+		591A9C1719B83E2A00848073 /* SpeechDictionary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpeechDictionary.framework; sourceTree = "<group>"; };
+		591A9C1819B83E2A00848073 /* SpeechObjects.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpeechObjects.framework; sourceTree = "<group>"; };
+		591A9C1919B83E2A00848073 /* SpotlightIndex.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotlightIndex.framework; sourceTree = "<group>"; };
+		591A9C1A19B83E2A00848073 /* SPSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SPSupport.framework; sourceTree = "<group>"; };
+		591A9C1B19B83E2A00848073 /* Symbolication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Symbolication.framework; sourceTree = "<group>"; };
+		591A9C1C19B83E2A00848073 /* SyncLegacy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SyncLegacy.framework; sourceTree = "<group>"; };
+		591A9C1D19B83E2A00848073 /* SyncServicesUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SyncServicesUI.framework; sourceTree = "<group>"; };
+		591A9C1E19B83E2A00848073 /* SyndicationUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SyndicationUI.framework; sourceTree = "<group>"; };
+		591A9C1F19B83E2A00848073 /* SystemMigration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SystemMigration.framework; sourceTree = "<group>"; };
+		591A9C2019B83E2A00848073 /* SystemUIPlugin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SystemUIPlugin.framework; sourceTree = "<group>"; };
+		591A9C2119B83E2A00848073 /* TrustEvaluationAgent.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TrustEvaluationAgent.framework; sourceTree = "<group>"; };
+		591A9C2219B83E2A00848073 /* UIRecording.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UIRecording.framework; sourceTree = "<group>"; };
+		591A9C2319B83E2A00848073 /* URLAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = URLAccess.framework; sourceTree = "<group>"; };
+		591A9C2419B83E2A00848073 /* VideoConference.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = VideoConference.framework; sourceTree = "<group>"; };
+		591A9C2519B83E2A00848073 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = VideoToolbox.framework; sourceTree = "<group>"; };
+		591A9C2619B83E2A00848073 /* vmutils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = vmutils.framework; sourceTree = "<group>"; };
+		591A9C2719B83E2A00848073 /* WebContentAnalysis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebContentAnalysis.framework; sourceTree = "<group>"; };
+		591A9C2819B83E2A00848073 /* WhitePages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WhitePages.framework; sourceTree = "<group>"; };
+		591A9C2919B83E2A00848073 /* XgridInterface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XgridInterface.framework; sourceTree = "<group>"; };
+		591A9C2A19B83E2A00848073 /* XMPP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XMPP.framework; sourceTree = "<group>"; };
+		591A9C2B19B83E2A00848073 /* XQuery.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XQuery.framework; sourceTree = "<group>"; };
+		591A9C2C19B83E2A00848073 /* YahooSync.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YahooSync.framework; sourceTree = "<group>"; };
+		591A9C2E19B8457A00848073 /* DisplayData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayData.m; sourceTree = "<group>"; };
 		591AEFF5197924CA00277858 /* DisplayData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayData.h; sourceTree = "<group>"; };
-		591AEFF6197924CA00277858 /* DisplayData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayData.m; sourceTree = "<group>"; };
 		592CED7D18FEB66E00FDDF65 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		592CED8018FEBDB300FDDF65 /* GLFW.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLFW.m; sourceTree = "<group>"; };
 		592CED8618FEC42800FDDF65 /* status_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_icon.png; sourceTree = "<group>"; };
@@ -65,6 +316,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				591A9C2D19B83E3F00848073 /* DisplayServices.framework in Frameworks */,
 				5997614F19864C25008D8C44 /* Security.framework in Frameworks */,
 				592CED7E18FEB66E00FDDF65 /* IOKit.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
@@ -77,11 +329,11 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				591A9C2E19B8457A00848073 /* DisplayData.m */,
 				256AC3D80F4B6AC300CF3369 /* DisableMonitorAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* DisableMonitorAppDelegate.m */,
 				592CED8018FEBDB300FDDF65 /* GLFW.m */,
 				591AEFF5197924CA00277858 /* DisplayData.h */,
-				591AEFF6197924CA00277858 /* DisplayData.m */,
 				59B871781979605C0021932B /* ResolutionDataSource.h */,
 				59B871791979605C0021932B /* ResolutionDataSource.m */,
 				59B8717B197960D40021932B /* ResolutionDataItem.h */,
@@ -158,6 +410,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				591A9B2E19B83E2800848073 /* Library */,
+				591A9B2C19B83E0700848073 /* DesktopServicesPriv.framework */,
 				5997615019865637008D8C44 /* Carbon.framework */,
 				5997614E19864C25008D8C44 /* Security.framework */,
 				59E41D2A1977C71F00FD45A6 /* CoreServices.framework */,
@@ -166,6 +420,303 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		591A9B2E19B83E2800848073 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				591A9B2F19B83E2800848073 /* CoreServices */,
+				591A9B3119B83E2800848073 /* Frameworks */,
+				591A9B8F19B83E2900848073 /* Printers */,
+				591A9B9519B83E2900848073 /* PrivateFrameworks */,
+			);
+			name = Library;
+			path = System/Library;
+			sourceTree = SDKROOT;
+		};
+		591A9B2F19B83E2800848073 /* CoreServices */ = {
+			isa = PBXGroup;
+			children = (
+				591A9B3019B83E2800848073 /* SystemVersion.plist */,
+			);
+			path = CoreServices;
+			sourceTree = "<group>";
+		};
+		591A9B3119B83E2800848073 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				591A9B3219B83E2800848073 /* Accelerate.framework */,
+				591A9B3319B83E2800848073 /* AddressBook.framework */,
+				591A9B3419B83E2800848073 /* AGL.framework */,
+				591A9B3519B83E2800848073 /* AppKit.framework */,
+				591A9B3619B83E2800848073 /* AppKitScripting.framework */,
+				591A9B3719B83E2800848073 /* AppleScriptKit.framework */,
+				591A9B3819B83E2800848073 /* AppleScriptObjC.framework */,
+				591A9B3919B83E2800848073 /* AppleShareClientCore.framework */,
+				591A9B3A19B83E2800848073 /* AppleTalk.framework */,
+				591A9B3B19B83E2800848073 /* ApplicationServices.framework */,
+				591A9B3C19B83E2800848073 /* AudioToolbox.framework */,
+				591A9B3D19B83E2800848073 /* AudioUnit.framework */,
+				591A9B3E19B83E2800848073 /* Automator.framework */,
+				591A9B3F19B83E2800848073 /* CalendarStore.framework */,
+				591A9B4019B83E2800848073 /* Carbon.framework */,
+				591A9B4119B83E2800848073 /* Cocoa.framework */,
+				591A9B4219B83E2800848073 /* Collaboration.framework */,
+				591A9B4319B83E2800848073 /* CoreAudio.framework */,
+				591A9B4419B83E2800848073 /* CoreAudioKit.framework */,
+				591A9B4519B83E2800848073 /* CoreData.framework */,
+				591A9B4619B83E2800848073 /* CoreFoundation.framework */,
+				591A9B4719B83E2800848073 /* CoreLocation.framework */,
+				591A9B4819B83E2800848073 /* CoreMIDI.framework */,
+				591A9B4919B83E2800848073 /* CoreMIDIServer.framework */,
+				591A9B4A19B83E2800848073 /* CoreServices.framework */,
+				591A9B4B19B83E2800848073 /* CoreVideo.framework */,
+				591A9B4C19B83E2800848073 /* CoreWLAN.framework */,
+				591A9B4D19B83E2800848073 /* DirectoryService.framework */,
+				591A9B4E19B83E2800848073 /* DiscRecording.framework */,
+				591A9B4F19B83E2800848073 /* DiscRecordingUI.framework */,
+				591A9B5019B83E2800848073 /* DiskArbitration.framework */,
+				591A9B5119B83E2800848073 /* DrawSprocket.framework */,
+				591A9B5219B83E2800848073 /* DVComponentGlue.framework */,
+				591A9B5319B83E2800848073 /* DVDPlayback.framework */,
+				591A9B5419B83E2800848073 /* ExceptionHandling.framework */,
+				591A9B5519B83E2800848073 /* ForceFeedback.framework */,
+				591A9B5619B83E2800848073 /* Foundation.framework */,
+				591A9B5719B83E2800848073 /* FWAUserLib.framework */,
+				591A9B5819B83E2800848073 /* GLUT.framework */,
+				591A9B5919B83E2800848073 /* ICADevices.framework */,
+				591A9B5A19B83E2800848073 /* ImageCaptureCore.framework */,
+				591A9B5B19B83E2800848073 /* IMCore.framework */,
+				591A9B5C19B83E2800848073 /* InputMethodKit.framework */,
+				591A9B5D19B83E2800848073 /* InstallerPlugins.framework */,
+				591A9B5E19B83E2800848073 /* InstantMessage.framework */,
+				591A9B5F19B83E2800848073 /* IOBluetooth.framework */,
+				591A9B6019B83E2800848073 /* IOBluetoothUI.framework */,
+				591A9B6119B83E2800848073 /* IOKit.framework */,
+				591A9B6219B83E2800848073 /* IOSurface.framework */,
+				591A9B6319B83E2800848073 /* JavaEmbedding.framework */,
+				591A9B6419B83E2800848073 /* JavaFrameEmbedding.framework */,
+				591A9B6519B83E2800848073 /* JavaScriptCore.framework */,
+				591A9B6619B83E2800848073 /* JavaVM.framework */,
+				591A9B6719B83E2800848073 /* Kerberos.framework */,
+				591A9B6819B83E2800848073 /* Kernel.framework */,
+				591A9B6919B83E2800848073 /* LatentSemanticMapping.framework */,
+				591A9B6A19B83E2800848073 /* LDAP.framework */,
+				591A9B6B19B83E2800848073 /* Message.framework */,
+				591A9B6C19B83E2800848073 /* NetFS.framework */,
+				591A9B6D19B83E2800848073 /* OpenAL.framework */,
+				591A9B6E19B83E2800848073 /* OpenCL.framework */,
+				591A9B6F19B83E2800848073 /* OpenDirectory.framework */,
+				591A9B7019B83E2800848073 /* OpenGL.framework */,
+				591A9B7119B83E2800848073 /* OSAKit.framework */,
+				591A9B7219B83E2800848073 /* PCSC.framework */,
+				591A9B7319B83E2800848073 /* PreferencePanes.framework */,
+				591A9B7419B83E2800848073 /* PubSub.framework */,
+				591A9B7519B83E2800848073 /* Python.framework */,
+				591A9B7619B83E2800848073 /* QTKit.framework */,
+				591A9B7719B83E2800848073 /* Quartz.framework */,
+				591A9B7819B83E2800848073 /* QuartzCore.framework */,
+				591A9B7919B83E2800848073 /* QuickLook.framework */,
+				591A9B7A19B83E2800848073 /* QuickTime.framework */,
+				591A9B7B19B83E2900848073 /* Ruby.framework */,
+				591A9B7C19B83E2900848073 /* RubyCocoa.framework */,
+				591A9B7D19B83E2900848073 /* ScreenSaver.framework */,
+				591A9B7E19B83E2900848073 /* Scripting.framework */,
+				591A9B7F19B83E2900848073 /* ScriptingBridge.framework */,
+				591A9B8019B83E2900848073 /* Security.framework */,
+				591A9B8119B83E2900848073 /* SecurityFoundation.framework */,
+				591A9B8219B83E2900848073 /* SecurityInterface.framework */,
+				591A9B8319B83E2900848073 /* ServerNotification.framework */,
+				591A9B8419B83E2900848073 /* ServiceManagement.framework */,
+				591A9B8519B83E2900848073 /* SyncServices.framework */,
+				591A9B8619B83E2900848073 /* System.framework */,
+				591A9B8719B83E2900848073 /* SystemConfiguration.framework */,
+				591A9B8819B83E2900848073 /* Tcl.framework */,
+				591A9B8919B83E2900848073 /* Tk.framework */,
+				591A9B8A19B83E2900848073 /* TWAIN.framework */,
+				591A9B8B19B83E2900848073 /* vecLib.framework */,
+				591A9B8C19B83E2900848073 /* VideoDecodeAcceleration.framework */,
+				591A9B8D19B83E2900848073 /* WebKit.framework */,
+				591A9B8E19B83E2900848073 /* XgridFoundation.framework */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		591A9B8F19B83E2900848073 /* Printers */ = {
+			isa = PBXGroup;
+			children = (
+				591A9B9019B83E2900848073 /* Libraries */,
+			);
+			path = Printers;
+			sourceTree = "<group>";
+		};
+		591A9B9019B83E2900848073 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				591A9B9119B83E2900848073 /* libConverter.dylib */,
+				591A9B9219B83E2900848073 /* libLW8Converter.dylib */,
+				591A9B9319B83E2900848073 /* libLW8Utils.dylib */,
+				591A9B9419B83E2900848073 /* libPPDLib.dylib */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		591A9B9519B83E2900848073 /* PrivateFrameworks */ = {
+			isa = PBXGroup;
+			children = (
+				591A9B9619B83E2900848073 /* Admin.framework */,
+				591A9B9719B83E2900848073 /* AirPort.framework */,
+				591A9B9819B83E2900848073 /* AOSNotification.framework */,
+				591A9B9919B83E2900848073 /* Apple80211.framework */,
+				591A9B9A19B83E2900848073 /* AppleAppSupport.framework */,
+				591A9B9B19B83E2900848073 /* AppleFSCompression.framework */,
+				591A9B9C19B83E2900848073 /* AppleGVA.framework */,
+				591A9B9D19B83E2900848073 /* AppleProfileFamily.framework */,
+				591A9B9E19B83E2900848073 /* ApplePushService.framework */,
+				591A9B9F19B83E2900848073 /* AppleScript.framework */,
+				591A9BA019B83E2900848073 /* AppleVA.framework */,
+				591A9BA119B83E2900848073 /* ARMDisassembler.framework */,
+				591A9BA219B83E2900848073 /* Assistant.framework */,
+				591A9BA319B83E2900848073 /* AVFoundationCF.framework */,
+				591A9BA419B83E2900848073 /* BackRow.framework */,
+				591A9BA519B83E2900848073 /* Backup.framework */,
+				591A9BA619B83E2900848073 /* BEEP.framework */,
+				591A9BA719B83E2900848073 /* BezelServices.framework */,
+				591A9BA819B83E2900848073 /* Bom.framework */,
+				591A9BA919B83E2900848073 /* BrowserKit.framework */,
+				591A9BAA19B83E2900848073 /* ByteRangeLocking.framework */,
+				591A9BAB19B83E2900848073 /* Calculate.framework */,
+				591A9BAC19B83E2900848073 /* CHUD.framework */,
+				591A9BAD19B83E2900848073 /* ClockMenuExtraPreferences.framework */,
+				591A9BAE19B83E2900848073 /* Coach.framework */,
+				591A9BAF19B83E2900848073 /* CodeCrayon.framework */,
+				591A9BB019B83E2900848073 /* CommerceKit.framework */,
+				591A9BB119B83E2900848073 /* CommonCandidateWindow.framework */,
+				591A9BB219B83E2900848073 /* CoreAUC.framework */,
+				591A9BB319B83E2900848073 /* CoreChineseEngine.framework */,
+				591A9BB419B83E2900848073 /* CoreFP.framework */,
+				591A9BB519B83E2900848073 /* CoreKE.framework */,
+				591A9BB619B83E2900848073 /* CoreMedia.framework */,
+				591A9BB719B83E2900848073 /* CoreMediaAuthoring.framework */,
+				591A9BB819B83E2900848073 /* CoreMediaIOServices.framework */,
+				591A9BB919B83E2900848073 /* CoreMediaIOServicesPrivate.framework */,
+				591A9BBA19B83E2900848073 /* CoreMediaPrivate.framework */,
+				591A9BBB19B83E2900848073 /* CorePDF.framework */,
+				591A9BBC19B83E2900848073 /* CoreProfile.framework */,
+				591A9BBD19B83E2900848073 /* CoreRAID.framework */,
+				591A9BBE19B83E2900848073 /* CoreSymbolication.framework */,
+				591A9BBF19B83E2900848073 /* CoreUI.framework */,
+				591A9BC019B83E2900848073 /* CrashReporterSupport.framework */,
+				591A9BC119B83E2900848073 /* DashboardClient.framework */,
+				591A9BC219B83E2900848073 /* DataDetectors.framework */,
+				591A9BC319B83E2900848073 /* DataDetectorsCore.framework */,
+				591A9BC419B83E2900848073 /* DAVKit.framework */,
+				591A9BC519B83E2900848073 /* DebugSymbols.framework */,
+				591A9BC619B83E2900848073 /* DesktopServicesPriv.framework */,
+				591A9BC719B83E2900848073 /* DeviceLink.framework */,
+				591A9BC819B83E2900848073 /* DigiHubPreference.framework */,
+				591A9BC919B83E2900848073 /* DirectoryServiceCore.framework */,
+				591A9BCA19B83E2900848073 /* DiskImages.framework */,
+				591A9BCB19B83E2900848073 /* DiskManagement.framework */,
+				591A9BCC19B83E2900848073 /* DisplayServices.framework */,
+				591A9BCD19B83E2900848073 /* diStorm.framework */,
+				591A9BCE19B83E2900848073 /* DMNotification.framework */,
+				591A9BCF19B83E2900848073 /* DotMacLegacy.framework */,
+				591A9BD019B83E2900848073 /* DotMacSyncManager.framework */,
+				591A9BD119B83E2900848073 /* DSObjCWrappers.framework */,
+				591A9BD219B83E2900848073 /* DVD.framework */,
+				591A9BD319B83E2900848073 /* EAP8021X.framework */,
+				591A9BD419B83E2900848073 /* ExchangeWebServices.framework */,
+				591A9BD519B83E2900848073 /* FamilyControls.framework */,
+				591A9BD619B83E2900848073 /* FileSync.framework */,
+				591A9BD719B83E2900848073 /* FWAVC.framework */,
+				591A9BD819B83E2900848073 /* FWAVCPrivate.framework */,
+				591A9BD919B83E2900848073 /* GeoKit.framework */,
+				591A9BDA19B83E2900848073 /* GoogleContactSync.framework */,
+				591A9BDB19B83E2900848073 /* GraphicsAppSupport.framework */,
+				591A9BDC19B83E2900848073 /* GraphKit.framework */,
+				591A9BDD19B83E2900848073 /* GSSRPC.framework */,
+				591A9BDE19B83E2900848073 /* Heimdal.framework */,
+				591A9BDF19B83E2900848073 /* HelpData.framework */,
+				591A9BE019B83E2900848073 /* iCalendar.framework */,
+				591A9BE119B83E2900848073 /* ICANotifications.framework */,
+				591A9BE219B83E2900848073 /* iLifeMediaBrowser.framework */,
+				591A9BE319B83E2900848073 /* Install.framework */,
+				591A9BE419B83E2900848073 /* International.framework */,
+				591A9BE519B83E2900848073 /* IntlPreferences.framework */,
+				591A9BE619B83E2900848073 /* iPhotoAccess.framework */,
+				591A9BE719B83E2900848073 /* iPod.framework */,
+				591A9BE819B83E2900848073 /* iPodSync.framework */,
+				591A9BE919B83E2900848073 /* ISSupport.framework */,
+				591A9BEA19B83E2900848073 /* iTunesAccess.framework */,
+				591A9BEB19B83E2900848073 /* JavaApplicationLauncher.framework */,
+				591A9BEC19B83E2900848073 /* JavaScriptGlue.framework */,
+				591A9BED19B83E2900848073 /* KAdminClient.framework */,
+				591A9BEE19B83E2900848073 /* KAdminServer.framework */,
+				591A9BEF19B83E2900848073 /* KDB5.framework */,
+				591A9BF019B83E2900848073 /* KerberosHelper.framework */,
+				591A9BF119B83E2900848073 /* MachineSettings.framework */,
+				591A9BF219B83E2900848073 /* ManagedClient.framework */,
+				591A9BF319B83E2900848073 /* MDSChannel.framework */,
+				591A9BF419B83E2900848073 /* MediaKit.framework */,
+				591A9BF519B83E2900848073 /* MediaToolbox.framework */,
+				591A9BF619B83E2900848073 /* MeshKit.framework */,
+				591A9BF719B83E2900848073 /* MobileDevice.framework */,
+				591A9BF819B83E2900848073 /* MonitorPanel.framework */,
+				591A9BF919B83E2900848073 /* MPWXmlCore.framework */,
+				591A9BFA19B83E2900848073 /* MultitouchSupport.framework */,
+				591A9BFB19B83E2900848073 /* NetInfo.framework */,
+				591A9BFC19B83E2900848073 /* NetworkDiagnosticsUI.framework */,
+				591A9BFD19B83E2900848073 /* OfficeImport.framework */,
+				591A9BFE19B83E2900848073 /* OpenDirectoryConfig.framework */,
+				591A9BFF19B83E2900848073 /* OpenDirectoryConfigUI.framework */,
+				591A9C0019B83E2900848073 /* OpenTransport.framework */,
+				591A9C0119B83E2900848073 /* PackageKit.framework */,
+				591A9C0219B83E2900848073 /* PasswordServer.framework */,
+				591A9C0319B83E2900848073 /* PerfTool.framework */,
+				591A9C0419B83E2900848073 /* PlatformHardwareManagement.framework */,
+				591A9C0519B83E2900848073 /* PodcastProducerCore.framework */,
+				591A9C0619B83E2900848073 /* PodcastProducerKit.framework */,
+				591A9C0719B83E2900848073 /* PPCDisasm.framework */,
+				591A9C0819B83E2900848073 /* PrintingPrivate.framework */,
+				591A9C0919B83E2900848073 /* ProKit.framework */,
+				591A9C0A19B83E2900848073 /* ProxyHelper.framework */,
+				591A9C0B19B83E2900848073 /* PSNormalizer.framework */,
+				591A9C0C19B83E2900848073 /* Restore.framework */,
+				591A9C0D19B83E2900848073 /* Safari.framework */,
+				591A9C0E19B83E2900848073 /* ScreenReader.framework */,
+				591A9C0F19B83E2900848073 /* ScreenSharing.framework */,
+				591A9C1019B83E2900848073 /* SecurityTokend.framework */,
+				591A9C1119B83E2900848073 /* ServerFoundation.framework */,
+				591A9C1219B83E2900848073 /* ServerKit.framework */,
+				591A9C1319B83E2A00848073 /* SetupAssistant.framework */,
+				591A9C1419B83E2A00848073 /* SetupAssistantSupport.framework */,
+				591A9C1519B83E2A00848073 /* Shortcut.framework */,
+				591A9C1619B83E2A00848073 /* SoftwareUpdate.framework */,
+				591A9C1719B83E2A00848073 /* SpeechDictionary.framework */,
+				591A9C1819B83E2A00848073 /* SpeechObjects.framework */,
+				591A9C1919B83E2A00848073 /* SpotlightIndex.framework */,
+				591A9C1A19B83E2A00848073 /* SPSupport.framework */,
+				591A9C1B19B83E2A00848073 /* Symbolication.framework */,
+				591A9C1C19B83E2A00848073 /* SyncLegacy.framework */,
+				591A9C1D19B83E2A00848073 /* SyncServicesUI.framework */,
+				591A9C1E19B83E2A00848073 /* SyndicationUI.framework */,
+				591A9C1F19B83E2A00848073 /* SystemMigration.framework */,
+				591A9C2019B83E2A00848073 /* SystemUIPlugin.framework */,
+				591A9C2119B83E2A00848073 /* TrustEvaluationAgent.framework */,
+				591A9C2219B83E2A00848073 /* UIRecording.framework */,
+				591A9C2319B83E2A00848073 /* URLAccess.framework */,
+				591A9C2419B83E2A00848073 /* VideoConference.framework */,
+				591A9C2519B83E2A00848073 /* VideoToolbox.framework */,
+				591A9C2619B83E2A00848073 /* vmutils.framework */,
+				591A9C2719B83E2A00848073 /* WebContentAnalysis.framework */,
+				591A9C2819B83E2A00848073 /* WhitePages.framework */,
+				591A9C2919B83E2A00848073 /* XgridInterface.framework */,
+				591A9C2A19B83E2A00848073 /* XMPP.framework */,
+				591A9C2B19B83E2A00848073 /* XQuery.framework */,
+				591A9C2C19B83E2A00848073 /* YahooSync.framework */,
+			);
+			path = PrivateFrameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,8 +785,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				59B87183197986BF0021932B /* ResOutlineView.m in Sources */,
+				591A9C2F19B8457A00848073 /* DisplayData.m in Sources */,
 				59B8717D197960D40021932B /* ResolutionDataItem.m in Sources */,
-				591AEFF7197924CA00277858 /* DisplayData.m in Sources */,
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				594D69681988D0F500D48AD7 /* OnlyIntegerValueFormatter.m in Sources */,
 				59DCF63319827F4C00FA3A21 /* CustomResolution.m in Sources */,
@@ -268,6 +819,10 @@
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -289,6 +844,10 @@
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DisableMonitor_Prefix.pch;

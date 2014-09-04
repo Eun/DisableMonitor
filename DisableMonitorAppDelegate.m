@@ -17,6 +17,7 @@
  */
 
 #import "DisableMonitorAppDelegate.h"
+#import <IOKit/i2c/IOI2CInterface.h>
 #import <IOKit/graphics/IOGraphicsLib.h>
 #import "DisplayData.h"
 #import "ResolutionDataSource.h"
@@ -44,6 +45,10 @@
 @synthesize panel_btncancel;
 
 
+
+
+
+CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
@@ -144,7 +149,90 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
     CFRelease(windowList);
 }
 
--(void)ToggleMonitor:(CGDirectDisplayID) display enabled:(Boolean) enabled
+void BrightnessRead(IOI2CConnectRef connect)
+{
+    kern_return_t kr;
+    IOI2CRequest request;
+    UInt8 data[128];
+    UInt8 inData[9];
+    int i;
+    
+    bzero( &request, sizeof(request));
+    
+    request.commFlags = 0;
+    
+    request.sendAddress = 0x6E;
+    request.sendTransactionType = kIOI2CSimpleTransactionType;
+    request.sendBuffer = (vm_address_t) &data[0];
+    request.sendBytes = 5;
+    request.minReplyDelay = 6000000;
+    
+    data[0] = 0x51;
+    data[1] = 0x82;
+    data[2] = 0x01;
+    data[3] = 0x10;
+    data[4] = 0x6E ^ data[0] ^ data[1] ^ data[2] ^ data[3];
+    
+    
+    request.replyTransactionType = kIOI2CDDCciReplyTransactionType;
+    request.replyAddress = 0x6F;
+    request.replySubAddress = 0x51;
+    request.replyBuffer = (vm_address_t) &inData[0];
+    request.replyBytes = 9;
+    bzero( &inData[0], request.replyBytes );
+    
+    kr = IOI2CSendRequest( connect, kNilOptions, &request );
+    assert( kIOReturnSuccess == kr );
+    if( kIOReturnSuccess != request.result)
+        return;
+    
+    
+    for (i=0; i<9; i++) {
+        
+        printf(" 0x%x ",inData[i]);
+    }
+    printf("n");
+}
+
+void SetBrightness(IOI2CConnectRef connect, int bright)
+{
+    kern_return_t kr;
+    IOI2CRequest request;
+    UInt8 data[128];
+    
+    bzero( &request, sizeof(request));
+    
+    request.commFlags = 0;
+    
+    request.sendAddress = 0x6E;
+    request.sendTransactionType = kIOI2CSimpleTransactionType;
+    request.sendBuffer = (vm_address_t) &data[0];
+    request.sendBytes = 7;
+    
+    data[0] = 0x51;
+    data[1] = 0x84;
+    data[2] = 0x03;
+    data[3] = 0x10;
+    data[4] = 0x64 ;
+    data[5] = bright;
+    data[6] = 0x6E ^ data[0] ^ data[1] ^ data[2] ^ data[3]^ data[4]^
+    data[5];
+    
+    
+    request.replyTransactionType = kIOI2CNoTransactionType;
+    request.replyBytes = 0;//128;
+    
+    kr = IOI2CSendRequest( connect, kNilOptions, &request );
+    assert( kIOReturnSuccess == kr );
+    if( kIOReturnSuccess != request.result)
+        return;
+
+}
+
+extern bool DisplayServicesCanChangeBrightness(CGDirectDisplayID display);
+extern CGError DisplayServicesSetBrightness(CGDirectDisplayID display, float brightnss);
+extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brightnss);
+-(void)ToggleMonitor:(DisplayData*) displayData enabled:(Boolean) enabled
 {
     CGError err;
     CGDisplayConfigRef config;
@@ -161,14 +249,14 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
             {
                 for (int i = 0; i < nDisplays; i++)
                 {
-                    if (displays[i] == display)
+                    if (displays[i] == [displayData display])
                         continue;
                     if (!CGDisplayIsOnline(displays[i]))
                         continue;
                     if (!CGDisplayIsActive(displays[i]))
                         continue;
                     @try {
-                        [self MoveAllWindows:display to:displays[i]];
+                        [self MoveAllWindows:[displayData display] to:displays[i]];
                     }
                     @catch (NSException *e)
                     {
@@ -179,6 +267,54 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
             }
         }
 
+       
+       
+        if (DisplayServicesCanChangeBrightness([displayData display]))
+        {
+            if (enabled == false)
+            {
+                float brightness = 0.0;
+                DisplayServicesGetBrightness([displayData display], &brightness);
+                [displayData setBrightness:brightness];
+                DisplayServicesSetBrightness([displayData display], 0.0f);
+            }
+            else
+            {
+                DisplayServicesSetBrightness([displayData display], [displayData brightness]);
+            }
+        }
+        else
+        {
+            io_service_t service = CGDisplayIOServicePort([displayData display]);
+            if (service)
+            {
+                IOItemCount count;
+                io_string_t pathName;
+                if (IORegistryEntryGetPath(service, kIOServicePlane, pathName) == KERN_SUCCESS)
+                {
+                    if (IOFBGetI2CInterfaceCount(service, &count) == kIOReturnSuccess)
+                    {
+                        for (int i = 0; i < count; ++i )
+                        {
+                            IOI2CConnectRef connect;
+                            io_service_t interface;
+                            if (IOFBCopyI2CInterfaceForBus(service, i, &interface) != kIOReturnSuccess)
+                                continue;
+                            kern_return_t kr = IOI2CInterfaceOpen(interface, kNilOptions, &connect );
+                            IOObjectRelease(interface);
+                            if(kIOReturnSuccess == kr)
+                            {
+                                
+                                BrightnessRead(connect);
+                                IOI2CInterfaceClose(connect, kNilOptions );
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
         
         err = CGBeginDisplayConfiguration (&config);
         if (err != 0)
@@ -186,12 +322,17 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
             ShowError(@"Error in CGBeginDisplayConfiguration: %d",err);
             return;
         }
-        err = CGSConfigureDisplayEnabled(config, display, enabled);
+        
+        //if mac version == 10.9.4
+        
+        
+        /*err = CGSConfigureDisplayEnabled(config, [displayData display], enabled);
         if (err != 0)
         {
             ShowError(@"Error in CGSConfigureDisplayEnabled: %d", err);
             return;
-        }
+        }*/
+        
         err = CGCompleteDisplayConfiguration(config, kCGConfigurePermanently);
         if (err != 0)
         {
@@ -263,7 +404,7 @@ NSString* screenNameForDisplay(CGDirectDisplayID displayID)
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self ToggleMonitor:display enabled:!active];
+        [self ToggleMonitor:(DisplayData*)[item representedObject] enabled:!active];
     });
 }
 
