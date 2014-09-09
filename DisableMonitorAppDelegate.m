@@ -270,7 +270,7 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
 
        
        
-        if (DisplayServicesCanChangeBrightness([displayData display]))
+        /*if (DisplayServicesCanChangeBrightness([displayData display]))
         {
             if (enabled == false)
             {
@@ -289,9 +289,6 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             io_service_t service = CGDisplayIOServicePort([displayData display]);
             if (service)
             {
-              
-                
-                /*
                 IOItemCount count;
                 io_string_t pathName;
                 if (IORegistryEntryGetPath(service, kIOServicePlane, pathName) == KERN_SUCCESS)
@@ -316,10 +313,10 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
                             }
                         }
                     }
-                }*/
+                }
             }
-
-        }
+        }*/
+    
         
         err = CGBeginDisplayConfiguration (&config);
         if (err != 0)
@@ -335,11 +332,12 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             return;
         }
         
-        /*io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
+        io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
         if (entry)
         {
             IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanTrue);
-        }*/
+            IOObjectRelease(entry);
+        }
 
         
         err = CGCompleteDisplayConfiguration(config, kCGConfigurePermanently);
@@ -796,6 +794,9 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             if (!CGDisplayIsOnline([[displays objectAtIndex:i] unsignedIntValue]))
                 continue;
             
+            if (!CGDisplayIsActive([[displays objectAtIndex:i] unsignedIntValue]) && CGDisplayIsInMirrorSet([[displays objectAtIndex:i] unsignedIntValue]))
+                continue;
+                
             for (int j = 0; j < monitors.count; j++)
             {
                 if ([[monitors objectAtIndex:j] caseInsensitiveCompare:[monitors objectAtIndex:i]] == NSOrderedSame)
