@@ -336,7 +336,6 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
         if (entry)
         {
             IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanTrue);
-            IOObjectRelease(entry);
         }
 
         
@@ -347,12 +346,12 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             return;
         }
         
-        /*if (entry)
+
+        if (entry)
         {
-            sleep(1);
             IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanFalse);
             IOObjectRelease(entry);
-        }*/
+        }
         
 
         
