@@ -51,7 +51,8 @@
 CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-
+	
+    
 }
 
 
@@ -288,10 +289,14 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             io_service_t service = CGDisplayIOServicePort([displayData display]);
             if (service)
             {
+              
+                
+                /*
                 IOItemCount count;
                 io_string_t pathName;
                 if (IORegistryEntryGetPath(service, kIOServicePlane, pathName) == KERN_SUCCESS)
                 {
+                    IORegistryEntrySetCFProperty
                     if (IOFBGetI2CInterfaceCount(service, &count) == kIOReturnSuccess)
                     {
                         for (int i = 0; i < count; ++i )
@@ -311,7 +316,7 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
                             }
                         }
                     }
-                }
+                }*/
             }
 
         }
@@ -323,15 +328,19 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             return;
         }
         
-        //if mac version == 10.9.4
-        
-        
-        /*err = CGSConfigureDisplayEnabled(config, [displayData display], enabled);
+        err = CGSConfigureDisplayEnabled(config, [displayData display], enabled);
         if (err != 0)
         {
             ShowError(@"Error in CGSConfigureDisplayEnabled: %d", err);
             return;
+        }
+        
+        /*io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
+        if (entry)
+        {
+            IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanTrue);
         }*/
+
         
         err = CGCompleteDisplayConfiguration(config, kCGConfigurePermanently);
         if (err != 0)
@@ -339,6 +348,15 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             ShowError(@"Error in CGCompleteDisplayConfiguration: %d", err);
             return;
         }
+        
+        /*if (entry)
+        {
+            sleep(1);
+            IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanFalse);
+            IOObjectRelease(entry);
+        }*/
+        
+
         
         
     }
@@ -466,10 +484,28 @@ extern void IOFBCreateOverrides(void* connectRef);*/
   
         }
     }
-    
-
-    
 }
+
+-(void)TurnOffMonitors:(id) sender
+{
+    io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
+    if (entry)
+    {
+        IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanTrue);
+        IOObjectRelease(entry);
+    }
+    else
+    {
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setInformativeText: NSLocalizedString(@"ERROR_TURNOFF", NULL)];
+        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setMessageText:NSLocalizedString(@"ALERT_ERROR",NULL)];
+        [alert runModal];
+        [alert release];
+    }
+}
+
 
 
 -(void)ManageResolution:(id) sender
@@ -481,71 +517,11 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     ProcessSerialNumber psn = { 0, kCurrentProcess };
 	TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     
-    
-    CGDirectDisplayID    displays[0x10];
-    CGDisplayCount  nDisplays = 0;
-    
-    CGDisplayErr err = CGSGetDisplayList(0x10, displays, &nDisplays);
-    
-    if (err == 0 && nDisplays > 0)
+    if (CGDisplayIsOnline(display) && CGDisplayIsActive(display))
     {
-        NSString *displayName = NULL;
-        NSMutableArray *monitors = [[NSMutableArray alloc] init];
-        for (int i = 0; i < nDisplays; i++)
-        {
-            NSString *name = screenNameForDisplay(displays[i]);
-            if (name != nil)
-            {
-                [monitors addObject: name];
-            }
-            
-            else
-            {
-                [monitors addObject: [NSString stringWithFormat:@"Display #%d", i + 1]];
-            }
-        }
-        
-        for (int i = 0; i < monitors.count; i++)
-        {
-            int num = 0;
-            int index = 1;
-            
-            if (!CGDisplayIsOnline(displays[i]))
-                continue;
-            
-            for (int j = 0; j < monitors.count; j++)
-            {
-                if ([[monitors objectAtIndex:j] caseInsensitiveCompare:[monitors objectAtIndex:i]] == NSOrderedSame)
-                {
-                    num++;
-                    if (j < i)
-                    {
-                        index++;
-                    }
-                }
-            }
-            
-            NSString *name;
-            if (num > 1)
-                name = [NSString stringWithFormat:@"%@ (%d)", [monitors objectAtIndex:i], index];
-            else
-                name = [monitors objectAtIndex:i];
-            
-            
-            if (displays[i] == display)
-            {
-                displayName = name;
-                break;
-            }
-            
-        }
-        
-        assert(displayName);
-        
         window_display = display;
-        
         customResolution = [[CustomResolution alloc] initWithDisplayID:window_display];
-        [window setTitle:displayName];
+        [window setTitle: [[item parentItem] title]];
         [window setDelegate:self];
         [window makeKeyAndOrderFront:self];
         [window setLevel:NSFloatingWindowLevel];
@@ -562,7 +538,6 @@ extern void IOFBCreateOverrides(void* connectRef);*/
                                                      , [window_btnclose frame].origin.y)];
         
         [window makeFirstResponder: nil];
-        [monitors release];
     }
     
 }
@@ -769,17 +744,39 @@ extern void IOFBCreateOverrides(void* connectRef);*/
 {
     [self releaseMenu:menu];
     
-    CGDirectDisplayID    displays[0x10];
-    CGDisplayCount  nDisplays = 0;
-    
-    CGDisplayErr err = CGSGetDisplayList(0x10, displays, &nDisplays);
-    
+    NSArray *displays = nil;
+    CGDisplayCount nDisplays = 0;
+
+    CGDirectDisplayID displayList[0x10];
+    NSMutableArray *displayArray = [[NSMutableArray alloc] init];
+    CGDisplayErr err = CGSGetDisplayList(0x10, displayList, &nDisplays);
+
     if (err == 0 && nDisplays > 0)
+    {
+        for (int i = 0; i < nDisplays; i++)
+        {
+            [displayArray addObject: [NSNumber numberWithUnsignedInt:displayList[i]]];
+        }
+        
+        displays = [displayArray sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            CGDirectDisplayID _a = [a unsignedIntValue], _b = [b unsignedIntValue];
+            if (_a == _b)
+                return NSOrderedSame;
+            else if (_a < _b)
+                return NSOrderedAscending;
+            else
+                return NSOrderedDescending;
+        }];
+    }
+    
+   
+    
+    if (nDisplays > 0)
     {
         NSMutableArray *monitors = [[NSMutableArray alloc] init];
         for (int i = 0; i < nDisplays; i++)
         {
-            NSString *name = screenNameForDisplay(displays[i]);
+            NSString *name = screenNameForDisplay([[displays objectAtIndex:i] unsignedIntValue]);
             if (name != nil)
             {
                 [monitors addObject: name];
@@ -796,7 +793,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             int num = 0;
             int index = 1;
             
-            if (!CGDisplayIsOnline(displays[i]))
+            if (!CGDisplayIsOnline([[displays objectAtIndex:i] unsignedIntValue]))
                 continue;
             
             for (int j = 0; j < monitors.count; j++)
@@ -817,8 +814,9 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             else
                 name = [monitors objectAtIndex:i];
             
+          
             NSMenuItem *displayItem = [[NSMenuItem alloc] initWithTitle: name  action:nil keyEquivalent:@""];
-            BOOL bActive = CGDisplayIsActive(displays[i]);
+            BOOL bActive = CGDisplayIsActive([[displays objectAtIndex:i] unsignedIntValue]);
             if (bActive)
                 [displayItem setState:NSOnState];
             else
@@ -828,12 +826,13 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             
             NSMenuItem *subItem;
 
-            ResolutionDataSource *dataSource = [[ResolutionDataSource alloc] initWithDisplay:displays[i]];
+            ResolutionDataSource *dataSource = [[ResolutionDataSource alloc] initWithDisplay:[[displays objectAtIndex:i] unsignedIntValue]];
             int numberOfDisplayModes = [dataSource outlineView:nil numberOfChildrenOfItem:nil];
-            if (numberOfDisplayModes > 0)
+            if (CGDisplayIsActive([[displays objectAtIndex:i] unsignedIntValue]) && numberOfDisplayModes > 0)
             {
+                [subMenu addItem:[[NSMenuItem separatorItem] copy]];
                 int currentDisplayModeNumber;
-                CGSGetCurrentDisplayMode(displays[i], &currentDisplayModeNumber);
+                CGSGetCurrentDisplayMode([[displays objectAtIndex:i] unsignedIntValue], &currentDisplayModeNumber);
                 NSTableColumn *tableColumn = [[NSTableColumn alloc] init];
                 [tableColumn setIdentifier:@"Name"];
                 for (int j = 0; j < numberOfDisplayModes; j++)
@@ -845,7 +844,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
                         
                         DisplayData *data = [[DisplayData alloc] init];
                         [data setMode:[dataItem mode]];
-                        [data setDisplay:displays[i]];
+                        [data setDisplay:[[displays objectAtIndex:i] unsignedIntValue]];
                         [subItem setRepresentedObject: data];
                         if (currentDisplayModeNumber == dataItem.mode.modeNumber)
                             [subItem setState:NSOnState];
@@ -862,53 +861,59 @@ extern void IOFBCreateOverrides(void* connectRef);*/
 
             if (bActive)
             {
-                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_DISABLE",@"") action:@selector(MonitorClicked:)  keyEquivalent:@""];
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_DISABLE",NULL) action:@selector(MonitorClicked:)  keyEquivalent:@""];
                 DisplayData *data = [[DisplayData alloc] init];
-                [data setDisplay:displays[i]];
+                [data setDisplay:[[displays objectAtIndex:i] unsignedIntValue]];
                 [subItem setRepresentedObject: data];
                 [subMenu insertItem:subItem atIndex:0];
             }
             else
             {
-                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_ENABLE",@"") action:@selector(MonitorClicked:)  keyEquivalent:@""];
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_ENABLE",NULL) action:@selector(MonitorClicked:)  keyEquivalent:@""];
                 DisplayData *data = [[DisplayData alloc] init];
-                [data setDisplay:displays[i]];
+                [data setDisplay:[[displays objectAtIndex:i] unsignedIntValue]];
                 [subItem setRepresentedObject: data];
                 [subMenu insertItem:subItem atIndex:0];
             }
-            ;
             
            
             
-            
-            [subMenu insertItem:[[NSMenuItem separatorItem] copy] atIndex:1];
-            
-            [subMenu insertItem:[[NSMenuItem separatorItem] copy] atIndex:[[subMenu itemArray] count]];
-             
-            subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_MANAGE",@"")  action:@selector(ManageResolution:)  keyEquivalent:@""];
-            DisplayData *data = [[DisplayData alloc] init];
-            [data setDisplay:displays[i]];
-            [subItem setRepresentedObject: data];
-            [subMenu insertItem:subItem atIndex:[[subMenu itemArray] count]];
+            if (CGDisplayIsActive([[displays objectAtIndex:i] unsignedIntValue]))
+            {
+                [subMenu insertItem:[[NSMenuItem separatorItem] copy] atIndex:[[subMenu itemArray] count]];
+                 
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_MANAGE",NULL)  action:@selector(ManageResolution:)  keyEquivalent:@""];
+                DisplayData *data = [[DisplayData alloc] init];
+                [data setDisplay:[[displays objectAtIndex:i] unsignedIntValue]];
+                [subItem setRepresentedObject: data];
+                [subItem setOffStateImage:[NSImage imageNamed: NSImageNameSmartBadgeTemplate]];
+                [subMenu insertItem:subItem atIndex:[[subMenu itemArray] count]];
+            }
             
             [displayItem setSubmenu:subMenu];
             [statusMenu addItem:displayItem];
 
         }
         [monitors release];
-        
     }
     else
     {
-        NSMenuItem *noDisplays = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_NO_MONITOS",@"MENU_NO_MONITOS") action:nil keyEquivalent:@""];
+        NSMenuItem *noDisplays = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_NO_MONITOS",NULL) action:nil keyEquivalent:@""];
         [statusMenu addItem:noDisplays];
         [noDisplays release];
     }
     
     [statusMenu addItem:[[NSMenuItem separatorItem] copy]];
     
-    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_DETECT",@"MENU_DETECT") action:@selector(DetectMonitors:) keyEquivalent:@""];
+
+    
+    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_TURNOFF",NULL) action:@selector(TurnOffMonitors:) keyEquivalent:@""];
+    [menuItem setOffStateImage:[NSImage imageNamed: NSImageNameLockLockedTemplate]];
     [statusMenu addItem:menuItem];
+    menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_DETECT",NULL) action:@selector(DetectMonitors:) keyEquivalent:@""];
+    [menuItem setOffStateImage:[NSImage imageNamed: NSImageNameRefreshTemplate]];
+    [statusMenu addItem:menuItem];
+
 }
 
 - (void) releaseMenu:(NSMenu*)menu

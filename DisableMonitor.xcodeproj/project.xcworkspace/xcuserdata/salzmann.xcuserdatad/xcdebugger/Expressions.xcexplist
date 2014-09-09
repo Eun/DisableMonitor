@@ -24,6 +24,9 @@
             <PersistentString
                value = "&amp;((char*)mode.pixelEncoding[28])">
             </PersistentString>
+            <PersistentString
+               value = "(CGDirectDisplayID)[displays objectAtIndex:i]">
+            </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
@@ -49,10 +52,10 @@
          contextName = "-[CustomResolution addCustomResolution:]:CustomResolution.m">
          <PersistentStrings>
             <PersistentString
-               value = "[item mode].width">
+               value = "item">
             </PersistentString>
             <PersistentString
-               value = "item">
+               value = "[item mode].width">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

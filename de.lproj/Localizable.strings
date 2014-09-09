@@ -1,6 +1,7 @@
 "MENU_DISABLE" = "Deaktivieren";
 "MENU_ENABLE" = "Aktivieren";
 "MENU_DETECT" = "Monitore erkennen";
+"MENU_TURNOFF" = "Bildschirme sperren";
 "MENU_NO_MONITOS" = "Keine Monitore gefunden";
 "MENU_MANAGE" = "Verwalten";
 "ALERT_OK" = "OK";
@@ -14,6 +15,7 @@
 "ERROR_AUTH3" = "Error: %d";
 "ERROR_ADD" = "Unable to add custom resolution";
 "ERROR_DEL" = "Unable to remove custom resolution";
+"ERROR_TURNOFF" = "Unable to turn off monitors";
 "CUSTOM_ADD" = "Your custom resolution has been added. However the system recoginzes the new resolution only if you\n\n    restart your Mac\nor\n    reattach (physicly) your monitor.";
 "CUSTOM_DEL" = "Your custom resolution has been removed. However the system recoginzes the change only if you\n\n    restart your Mac\nor\n    reattach (physicly) your monitor.";
 "CUSTOM_LABEL" = "Welche Auflösungen sollen sichtbar sein?";
