@@ -318,6 +318,8 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
         }*/
     
         
+        
+        
         err = CGBeginDisplayConfiguration (&config);
         if (err != 0)
         {
@@ -332,27 +334,24 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             return;
         }
         
-        io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
-        if (entry)
-        {
-            IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanTrue);
-        }
-
+        //CGConfigureDisplayFadeEffect (config, 0, 0, 0, 0, 0);
         
         err = CGCompleteDisplayConfiguration(config, kCGConfigurePermanently);
         if (err != 0)
         {
             ShowError(@"Error in CGCompleteDisplayConfiguration: %d", err);
-            return;
         }
         
-
+        
+        io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
         if (entry)
         {
+            IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanTrue);
+            usleep(100*1000); // sleep 100 ms
             IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanFalse);
             IOObjectRelease(entry);
         }
-        
+       
 
         
         
