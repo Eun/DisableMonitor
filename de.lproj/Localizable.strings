@@ -9,7 +9,7 @@
 "ALERT_ERROR" = "Fehler";
 "ALERT_WARNING" = "Warnung";
 "ALERT_MONITOR_NOT_ACTIVE" = "Monitor ist nicht aktiv!\nDer Monitor muss aktiv sein bevor seine Auflösung geändert werden kann!";
-"ALERT_LAST_MONITOR" = "Du deaktivierst den letzen aktiven Monitor, alle Monitore sind dann deaktivert. Fortfahren?";
+"ALERT_LAST_MONITOR" = "Du deaktivierst den letzen aktiven Monitor, du kannst dann keinen Monitor mehr aktivieren. Fortfahren?";
 "ERROR_AUTH" = "Error creating initial authorization: %d";
 "ERROR_AUTH2" = "Copy rights unsuccessful: %d";
 "ERROR_AUTH3" = "Error: %d";
