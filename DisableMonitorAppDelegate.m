@@ -334,14 +334,7 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             return;
         }
         
-        //CGConfigureDisplayFadeEffect (config, 0, 0, 0, 0, 0);
-        
-        err = CGCompleteDisplayConfiguration(config, kCGConfigurePermanently);
-        if (err != 0)
-        {
-            ShowError(@"Error in CGCompleteDisplayConfiguration: %d", err);
-        }
-        
+        CGConfigureDisplayFadeEffect (config, 0, 0, 0, 0, 0);
         
         io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
         if (entry)
@@ -351,10 +344,12 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanFalse);
             IOObjectRelease(entry);
         }
-       
-
         
-        
+        err = CGCompleteDisplayConfiguration(config, kCGConfigurePermanently);
+        if (err != 0)
+        {
+            ShowError(@"Error in CGCompleteDisplayConfiguration: %d", err);
+        }
     }
     @catch (NSException *exception) {
         
