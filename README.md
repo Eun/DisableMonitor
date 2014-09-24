@@ -9,6 +9,11 @@ Easily disable, enable or change the resolution of a monitor!
 
 Changelog
 =========
+1.6:
+* Added Icons
+* Added Lock Screens
+* Fixed Issues #5 & #6
+
 1.5:
 * Minor Bugfixes
 
