@@ -2,6 +2,7 @@
 "MENU_ENABLE" = "Aktivieren";
 "MENU_DETECT" = "Monitore erkennen";
 "MENU_TURNOFF" = "Bildschirme sperren";
+"MENU_SCREENSAVER" = "Bildschirmschoner starten";
 "MENU_NO_MONITOS" = "Keine Monitore gefunden";
 "MENU_MANAGE" = "Verwalten";
 "ALERT_OK" = "OK";

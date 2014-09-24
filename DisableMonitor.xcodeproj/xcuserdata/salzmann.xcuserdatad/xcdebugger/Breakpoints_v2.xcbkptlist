@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431942477.428052"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "369"
-            endingLineNumber = "369"
+            startingLineNumber = "468"
+            endingLineNumber = "468"
             landmarkName = "-SetMonitorRes:mode:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431942477.428052"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "369"
-            endingLineNumber = "369"
+            startingLineNumber = "468"
+            endingLineNumber = "468"
             landmarkName = "-SetMonitorRes:mode:"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,28 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431942477.428052"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
-            landmarkName = "screenNameForDisplay()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431947686.697831"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "832"
-            endingLineNumber = "832"
-            landmarkName = "-menuNeedsUpdate:"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "+screenNameForDisplay:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -74,45 +58,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431947686.697831"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "857"
-            endingLineNumber = "857"
-            landmarkName = "-menuNeedsUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431947686.697831"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "854"
-            endingLineNumber = "854"
-            landmarkName = "-menuNeedsUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "716"
-            endingLineNumber = "716"
-            landmarkName = "-getDepthFromPixelEncoding:"
-            landmarkType = "5">
+            startingLineNumber = "822"
+            endingLineNumber = "822"
+            landmarkName = "@implementation DisableMonitorAppDelegate"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -282,13 +234,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "729"
-            endingLineNumber = "729"
-            landmarkName = "@implementation DisableMonitorAppDelegate"
-            landmarkType = "3">
+            startingLineNumber = "835"
+            endingLineNumber = "835"
+            landmarkName = "-bitDepthCGS:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -362,13 +314,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431942477.428052"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "59"
-            endingLineNumber = "59"
-            landmarkName = "@implementation DisableMonitorAppDelegate"
-            landmarkType = "3">
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "+screenNameForDisplay:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -442,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "522"
-            endingLineNumber = "522"
+            startingLineNumber = "628"
+            endingLineNumber = "628"
             landmarkName = "-ManageResolution:"
             landmarkType = "5">
          </BreakpointContent>
@@ -458,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "527"
-            endingLineNumber = "527"
+            startingLineNumber = "633"
+            endingLineNumber = "633"
             landmarkName = "-ManageResolution:"
             landmarkType = "5">
          </BreakpointContent>
@@ -602,11 +554,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431942477.428052"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "420"
-            endingLineNumber = "420"
+            startingLineNumber = "519"
+            endingLineNumber = "519"
             landmarkName = "-MonitorClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -618,11 +570,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "617"
-            endingLineNumber = "617"
+            startingLineNumber = "723"
+            endingLineNumber = "723"
             landmarkName = "-AddCustomResoultion:"
             landmarkType = "5">
          </BreakpointContent>
@@ -634,11 +586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431942477.428052"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "402"
-            endingLineNumber = "402"
+            startingLineNumber = "501"
+            endingLineNumber = "501"
             landmarkName = "-MonitorClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -650,12 +602,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431942477.428052"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
-            landmarkName = "-ToggleMonitor:enabled:"
+            startingLineNumber = "337"
+            endingLineNumber = "337"
+            landmarkName = "+ToggleMonitor:enabled:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -666,124 +618,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
+            timestampString = "433249128.254921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "774"
-            endingLineNumber = "774"
-            landmarkName = "-menuNeedsUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "791"
-            endingLineNumber = "791"
-            landmarkName = "-menuNeedsUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "779"
-            endingLineNumber = "779"
-            landmarkName = "-menuNeedsUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "778"
-            endingLineNumber = "778"
-            landmarkName = "-menuNeedsUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "777"
-            endingLineNumber = "777"
-            landmarkName = "-menuNeedsUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "775"
-            endingLineNumber = "775"
-            landmarkName = "-menuNeedsUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "764"
-            endingLineNumber = "764"
-            landmarkName = "-menuNeedsUpdate:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DisableMonitorAppDelegate.m"
-            timestampString = "431946524.399822"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "766"
-            endingLineNumber = "766"
-            landmarkName = "-menuNeedsUpdate:"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
+            landmarkName = "+GetSortedDisplays"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -2,6 +2,7 @@
 "MENU_ENABLE" = "Enable";
 "MENU_DETECT" = "Detect Monitors";
 "MENU_TURNOFF" = "Lock Screens";
+"MENU_SCREENSAVER" = "Start Screensaver";
 "MENU_NO_MONITOS" = "No displays detected";
 "MENU_MANAGE" = "Manage";
 "ALERT_OK" = "OK";

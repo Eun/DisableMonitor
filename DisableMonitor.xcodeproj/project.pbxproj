@@ -14,6 +14,7 @@
 		592CED8118FEBDB300FDDF65 /* GLFW.m in Sources */ = {isa = PBXBuildFile; fileRef = 592CED8018FEBDB300FDDF65 /* GLFW.m */; };
 		592CED8718FEC42800FDDF65 /* status_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 592CED8618FEC42800FDDF65 /* status_icon.png */; };
 		594D69681988D0F500D48AD7 /* OnlyIntegerValueFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */; };
+		5960567319D2E00E00B4525E /* DisplayIDAndName.m in Sources */ = {isa = PBXBuildFile; fileRef = 5960567219D2E00E00B4525E /* DisplayIDAndName.m */; };
 		598E9892193DC99B005DEB10 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 598E9891193DC99B005DEB10 /* MainMenu.xib */; };
 		5997614F19864C25008D8C44 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5997614E19864C25008D8C44 /* Security.framework */; };
 		59B5766718FFDC6700B57E77 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 59B5766618FFDC6700B57E77 /* icon.icns */; };
@@ -293,6 +294,8 @@
 		592CED8618FEC42800FDDF65 /* status_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = status_icon.png; sourceTree = "<group>"; };
 		594D69661988D0F500D48AD7 /* OnlyIntegerValueFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlyIntegerValueFormatter.h; sourceTree = "<group>"; };
 		594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnlyIntegerValueFormatter.m; sourceTree = "<group>"; };
+		5960567119D2E00E00B4525E /* DisplayIDAndName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayIDAndName.h; sourceTree = "<group>"; };
+		5960567219D2E00E00B4525E /* DisplayIDAndName.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayIDAndName.m; sourceTree = "<group>"; };
 		598E9891193DC99B005DEB10 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		5997614E19864C25008D8C44 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		5997615019865637008D8C44 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = DEVELOPER_DIR; };
@@ -344,6 +347,8 @@
 				59DCF63219827F4C00FA3A21 /* CustomResolution.m */,
 				594D69661988D0F500D48AD7 /* OnlyIntegerValueFormatter.h */,
 				594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */,
+				5960567119D2E00E00B4525E /* DisplayIDAndName.h */,
+				5960567219D2E00E00B4525E /* DisplayIDAndName.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -788,6 +793,7 @@
 				591A9C2F19B8457A00848073 /* DisplayData.m in Sources */,
 				59B8717D197960D40021932B /* ResolutionDataItem.m in Sources */,
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				5960567319D2E00E00B4525E /* DisplayIDAndName.m in Sources */,
 				594D69681988D0F500D48AD7 /* OnlyIntegerValueFormatter.m in Sources */,
 				59DCF63319827F4C00FA3A21 /* CustomResolution.m in Sources */,
 				59B8717A1979605C0021932B /* ResolutionDataSource.m in Sources */,

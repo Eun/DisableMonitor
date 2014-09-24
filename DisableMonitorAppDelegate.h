@@ -18,10 +18,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CustomResolution.h"
+#import "DisplayData.h"
 @interface DisableMonitorAppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate, NSWindowDelegate, NSOutlineViewDelegate> {
     IBOutlet NSMenu *statusMenu;
-    NSStatusItem * statusItem;
-    CustomResolution* customResolution;
+    NSStatusItem *statusItem;
+    NSMenuItem *menuItemLock;
+    NSMenuItem *menuItemScreenSaver;
+    CustomResolution *customResolution;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -39,5 +42,6 @@
 @property (assign) IBOutlet NSTextField *panel_lblratio;
 @property (assign) IBOutlet NSButton *panel_btnok;
 @property (assign) IBOutlet NSButton *panel_btncancel;
-
++(NSMutableArray*) GetSortedDisplays;
++(void)ToggleMonitor:(DisplayData*) displayData enabled:(Boolean) enabled;
 @end
