@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6245"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -11,10 +11,17 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <menu id="533"/>
         <customObject id="494" customClass="DisableMonitorAppDelegate">
             <connections>
+                <outlet property="about_btnUpdate" destination="MTW-NH-2Pw" id="QYt-N7-9vM"/>
+                <outlet property="about_btnWeb" destination="fxB-RB-TIE" id="eoi-BJ-nfo"/>
+                <outlet property="about_homepage" destination="fxB-RB-TIE" id="aPK-hy-wPq"/>
+                <outlet property="about_lblAppName" destination="TGz-JT-Kfb" id="xdd-ks-eEZ"/>
+                <outlet property="about_lblVersion" destination="HoO-E2-I6b" id="fWj-TZ-gZG"/>
+                <outlet property="about_window" destination="i7j-si-zbO" id="RpV-7i-a36"/>
+                <outlet property="about_window_btnupdate" destination="MTW-NH-2Pw" id="4gx-w4-Fvv"/>
                 <outlet property="panel_btncancel" destination="rPa-be-MVg" id="zRa-Oa-z8i"/>
                 <outlet property="panel_btnok" destination="E8P-1T-XY2" id="GTc-cU-UyM"/>
                 <outlet property="panel_lblheight" destination="mU1-Lz-s4F" id="SRZ-zK-PTv"/>
@@ -23,6 +30,24 @@
                 <outlet property="panel_txtheight" destination="bTT-87-GQy" id="n4b-lR-5OX"/>
                 <outlet property="panel_txtwidth" destination="8aC-lG-uMB" id="2i1-yF-sxP"/>
                 <outlet property="panel_width" destination="AFW-lY-qxP" id="3ud-ho-E9Y"/>
+                <outlet property="pref_CustomRes_btnCancel" destination="rPa-be-MVg" id="rdC-Xv-iJN"/>
+                <outlet property="pref_CustomRes_btnOk" destination="E8P-1T-XY2" id="dEr-Lc-jJS"/>
+                <outlet property="pref_CustomRes_lblHeight" destination="mU1-Lz-s4F" id="ZNo-1b-zcP"/>
+                <outlet property="pref_CustomRes_lblRatio" destination="dAI-ns-hE8" id="ewH-bx-88p"/>
+                <outlet property="pref_CustomRes_lblWidth" destination="AFW-lY-qxP" id="hdV-wq-sAl"/>
+                <outlet property="pref_CustomRes_txtHeight" destination="bTT-87-GQy" id="9ri-rL-F5R"/>
+                <outlet property="pref_CustomRes_txtRatio" destination="dAI-ns-hE8" id="Lxj-Fr-qX2"/>
+                <outlet property="pref_CustomRes_txtWidth" destination="8aC-lG-uMB" id="F4B-eN-ugG"/>
+                <outlet property="pref_CustomRes_width" destination="AFW-lY-qxP" id="LLx-mh-xib"/>
+                <outlet property="pref_CustomRes_window" destination="k4x-Qz-rOG" id="BVc-gZ-9DN"/>
+                <outlet property="pref_btnAdd" destination="I3n-Kc-7oN" id="29q-Xn-yuU"/>
+                <outlet property="pref_btnClose" destination="67K-Sz-8O1" id="y0L-UQ-584"/>
+                <outlet property="pref_btnDel" destination="fKC-1E-Bml" id="Q8o-sr-szL"/>
+                <outlet property="pref_header" destination="55r-cD-Tlh" id="q6d-6i-nRp"/>
+                <outlet property="pref_label" destination="55r-cD-Tlh" id="JlJ-4C-Bhh"/>
+                <outlet property="pref_lblHeader" destination="55r-cD-Tlh" id="WDH-Ja-NAB"/>
+                <outlet property="pref_lstResolutions" destination="cMr-0V-T92" id="dOu-mz-tCq"/>
+                <outlet property="pref_window" destination="B4q-iO-a3J" id="r5c-af-qQR"/>
                 <outlet property="statusMenu" destination="533" id="537"/>
                 <outlet property="window" destination="B4q-iO-a3J" id="JQS-QZ-C3w"/>
                 <outlet property="window_btnadd" destination="I3n-Kc-7oN" id="Xjq-PY-QkV"/>
@@ -73,7 +98,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" outlineTableColumn="eJW-hG-Agu" id="cMr-0V-T92" customClass="ResOutlineView">
-                                    <rect key="frame" x="0.0" y="0.0" width="284" height="199"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="284" height="24"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="0.0"/>
                                     <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -109,11 +134,9 @@
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="SP9-sp-RO7">
-                            <rect key="frame" x="1" y="-15" width="0.0" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="iEg-g7-VMf">
-                            <rect key="frame" x="-15" y="1" width="16" height="0.0"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
@@ -225,9 +248,65 @@
                 </subviews>
             </view>
         </window>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="i7j-si-zbO" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="211" y="124" width="333" height="162"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1130"/>
+            <view key="contentView" id="KtW-mz-iVD">
+                <rect key="frame" x="0.0" y="-5" width="333" height="162"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="nFo-a8-yNt">
+                        <rect key="frame" x="20" y="20" width="122" height="122"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="icon" id="rRF-Am-iIT"/>
+                    </imageView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="HoO-E2-I6b">
+                        <rect key="frame" x="148" y="94" width="167" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Label" id="x3N-sE-MYU">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="TGz-JT-Kfb">
+                        <rect key="frame" x="148" y="118" width="167" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Label" id="xjP-sQ-a2B">
+                            <font key="font" metaFont="system" size="20"/>
+                            <color key="textColor" white="0.25" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" id="MTW-NH-2Pw">
+                        <rect key="frame" x="237" y="13" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mqz-Ig-iA1">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button id="fxB-RB-TIE">
+                        <rect key="frame" x="0.0" y="0.0" width="180" height="12"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="bevel" title="https://github.com/Eun/DisableMonitor" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="cjh-xc-VFo">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="miniSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="GotoHomePage:" target="494" id="Txk-Jp-QMu"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="532.5" y="-30"/>
+        </window>
     </objects>
     <resources>
         <image name="NSAddTemplate" width="8" height="8"/>
         <image name="NSRemoveTemplate" width="8" height="8"/>
+        <image name="icon" width="512" height="512"/>
     </resources>
 </document>

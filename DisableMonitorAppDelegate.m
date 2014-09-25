@@ -31,24 +31,27 @@
 
 @implementation DisableMonitorAppDelegate
 
-@synthesize window_label;
-@synthesize window_list;
-@synthesize window;
+@synthesize pref_window;
+@synthesize pref_lblHeader;
+@synthesize pref_btnAdd;
+@synthesize pref_btnDel;
+@synthesize pref_btnClose;
+@synthesize pref_lstResolutions;
+@synthesize pref_CustomRes_window;
+@synthesize pref_CustomRes_lblWidth;
+@synthesize pref_CustomRes_lblHeight;
+@synthesize pref_CustomRes_txtWidth;
+@synthesize pref_CustomRes_txtHeight;
+@synthesize pref_CustomRes_lblRatio;
+@synthesize pref_CustomRes_btnOk;
+@synthesize pref_CustomRes_btnCancel;
+@synthesize about_window;
+@synthesize about_btnUpdate;
+@synthesize about_btnWeb;
+@synthesize about_lblAppName;
+@synthesize about_lblVersion;
+
 @synthesize window_display;
-@synthesize window_btndel;
-@synthesize window_btnclose;
-@synthesize window_panel;
-
-@synthesize panel_lblwidth;
-@synthesize panel_lblheight;
-@synthesize panel_txtwidth;
-@synthesize panel_txtheight;
-@synthesize panel_lblratio;
-@synthesize panel_btnok;
-@synthesize panel_btncancel;
-
-
-
 
 
 CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
@@ -591,12 +594,52 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     [[NSWorkspace sharedWorkspace] openFile:@"/System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"];
 }
 
+-(void)ShowAboutDialog:(id) sender
+{
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+    [about_window setTitle: NSLocalizedString(@"MENU_ABOUT", NULL)];
+    [about_window setDelegate:self];
+    [about_window makeKeyAndOrderFront:self];
+    [about_window setLevel:NSFloatingWindowLevel];
+    [about_btnUpdate setTitle:NSLocalizedString(@"CHECK_FOR_UPDATES", NULL)];
+    [about_btnUpdate sizeToFit];
+    [about_btnUpdate setFrameOrigin: NSMakePoint(
+                                                 
+                                                 [about_window frame].size.width -
+                                                 [about_btnUpdate frame].size.width
+                                                 - 13
+                                                 , [about_btnUpdate frame].origin.y)];
+    
+    NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
+    [about_lblVersion setStringValue:[infoDict objectForKey:@"CFBundleVersion"]];
+    [about_lblAppName setStringValue:[infoDict objectForKey:@"CFBundleExecutable"]];
+    [about_window makeFirstResponder: nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(CloseAboutDialog) name:NSWindowDidResignMainNotification object:about_window];
+    
+}
+
+-(void)CloseAboutDialog
+{
+    [about_window close];
+}
+
+-(void)Quit:(id) sender
+{
+    [NSApp terminate: nil];
+}
+
+-(IBAction)GotoHomePage:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/Eun/DisableMonitor"]];
+}
 
 
 
 
 -(void)ManageResolution:(id) sender
 {
+    [about_window close];
     NSMenuItem * item = (NSMenuItem*)sender;
     
     CGDirectDisplayID display = [(DisplayData*)[item representedObject] display];
@@ -608,23 +651,23 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     {
         window_display = display;
         customResolution = [[CustomResolution alloc] initWithDisplayID:window_display];
-        [window setTitle: [[item parentItem] title]];
-        [window setDelegate:self];
-        [window makeKeyAndOrderFront:self];
-        [window setLevel:NSFloatingWindowLevel];
-        [window_list setDataSource:[[ResolutionDataSource alloc] initWithDisplay:display]];
-        [window_list setDelegate:self];
-        [window_label setStringValue:NSLocalizedString(@"CUSTOM_LABEL", NULL)];
-        [window_btnclose setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
-        [window_btnclose sizeToFit];
-        [window_btnclose setFrameOrigin: NSMakePoint(
+        [pref_window setTitle: [[item parentItem] title]];
+        [pref_window setDelegate:self];
+        [pref_window makeKeyAndOrderFront:self];
+        [pref_window setLevel:NSFloatingWindowLevel];
+        [pref_lstResolutions setDataSource:[[ResolutionDataSource alloc] initWithDisplay:display]];
+        [pref_lstResolutions setDelegate:self];
+        [pref_lblHeader setStringValue:NSLocalizedString(@"CUSTOM_LABEL", NULL)];
+        [pref_btnClose setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
+        [pref_btnClose sizeToFit];
+        [pref_btnClose setFrameOrigin: NSMakePoint(
                                                      
-                                                     [window frame].size.width -
-                                                     [window_btnclose frame].size.width
+                                                     [pref_window frame].size.width -
+                                                     [pref_btnClose frame].size.width
                                                      - 13
-                                                     , [window_btnclose frame].origin.y)];
+                                                     , [pref_btnClose frame].origin.y)];
         
-        [window makeFirstResponder: nil];
+        [pref_window makeFirstResponder: nil];
     }
     
 }
@@ -632,39 +675,45 @@ extern void IOFBCreateOverrides(void* connectRef);*/
 - (void)windowWillClose:(NSNotification *)notification {
     ProcessSerialNumber psn = { 0, kCurrentProcess };
 	TransformProcessType(&psn, 2 /*kProcessTransformToBackgroundApplication*/);
-    [customResolution release];
+    if (customResolution != nil)
+    {
+        [customResolution release];
+        customResolution = nil;
+    }
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (IBAction)AddCustomResoultion:(id)sender
 {
     OnlyIntegerValueFormatter *formatter = [[OnlyIntegerValueFormatter alloc] init];
 
-    [NSApp beginSheet:window_panel modalForWindow:window modalDelegate:nil didEndSelector:nil contextInfo:nil];
-    [panel_lblwidth setStringValue:NSLocalizedString(@"CUSTOM_WIDTH", NULL)];
-    [panel_lblheight setStringValue:NSLocalizedString(@"CUSTOM_HEIGHT", NULL)];
-    [panel_btnok setTitle:NSLocalizedString(@"ALERT_OK", NULL)];
-    [panel_btncancel setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
-    [panel_lblratio setStringValue:@""];
-    [panel_txtheight setStringValue:@""];
-    [panel_txtwidth setStringValue:@""];
-    [panel_txtwidth setFormatter:formatter];
-    [panel_txtheight setFormatter:formatter];
+    [NSApp beginSheet:pref_CustomRes_window modalForWindow:pref_window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    [pref_CustomRes_lblWidth setStringValue:NSLocalizedString(@"CUSTOM_WIDTH", NULL)];
+    [pref_CustomRes_lblHeight setStringValue:NSLocalizedString(@"CUSTOM_HEIGHT", NULL)];
+    [pref_CustomRes_btnOk setTitle:NSLocalizedString(@"ALERT_OK", NULL)];
+    [pref_CustomRes_btnCancel setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
+    [pref_CustomRes_lblRatio setStringValue:@""];
+    [pref_CustomRes_txtHeight setStringValue:@""];
+    [pref_CustomRes_txtHeight setFormatter:formatter];
+    [pref_CustomRes_txtWidth setStringValue:@""];
+    [pref_CustomRes_txtWidth setFormatter:formatter];
+
  
-    [window_panel setDefaultButtonCell:[panel_btncancel cell]];
-     [window_panel makeFirstResponder:panel_txtwidth];
-    [NSApp runModalForWindow:window_panel];   //This call blocks the execution until [NSApp stopModal] is called
-    [NSApp endSheet:window_panel];
-    [window_panel orderOut:self];
+    [pref_CustomRes_window setDefaultButtonCell:[pref_CustomRes_btnCancel cell]];
+    [pref_CustomRes_window makeFirstResponder:pref_CustomRes_txtWidth];
+    [NSApp runModalForWindow:pref_CustomRes_window];   //This call blocks the execution until [NSApp stopModal] is called
+    [NSApp endSheet:pref_CustomRes_window];
+    [pref_CustomRes_window orderOut:self];
     
     [formatter release];
     
-    NSString *sHeight = [panel_txtheight stringValue];
+    NSString *sHeight = [pref_CustomRes_txtHeight stringValue];
     if ([sHeight length] == 0)
     {
         return;
     }
     
-    NSString *sWidth = [panel_txtwidth stringValue];
+    NSString *sWidth = [pref_CustomRes_txtWidth stringValue];
     if ([sWidth length] == 0)
     {
         return;
@@ -702,7 +751,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
         [alert runModal];
         [alert release];
         
-        [window_list reloadData];
+        [pref_lstResolutions reloadData];
     }
     
     [rdi release];
@@ -710,7 +759,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
 
 - (IBAction)RemoveCustomResoultion:(id)sender
 {
-    if ([customResolution removeCustomResolution:[window_list itemAtRow:[window_list selectedRow]]] == false)
+    if ([customResolution removeCustomResolution:[pref_lstResolutions itemAtRow:[pref_lstResolutions selectedRow]]] == false)
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setInformativeText: NSLocalizedString(@"ERROR_DEL", NULL)];
@@ -733,7 +782,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
         [alert runModal];
         [alert release];
         
-        [window_list reloadData];
+        [pref_lstResolutions reloadData];
     }
 }
 
@@ -744,25 +793,25 @@ extern void IOFBCreateOverrides(void* connectRef);*/
 
 - (IBAction)PanelCancel:(id)sender
 {
-    [panel_lblratio setStringValue:@""];
-    [panel_txtheight setStringValue:@""];
-    [panel_txtwidth setStringValue:@""];
+    [pref_CustomRes_lblRatio setStringValue:@""];
+    [pref_CustomRes_txtHeight setStringValue:@""];
+    [pref_CustomRes_txtWidth setStringValue:@""];
     [NSApp stopModal];
 }
 
 
 - (IBAction)CloseWindow:(id)sender
 {
-    [window close];
+    [pref_window close];
 }
 
 - (IBAction)PaneltTXTChanged:(id)sender
 {
-    NSString *sHeight = [panel_txtheight stringValue];
-     NSString *sWidth = [panel_txtwidth stringValue];
+    NSString *sHeight = [pref_CustomRes_txtHeight stringValue];
+    NSString *sWidth = [pref_CustomRes_txtWidth stringValue];
     if ([sHeight length] == 0 || [sWidth length] == 0)
     {
-        [panel_lblratio setStringValue:@""];
+        [pref_CustomRes_lblRatio setStringValue:@""];
         return;
     }
     
@@ -771,12 +820,12 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     int nHeight = [sHeight intValue];
     
     int gcd = [ResolutionDataItem gcd:nWidth height:nHeight];
-    [panel_lblratio setStringValue:[NSString stringWithFormat:@"%d:%d", nWidth/gcd, nHeight/gcd]];
+    [pref_CustomRes_lblRatio setStringValue:[NSString stringWithFormat:@"%d:%d", nWidth/gcd, nHeight/gcd]];
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item
 {
-    [window_btndel setEnabled: ([customResolution isCustomItem: item])];
+    [pref_btnDel setEnabled: ([customResolution isCustomItem: item])];
     return true;
 }
 
@@ -944,6 +993,15 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_DETECT",NULL) action:@selector(DetectMonitors:) keyEquivalent:@""];
     [menuItem setOffStateImage:[NSImage imageNamed: NSImageNameRefreshTemplate]];
     [statusMenu addItem:menuItem];
+    
+    [statusMenu addItem:[[NSMenuItem separatorItem] copy]];
+    
+    menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_ABOUT",NULL) action:@selector(ShowAboutDialog:) keyEquivalent:@""];
+    [statusMenu addItem:menuItem];
+    
+    menuItemQuit = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_QUIT",NULL) action:@selector(Quit:) keyEquivalent:@""];
+    [menuItemQuit setHidden:YES];
+    [statusMenu addItem:menuItemQuit];
 
     NSTimer *t = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateMenu:) userInfo:statusMenu repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:t forMode:NSEventTrackingRunLoopMode];
@@ -959,6 +1017,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     
     [menuItemLock setHidden:optionKeyIsPressed];
     [menuItemScreenSaver setHidden:!optionKeyIsPressed];
+    [menuItemQuit setHidden:!optionKeyIsPressed];
 }
 
 - (void) releaseMenu:(NSMenu*)menu
@@ -988,12 +1047,35 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     }
 }
 
+
+- (NSImage *)imageResize:(NSImage*)anImage newSize:(NSSize)newSize {
+    NSImage *sourceImage = anImage;
+    [sourceImage setScalesWhenResized:YES];
+    
+    // Report an error if the source isn't a valid image
+    if (![sourceImage isValid]){
+        NSLog(@"Invalid Image");
+    } else {
+        NSImage *smallImage = [[NSImage alloc] initWithSize: newSize];
+        [smallImage lockFocus];
+        [sourceImage setSize: newSize];
+        [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+        [sourceImage drawAtPoint:NSZeroPoint fromRect:CGRectMake(0, 0, newSize.width, newSize.height) operation:NSCompositeCopy fraction:1.0];
+        [smallImage unlockFocus];
+        return smallImage;
+    }
+    return nil;
+}
+
+
 -(void)awakeFromNib{
+    customResolution = nil;
     statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
     [statusMenu setDelegate:self];
     [statusItem setMenu:statusMenu];
-    [statusItem setImage:[NSImage imageNamed:@"status_icon.png"]];
+    [statusItem setImage:[self imageResize:[[NSImage imageNamed:@"icon.icns"] copy] newSize:NSMakeSize(20, 20)]];
     [statusItem setHighlightMode:YES];
+   
     
     
 }

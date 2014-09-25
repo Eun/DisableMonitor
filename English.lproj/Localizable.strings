@@ -5,6 +5,9 @@
 "MENU_SCREENSAVER" = "Start Screensaver";
 "MENU_NO_MONITOS" = "No displays detected";
 "MENU_MANAGE" = "Manage";
+"MENU_ABOUT" = "About";
+"MENU_QUIT" = "Quit";
+"CHECK_FOR_UPDATES" = "Check for Updates";
 "ALERT_OK" = "OK";
 "ALERT_CANCEL" = "Cancel";
 "ALERT_ERROR" = "Error";

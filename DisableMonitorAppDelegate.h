@@ -24,24 +24,33 @@
     NSStatusItem *statusItem;
     NSMenuItem *menuItemLock;
     NSMenuItem *menuItemScreenSaver;
+    NSMenuItem *menuItemQuit;
     CustomResolution *customResolution;
 }
 
-@property (assign) IBOutlet NSWindow *window;
-@property (assign) IBOutlet NSTextField *window_label;
-@property (assign) IBOutlet NSButton *window_btnadd;
-@property (assign) IBOutlet NSButton *window_btndel;
-@property (assign) IBOutlet NSButton *window_btnclose;
-@property (assign) IBOutlet NSOutlineView *window_list;
+@property (assign) IBOutlet NSWindow *pref_window;
+@property (assign) IBOutlet NSTextField *pref_lblHeader;
+@property (assign) IBOutlet NSButton *pref_btnAdd;
+@property (assign) IBOutlet NSButton *pref_btnDel;
+@property (assign) IBOutlet NSButton *pref_btnClose;
+@property (assign) IBOutlet NSOutlineView *pref_lstResolutions;
+@property (assign) IBOutlet NSPanel *pref_CustomRes_window;
+@property (assign) IBOutlet NSTextField *pref_CustomRes_lblWidth;
+@property (assign) IBOutlet NSTextField *pref_CustomRes_lblHeight;
+@property (assign) IBOutlet NSTextField *pref_CustomRes_txtWidth;
+@property (assign) IBOutlet NSTextField *pref_CustomRes_txtHeight;
+@property (assign) IBOutlet NSTextField *pref_CustomRes_lblRatio;
+@property (assign) IBOutlet NSButton *pref_CustomRes_btnOk;
+@property (assign) IBOutlet NSButton *pref_CustomRes_btnCancel;
+@property (assign) IBOutlet NSPanel *about_window;
+@property (assign) IBOutlet NSButton *about_btnUpdate;
+@property (assign) IBOutlet NSButton *about_btnWeb;
+@property (assign) IBOutlet NSTextField *about_lblAppName;
+@property (assign) IBOutlet NSTextField *about_lblVersion;
+
 @property (assign) CGDirectDisplayID window_display;
-@property (assign) IBOutlet NSPanel *window_panel;
-@property (assign) IBOutlet NSTextField *panel_lblwidth;
-@property (assign) IBOutlet NSTextField *panel_lblheight;
-@property (assign) IBOutlet NSTextField *panel_txtwidth;
-@property (assign) IBOutlet NSTextField *panel_txtheight;
-@property (assign) IBOutlet NSTextField *panel_lblratio;
-@property (assign) IBOutlet NSButton *panel_btnok;
-@property (assign) IBOutlet NSButton *panel_btncancel;
+
+
 +(NSMutableArray*) GetSortedDisplays;
 +(void)ToggleMonitor:(DisplayData*) displayData enabled:(Boolean) enabled;
 @end
