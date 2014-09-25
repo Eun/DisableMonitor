@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <channel>
+      <title>DisableMonitor Changelog</title>
+      <link>https://raw.githubusercontent.com/Eun/DisableMonitor/res/appcast.xml</link>
+      <description>Most recent changes with links to updates.</description>
+      <language>en</language>
+         <item>
+            <title>Version 1.7 (0 bugs fixed; 5 new features)</title>
+            <description><![CDATA[
+              <h2>New Features for Version 1.7</h2>
+               <ul>
+                  <li>Added Updater</li>
+                  <li>Added Quit Menu (Alternative Menu)</li>
+                  <li>Added Start Screensaver Menu (Alternative Menu)</li>
+                  <li>Added console usage (Issue &#35;8)</li>
+                  <li>Added About Dialog</li>
+               </ul> 
+            ]]>
+            </description>
+            <pubDate>Thu, 25 Sep 2014 16:35:00 +0000</pubDate>
+            <enclosure url="https://github.com/Eun/DisableMonitor/releases/download/G1.7/DisableMonitor-G1.7.zip" sparkle:version="1.7" length="460032" type="application/octet-stream" sparkle:dsaSignature="MCwCFGAz/F072OV4AyuZkoGnm0ZZgRZnAhQbakfMf2pA/LBgAbNZuwUM5rrJrA==" />
+         </item>
+   </channel>
+</rss>
