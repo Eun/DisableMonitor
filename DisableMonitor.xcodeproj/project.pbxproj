@@ -12,6 +12,9 @@
 		591A9C2F19B8457A00848073 /* DisplayData.m in Sources */ = {isa = PBXBuildFile; fileRef = 591A9C2E19B8457A00848073 /* DisplayData.m */; };
 		592CED7E18FEB66E00FDDF65 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 592CED7D18FEB66E00FDDF65 /* IOKit.framework */; };
 		592CED8118FEBDB300FDDF65 /* GLFW.m in Sources */ = {isa = PBXBuildFile; fileRef = 592CED8018FEBDB300FDDF65 /* GLFW.m */; };
+		593E314119D445C6000B07DE /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593E314019D445C6000B07DE /* Sparkle.framework */; };
+		593E314319D445F5000B07DE /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 593E314019D445C6000B07DE /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		593E314719D44873000B07DE /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 593E314519D44873000B07DE /* dsa_pub.pem */; };
 		594D69681988D0F500D48AD7 /* OnlyIntegerValueFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */; };
 		5960567319D2E00E00B4525E /* DisplayIDAndName.m in Sources */ = {isa = PBXBuildFile; fileRef = 5960567219D2E00E00B4525E /* DisplayIDAndName.m */; };
 		598E9892193DC99B005DEB10 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 598E9891193DC99B005DEB10 /* MainMenu.xib */; };
@@ -25,6 +28,19 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		593E314219D445E0000B07DE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				593E314319D445F5000B07DE /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -290,6 +306,8 @@
 		591AEFF5197924CA00277858 /* DisplayData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayData.h; sourceTree = "<group>"; };
 		592CED7D18FEB66E00FDDF65 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		592CED8018FEBDB300FDDF65 /* GLFW.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLFW.m; sourceTree = "<group>"; };
+		593E314019D445C6000B07DE /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		593E314519D44873000B07DE /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		594D69661988D0F500D48AD7 /* OnlyIntegerValueFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlyIntegerValueFormatter.h; sourceTree = "<group>"; };
 		594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnlyIntegerValueFormatter.m; sourceTree = "<group>"; };
 		5960567119D2E00E00B4525E /* DisplayIDAndName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayIDAndName.h; sourceTree = "<group>"; };
@@ -319,6 +337,7 @@
 			files = (
 				591A9C2D19B83E3F00848073 /* DisplayServices.framework in Frameworks */,
 				5997614F19864C25008D8C44 /* Security.framework in Frameworks */,
+				593E314119D445C6000B07DE /* Sparkle.framework in Frameworks */,
 				592CED7E18FEB66E00FDDF65 /* IOKit.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 			);
@@ -394,6 +413,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				593E314519D44873000B07DE /* dsa_pub.pem */,
 				256AC3F00F4B6AF500CF3369 /* DisableMonitor_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
@@ -412,6 +432,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				593E314019D445C6000B07DE /* Sparkle.framework */,
 				591A9B2E19B83E2800848073 /* Library */,
 				591A9B2C19B83E0700848073 /* DesktopServicesPriv.framework */,
 				5997615019865637008D8C44 /* Carbon.framework */,
@@ -731,6 +752,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				593E314219D445E0000B07DE /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -772,6 +794,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				593E314719D44873000B07DE /* dsa_pub.pem in Resources */,
 				8D11072B0486CEB800E47090 /* Localizable.strings in Resources */,
 				59B5766718FFDC6700B57E77 /* icon.icns in Resources */,
 				598E9892193DC99B005DEB10 /* MainMenu.xib in Resources */,
@@ -824,6 +847,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -849,6 +873,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+					"$(PROJECT_DIR)",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

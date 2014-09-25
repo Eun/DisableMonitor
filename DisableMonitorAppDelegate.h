@@ -17,6 +17,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <Sparkle/Sparkle.h>
 #import "CustomResolution.h"
 #import "DisplayData.h"
 @interface DisableMonitorAppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate, NSWindowDelegate, NSOutlineViewDelegate> {
@@ -49,6 +50,7 @@
 @property (assign) IBOutlet NSTextField *about_lblVersion;
 
 @property (assign) CGDirectDisplayID window_display;
+@property (assign) IBOutlet SUUpdater *updater;
 
 
 +(NSMutableArray*) GetSortedDisplays;

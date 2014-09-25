@@ -52,6 +52,7 @@
 @synthesize about_lblVersion;
 
 @synthesize window_display;
+@synthesize updater;
 
 
 CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
@@ -632,6 +633,11 @@ extern void IOFBCreateOverrides(void* connectRef);*/
 -(IBAction)GotoHomePage:(id)sender
 {
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/Eun/DisableMonitor"]];
+}
+
+-(IBAction)CheckForUpdates:(id)sender
+{
+    [updater checkForUpdates:sender];
 }
 
 

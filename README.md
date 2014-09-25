@@ -9,6 +9,13 @@ Easily disable, enable or change the resolution of a monitor!
 
 Changelog
 =========
+1.7:
+* Added Updater
+* Added Quit Menu (Alternative Menu)
+* Added Start Screensaver Menu (Alternative Menu)
+* Added console usage (Issue #8)
+* Added About Dialog
+
 1.6:
 * Added Icons
 * Added Lock Screens
