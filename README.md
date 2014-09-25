@@ -7,6 +7,31 @@ Easily disable, enable or change the resolution of a monitor!
 
 ![](https://raw.githubusercontent.com/Eun/DisableMonitor/res/screenshot1.png)
 
+Console Usage
+============
+You can use DisableMonitor with the console.  
+Following switches are available:
+```
+-list           Displays a list of monitors that were detected
+-enable <id>    Enables a Monitor with the matching id 
+-e <id>
+-disable <id>   Disables a Monitor with the matching id
+-d <id>
+```
+
+Example Usage:
+```
+$ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor -list
+ ID         Name
+----------- -----------------
+ 188823026  SyncMaster (1)
+ 188834480  SyncMaster (2)
+----------- -----------------
+$ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor -disable 188834480
+```
+
+(More switches might be coming)
+
 Changelog
 =========
 1.7:
