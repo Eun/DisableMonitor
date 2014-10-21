@@ -54,5 +54,5 @@
 
 
 +(NSMutableArray*) GetSortedDisplays;
-+(void)ToggleMonitor:(DisplayData*) displayData enabled:(Boolean) enabled;
++(void)ToggleMonitor:(DisplayData*) displayData enabled:(Boolean) enabled mirror:(Boolean)mirror;
 @end

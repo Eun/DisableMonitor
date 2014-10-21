@@ -136,9 +136,6 @@ CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
             if (!CGDisplayIsOnline([[displays objectAtIndex:i] unsignedIntValue]))
                 continue;
             
-            if (!CGDisplayIsActive([[displays objectAtIndex:i] unsignedIntValue]) && CGDisplayIsInMirrorSet([[displays objectAtIndex:i] unsignedIntValue]))
-                continue;
-            
             for (int j = 0; j < monitors.count; j++)
             {
                 if ([[monitors objectAtIndex:j] caseInsensitiveCompare:[monitors objectAtIndex:i]] == NSOrderedSame)
@@ -326,12 +323,11 @@ void SetBrightness(IOI2CConnectRef connect, int bright)
 extern bool DisplayServicesCanChangeBrightness(CGDirectDisplayID display);
 extern CGError DisplayServicesSetBrightness(CGDirectDisplayID display, float brightnss);
 extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brightnss);
-+(void)ToggleMonitor:(DisplayData*) displayData enabled:(Boolean) enabled
++(void)ToggleMonitor:(DisplayData*) displayData enabled:(Boolean) enabled mirror:(Boolean)mirror
 {
     CGError err;
     CGDisplayConfigRef config;
     @try {
-        
         if (enabled == false)
         {
             CGDirectDisplayID    displays[0x10];
@@ -419,6 +415,10 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             ShowError(@"Error in CGBeginDisplayConfiguration: %d",err);
             return;
         }
+        if (mirror && enabled == false)
+        {
+            CGConfigureDisplayMirrorOfDisplay(config, [displayData display], kCGNullDirectDisplay);
+        }
         
         err = CGSConfigureDisplayEnabled(config, [displayData display], enabled);
         if (err != 0)
@@ -427,15 +427,18 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             return;
         }
         
-        CGConfigureDisplayFadeEffect (config, 0, 0, 0, 0, 0);
-        
-        io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
-        if (entry)
+        if (!mirror)
         {
-            IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanTrue);
-            usleep(100*1000); // sleep 100 ms
-            IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanFalse);
-            IOObjectRelease(entry);
+            CGConfigureDisplayFadeEffect (config, 0, 0, 0, 0, 0);
+            
+            io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
+            if (entry)
+            {
+                IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanTrue);
+                usleep(100*1000); // sleep 100 ms
+                IORegistryEntrySetCFProperty(entry, CFSTR("IORequestIdle"), kCFBooleanFalse);
+                IOObjectRelease(entry);
+            }
         }
         
         err = CGCompleteDisplayConfiguration(config, kCGConfigurePermanently);
@@ -479,10 +482,20 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
 -(void)MonitorClicked:(id) sender
 {
     NSMenuItem * item = (NSMenuItem*)sender;
-    CGDirectDisplayID display = [(DisplayData*)[item representedObject] display];
-    BOOL active = CGDisplayIsActive(display);
+    CGDirectDisplayID displayId = [(DisplayData*)[item representedObject] display];
+    BOOL bActive = CGDisplayIsActive(displayId);
+    BOOL bMirror = NO;
+    if (bActive == NO)
+    {
+        bMirror = CGDisplayIsInMirrorSet(displayId);
+        if (bMirror)
+        {
+            bActive = YES;
+        }
+    }
+
     
-    if (active == true)
+    if (bMirror == NO && bActive == true)
     {
         CGDirectDisplayID    displays[0x10];
         CGDisplayCount  nDisplays = 0;
@@ -506,7 +519,7 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [DisableMonitorAppDelegate ToggleMonitor:(DisplayData*)[item representedObject] enabled:!active];
+        [DisableMonitorAppDelegate ToggleMonitor:(DisplayData*)[item representedObject] enabled:!bActive mirror:bMirror];
     });
 }
 
@@ -901,6 +914,16 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             CGDirectDisplayID displayId = [idAndName id];
             NSMenuItem *displayItem = [[NSMenuItem alloc] initWithTitle: [idAndName name]  action:nil keyEquivalent:@""];
             BOOL bActive = CGDisplayIsActive(displayId);
+            BOOL bMirror = NO;
+            if (bActive == NO)
+            {
+                bMirror = CGDisplayIsInMirrorSet(displayId);
+                if (bMirror)
+                {
+                    bActive = YES;
+                }
+            }
+            
             if (bActive)
                 [displayItem setState:NSOnState];
             else
@@ -912,7 +935,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             
             ResolutionDataSource *dataSource = [[ResolutionDataSource alloc] initWithDisplay:displayId];
             int numberOfDisplayModes = [dataSource outlineView:nil numberOfChildrenOfItem:nil];
-            if (CGDisplayIsActive(displayId) && numberOfDisplayModes > 0)
+            if (bActive && numberOfDisplayModes > 0 && bMirror == NO)
             {
                 [subMenu addItem:[[NSMenuItem separatorItem] copy]];
                 int currentDisplayModeNumber;
@@ -940,6 +963,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
                 }
                 [tableColumn release];
             }
+            
             [dataSource release];
             
             
@@ -962,7 +986,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             
             
             
-            if (CGDisplayIsActive(displayId))
+            if (bActive && bMirror == NO)
             {
                 [subMenu insertItem:[[NSMenuItem separatorItem] copy] atIndex:[[subMenu itemArray] count]];
                 
