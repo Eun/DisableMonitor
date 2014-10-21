@@ -34,6 +34,10 @@ $ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor -disable 188834
 
 Changelog
 =========
+
+1.8:
+* Added posibility to disable mirrored monitor (Issue #9)
+
 1.7:
 * Added Updater
 * Added Quit Menu (Alternative Menu)
