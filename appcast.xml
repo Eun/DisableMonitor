@@ -21,5 +21,18 @@
             <pubDate>Thu, 25 Sep 2014 16:35:00 +0000</pubDate>
             <enclosure url="https://github.com/Eun/DisableMonitor/releases/download/G1.7/DisableMonitor-G1.7.zip" sparkle:version="1.7" length="460032" type="application/octet-stream" />
          </item>
+         <item>
+            <title>Version 1.8 (1 bugs fixed; 1 new features)</title>
+            <description><![CDATA[
+              <h2>New Features for Version 1.8</h2>
+               <ul>
+                  <li>Added Yosemite White Icon</li>
+                  <li>Added posibility to disable mirrored monitor (Issue #9)</li>
+               </ul> 
+            ]]>
+            </description>
+            <pubDate>Thu, 30 Oct 2014 11:01:00 +0000</pubDate>
+            <enclosure url="https://github.com/Eun/DisableMonitor/releases/download/G1.8/DisableMonitor-G1.8.zip" sparkle:version="1.8" length="460286" type="application/octet-stream" />
+         </item>
    </channel>
 </rss>
