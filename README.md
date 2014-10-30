@@ -68,3 +68,7 @@ Changelog
 * Bugfixes
 * improved stability
 * added German language
+
+Notes
+-----
+App Icon by http://ionicons.com/
