@@ -36,6 +36,7 @@ Changelog
 =========
 
 1.8:
+* Added Yosemite White Icon
 * Added posibility to disable mirrored monitor (Issue #9)
 
 1.7:
