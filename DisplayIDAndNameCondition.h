@@ -17,15 +17,9 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "ResolutionDataItem.h"
-
-@interface CustomResolution : NSObject
-{
-    CGDirectDisplayID displayID;
-    NSMutableArray *resolutions;
-}
-- (id)initWithDisplayID:(CGDirectDisplayID)aDisplay;
-- (bool) isCustomItem:(ResolutionDataItem*)item;
-- (bool) addCustomResolution:(ResolutionDataItem*)item;
-- (bool) removeCustomResolution:(ResolutionDataItem*)item;
+#import "DisplayIDAndName.h"
+@interface DisplayIDAndNameCondition : DisplayIDAndName
+@property (assign) BOOL enabled;
+@property (assign) BOOL disabled;
+- (id) initWithDisplayIDAndName:(DisplayIDAndName*)displayIDAndName;
 @end

@@ -18,11 +18,14 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ResolutionDataSource : NSObject  <NSOutlineViewDataSource>
+@interface MonitorDataSource : NSObject  <NSOutlineViewDataSource>
 {
     NSMutableArray *dataItems;
+    NSString *listToUse;
 }
 @property CGDirectDisplayID display;
-- (id) initWithDisplay:(CGDirectDisplayID)aDisplay;
-+ (NSMutableDictionary*) getDictForDisplay:(NSUserDefaults*)userDefaults display:(CGDirectDisplayID)display;
+- (id) initWithDisplay:(CGDirectDisplayID)aDisplay useEnableList:(BOOL)useEnableList;
++(NSString*) screenNameForDisplay:(CGDirectDisplayID)displayID;
++(NSMutableArray*) GetSortedDisplays;
++(NSMutableArray*) GetSortedDisplays:(CGDirectDisplayID)skipDisplayID;
 @end

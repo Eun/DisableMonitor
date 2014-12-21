@@ -26,18 +26,15 @@
 - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
     if (item != nil)
         return 0;
-    int numberOfDisplayModes;
-    CGSGetNumberOfDisplayModes(display, &numberOfDisplayModes);
 
-    if (dataItems != nil)
+    if (dataItems == nil)
     {
-       [dataItems release];
-        dataItems = nil;
-    }
-    
-    
-    if (numberOfDisplayModes > 0)
-    {
+        int numberOfDisplayModes;
+        CGSGetNumberOfDisplayModes(display, &numberOfDisplayModes);
+        if (numberOfDisplayModes <= 0)
+        {
+            return 0;
+        }
         NSMutableArray *items = [[NSMutableArray alloc] init];
         for (int j = 0; j < numberOfDisplayModes; j++) {
             
@@ -45,18 +42,11 @@
             CGSGetDisplayModeDescriptionOfLength(display, j, &mode, sizeof(mode));
             [items addObject: [[ResolutionDataItem alloc] initWithMode:mode]];
         }
-        [self LoadData:items];
+        [self loadData:items];
         
         dataItems = [[items sortedArrayUsingComparator:^NSComparisonResult(ResolutionDataItem* a, ResolutionDataItem* b) {
             CGSDisplayMode mymode = [a mode];
             CGSDisplayMode othermode = [b mode];
-            
-            if (![a visible] && ![b visible])
-                return NSOrderedSame;
-            else if ([a visible] && ![b visible])
-                return NSOrderedAscending;
-            else if (![a visible] && [b visible])
-                return NSOrderedDescending;
             
             if (mymode.width > othermode.width)
                 return NSOrderedAscending;
@@ -66,12 +56,10 @@
                 return NSOrderedSame;
         }] mutableCopy];
         [items release];
+
     }
-    return numberOfDisplayModes;
+    return [dataItems count];
 }
-
-
-NSArray *sortedArray;
 
 
 
@@ -91,6 +79,8 @@ NSArray *sortedArray;
 
 
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
+    if (item == nil)
+        return nil;
     if ([[tableColumn identifier] isEqualToString:@"Name"])
     {
         CGSDisplayMode mode = [(ResolutionDataItem*)item mode];
@@ -105,9 +95,11 @@ NSArray *sortedArray;
         
         int fontSize = [NSFont systemFontSize];
         
-        NSMutableString *res = [NSMutableString stringWithFormat:@"%lux%lux%lu@%d ", w, h, d, r];
+        NSMutableString *res = [NSMutableString stringWithFormat:@"%lux%lux%lu", w, h, d];
+        if (r > 0)
+            [res appendFormat:@"@%d", r];
         int lres = [res length];
-        [res appendFormat:@"[%d:%d]", (int)w/gcd, (int)h/gcd];
+        [res appendFormat:@" [%d:%d]", (int)w/gcd, (int)h/gcd];
         int lrat = [res length] - lres;
         
         NSMutableAttributedString *titleText = [[NSMutableAttributedString alloc] initWithString:res];
@@ -134,7 +126,7 @@ NSArray *sortedArray;
     if ([[tableColumn identifier] isEqualToString:@"CheckBox"])
     {
         [[dataItems objectAtIndex:[dataItems indexOfObject:item]] setVisible:[object boolValue]];
-        [self SaveData];
+        [self saveData];
         [outlineView reloadData];
     }
 }
@@ -178,44 +170,58 @@ NSArray *sortedArray;
     return self;
 }
 
-- (void) SaveData
++ (NSMutableDictionary*) getDictForDisplay:(NSUserDefaults*)userDefaults display:(CGDirectDisplayID)display
+{
+    NSMutableDictionary *dict;
+    NSObject *data = [userDefaults dictionaryForKey:[NSString stringWithFormat:@"%u", display]];
+    if (data == nil)
+        dict = [[[[NSMutableDictionary alloc] init] autorelease] retain];
+    else
+        dict = [[[(NSDictionary*)data mutableCopy] autorelease] retain];
+
+    return dict;
+}
+
+- (void) saveData
 {
     if (dataItems != nil)
     {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        
         // encode data
-        NSMutableArray *archiveArray = [NSMutableArray arrayWithCapacity:[dataItems count]];
+        NSMutableArray *archiveArray = [[NSMutableArray alloc]init];
         for (ResolutionDataItem *item in dataItems) {
-            NSData *encodedItem = [NSKeyedArchiver archivedDataWithRootObject:item];
-            [archiveArray addObject:encodedItem];
+                NSData *encodedItem = [NSKeyedArchiver archivedDataWithRootObject:item];
+                [archiveArray addObject:encodedItem];
         }
-        [userDefaults setObject:archiveArray forKey:[NSString stringWithFormat:@"%u", display]];
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        NSMutableDictionary *dict = [ResolutionDataSource getDictForDisplay:userDefaults display:display];
+        [dict setObject:archiveArray forKey:@"resolutions"];
+        [userDefaults setObject:dict forKey:[NSString stringWithFormat:@"%u", display]];
         [userDefaults synchronize];
+ 
     }
 }
 
-- (void) LoadData:(NSMutableArray*)system_items
+- (void) loadData:(NSMutableArray*)system_items
 {
-    
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *items = [userDefaults objectForKey:[NSString stringWithFormat:@"%u", display]];
-    if (items != nil)
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *dict = [ResolutionDataSource getDictForDisplay:userDefaults display:display];
+    if ([dict count] <= 0)
+        return;
+    NSMutableArray *items = [dict objectForKey:@"resolutions"];
+    if (items == nil)
+        return;
+    for (int i = [items count] - 1; i>= 0; --i)
     {
-        for (int i = [items count] - 1; i>= 0; --i)
+        NSData *encodedItem = [items objectAtIndex:i];
+        ResolutionDataItem *item =[NSKeyedUnarchiver unarchiveObjectWithData:encodedItem];
+        for (int j = [system_items count] - 1; j>= 0; --j)
         {
-            NSData *encodedItem = [items objectAtIndex:i];
-            ResolutionDataItem *item =[NSKeyedUnarchiver unarchiveObjectWithData:encodedItem];
-            for (int j = [system_items count] - 1; j>= 0; --j)
+            ResolutionDataItem *sysitem = [system_items objectAtIndex:j];
+            
+            if (sysitem.mode.width == item.mode.width && sysitem.mode.height == item.mode.height && sysitem.mode.depth == item.mode.depth && sysitem.mode.freq == item.mode.freq)
             {
-                ResolutionDataItem *sysitem = [system_items objectAtIndex:j];
-                
-                if (sysitem.mode.width == item.mode.width && sysitem.mode.height == item.mode.height && sysitem.mode.depth == item.mode.depth && sysitem.mode.freq == item.mode.freq)
-                {
-                    [sysitem setVisible:[item visible]];
-                    break;
-                }
+                [sysitem setVisible:[item visible]];
+                break;
             }
         }
     }

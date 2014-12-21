@@ -20,8 +20,10 @@
 "ERROR_ADD" = "Unable to add custom resolution";
 "ERROR_DEL" = "Unable to remove custom resolution";
 "ERROR_TURNOFF" = "Unable to turn off monitors";
-"CUSTOM_ADD" = "Your custom resolution has been added. However the system recoginzes the new resolution only if you\n\n    restart your Mac\nor\n    reattach (physicly) your monitor.";
-"CUSTOM_DEL" = "Your custom resolution has been removed. However the system recoginzes the change only if you\n\n    restart your Mac\nor\n    reattach (physicly) your monitor.";
-"CUSTOM_LABEL" = "Welche Auflösungen sollen sichtbar sein?";
-"CUSTOM_WIDTH" = "Breite";
-"CUSTOM_HEIGHT" = "Höhe";
+"PREF_TAB_RESOLUTIONS" = "Auflösungen";
+"PREF_TAB_RULES" = "Regeln";
+"PREF_LABEL" = "Welche Auflösungen sollen sichtbar sein?";
+"PREF_ENABLE_MONITOR" = "Monitor automatisch aktivieren wenn...";
+"PREF_DISABLE_MONITOR" = "Monitor automatisch deaktivieren wenn...";
+"PREF_CLOSE" = "Schließen";
+"PREF_DISCONNECTED_MONITOR" = "Getrennter Monitor #%u";

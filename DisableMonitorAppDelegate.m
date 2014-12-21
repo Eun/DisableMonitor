@@ -22,106 +22,24 @@
 #import "DisplayData.h"
 #import "ResolutionDataSource.h"
 #import "ResolutionDataItem.h"
-#import "CustomResolution.h"
 #import "OnlyIntegerValueFormatter.h"
-#import "DisplayIDAndName.h"
+#import "DisplayIDAndNameCondition.h"
+#import "MonitorDataSource.h"
+#import "NSImage+NegativeImage.h"
 #include <stdlib.h>
 
-@implementation NSImage (NegativeImage)
-
-- (NSImage *)negativeImage
-{
-    // get width and height as integers, since we'll be using them as
-    // array subscripts, etc, and this'll save a whole lot of casting
-    CGSize size = self.size;
-    int width = size.width;
-    int height = size.height;
-    
-    // Create a suitable RGB+alpha bitmap context in BGRA colour space
-    CGColorSpaceRef colourSpace = CGColorSpaceCreateDeviceRGB();
-    unsigned char *memoryPool = (unsigned char *)calloc(width*height*4, 1);
-    CGContextRef context = CGBitmapContextCreate(memoryPool, width, height, 8, width * 4, colourSpace, kCGBitmapByteOrder32Big | kCGImageAlphaPremultipliedLast);
-    CGColorSpaceRelease(colourSpace);
-    
-    // draw the current image to the newly created context
-    
-    CGImageSourceRef source;
-    
-    source = CGImageSourceCreateWithData((CFDataRef)[self TIFFRepresentation], NULL);
-    CGImageRef maskRef =  CGImageSourceCreateImageAtIndex(source, 0, NULL);
-    
-    CGContextDrawImage(context, CGRectMake(0, 0, width, height), maskRef);
-    
-    // run through every pixel, a scan line at a time...
-    for(int y = 0; y < height; y++)
-    {
-        // get a pointer to the start of this scan line
-        unsigned char *linePointer = &memoryPool[y * width * 4];
-        
-        // step through the pixels one by one...
-        for(int x = 0; x < width; x++)
-        {
-            // get RGB values. We're dealing with premultiplied alpha
-            // here, so we need to divide by the alpha channel (if it
-            // isn't zero, of course) to get uninflected RGB. We
-            // multiply by 255 to keep precision while still using
-            // integers
-            int r, g, b;
-            if(linePointer[3])
-            {
-                r = linePointer[0] * 255 / linePointer[3];
-                g = linePointer[1] * 255 / linePointer[3];
-                b = linePointer[2] * 255 / linePointer[3];
-            }
-            else
-                r = g = b = 0;
-            
-            // perform the colour inversion
-            r = 255 - r;
-            g = 255 - g;
-            b = 255 - b;
-            
-            // multiply by alpha again, divide by 255 to undo the
-            // scaling before, store the new values and advance
-            // the pointer we're reading pixel data from
-            linePointer[0] = r * linePointer[3] / 255;
-            linePointer[1] = g * linePointer[3] / 255;
-            linePointer[2] = b * linePointer[3] / 255;
-            linePointer += 4;
-        }
-    }
-    
-    // get a CG image from the context, wrap that into a
-    // UIImage
-    CGImageRef cgImage = CGBitmapContextCreateImage(context);
-    NSImage *returnImage = [[NSImage alloc] initWithCGImage:cgImage size: NSZeroSize];
-    // clean up
-    CGImageRelease(cgImage);
-    CGContextRelease(context);
-    free(memoryPool);
-    
-    // and return
-    return returnImage;
-}
-
-@end
 
 @implementation DisableMonitorAppDelegate
 
 @synthesize pref_window;
 @synthesize pref_lblHeader;
-@synthesize pref_btnAdd;
-@synthesize pref_btnDel;
 @synthesize pref_btnClose;
 @synthesize pref_lstResolutions;
-@synthesize pref_CustomRes_window;
-@synthesize pref_CustomRes_lblWidth;
-@synthesize pref_CustomRes_lblHeight;
-@synthesize pref_CustomRes_txtWidth;
-@synthesize pref_CustomRes_txtHeight;
-@synthesize pref_CustomRes_lblRatio;
-@synthesize pref_CustomRes_btnOk;
-@synthesize pref_CustomRes_btnCancel;
+@synthesize pref_chkDisableMonitor;
+@synthesize pref_chkEnableMonitor;
+@synthesize pref_lstDisableMonitors;
+@synthesize pref_lstEnableMonitors;
+@synthesize pref_tabView;
 @synthesize about_window;
 @synthesize about_btnUpdate;
 @synthesize about_btnWeb;
@@ -140,110 +58,49 @@ CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 }
 
 
-+(NSString*) screenNameForDisplay:(CGDirectDisplayID)displayID
-{
-    NSString *screenName = nil;
-    io_service_t service = IOServicePortFromCGDisplayID(displayID);
-    if (service)
+-(void)awakeFromNib{
+    statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
+    [statusMenu setDelegate:self];
+    [statusItem setMenu:statusMenu];
+    NSImage *statusImage = [NSImage imageResize:[[NSImage imageNamed:@"icon.icns"] copy] newSize:NSMakeSize(20, 20)];
+    
+    
+    if ([self isInDarkMode])
     {
-        NSDictionary *deviceInfo = (NSDictionary *)IODisplayCreateInfoDictionary(service, kIODisplayOnlyPreferredName);
-        NSDictionary *localizedNames = [deviceInfo objectForKey:[NSString stringWithUTF8String:kDisplayProductName]];
-    
-        if ([localizedNames count] > 0) {
-            screenName = [[localizedNames objectForKey:[[localizedNames allKeys] objectAtIndex:0]] retain];
-        }
-    
-        [deviceInfo release];
+        NSImage *normalImage = statusImage;
+        statusImage = [normalImage negativeImage];
+        [normalImage release];
     }
-    return [screenName autorelease];
+    
+    
+    [self setupAboutWindow];
+    [self setupPreferencesWindow];
+    
+    [statusItem setImage:statusImage];
+    [statusItem setHighlightMode:YES];
+    [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeChanged:) name:@"AppleInterfaceThemeChangedNotification" object:nil];
+    CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallBack, NULL);
 }
 
-+(NSMutableArray*) GetSortedDisplays
+
+#pragma mark Helper functions
+- (BOOL)isInDarkMode
 {
-    NSArray *displays = nil;
-    CGDisplayCount nDisplays = 0;
-    
-    CGDirectDisplayID displayList[0x10];
-    NSMutableArray *displayArray = [[NSMutableArray alloc] init];
-    CGDisplayErr err = CGSGetDisplayList(0x10, displayList, &nDisplays);
-    
-    if (err == 0 && nDisplays > 0)
+    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] persistentDomainForName:NSGlobalDomain];
+    id style = [dict objectForKey:@"AppleInterfaceStyle"];
+    return ( style && [style isKindOfClass:[NSString class]] && NSOrderedSame == [style caseInsensitiveCompare:@"dark"] );
+}
+
+-(void)darkModeChanged:(NSNotification *)notif
+{
+    NSImage *statusImage = [NSImage imageResize:[[NSImage imageNamed:@"icon.icns"] copy] newSize:NSMakeSize(20, 20)];
+    if ([self isInDarkMode])
     {
-        for (int i = 0; i < nDisplays; i++)
-        {
-            [displayArray addObject: [NSNumber numberWithUnsignedInt:displayList[i]]];
-        }
-        
-        displays = [displayArray sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-            CGDirectDisplayID _a = [a unsignedIntValue], _b = [b unsignedIntValue];
-            if (_a == _b)
-                return NSOrderedSame;
-            else if (_a < _b)
-                return NSOrderedAscending;
-            else
-                return NSOrderedDescending;
-        }];
+        NSImage *normalImage = statusImage;
+        statusImage = [normalImage negativeImage];
+        [normalImage release];
     }
-    
-    
-    
-    if (nDisplays > 0)
-    {
-        NSMutableArray *monitors = [[NSMutableArray alloc] init];
-        for (int i = 0; i < nDisplays; i++)
-        {
-            NSString *name = [DisableMonitorAppDelegate screenNameForDisplay:[[displays objectAtIndex:i] unsignedIntValue]];
-            if (name != nil)
-            {
-                [monitors addObject: name];
-            }
-            
-            else
-            {
-                [monitors addObject: [NSString stringWithFormat:@"Display #%d", i + 1]];
-            }
-        }
-        
-        NSMutableArray *retDisplays = [[NSMutableArray alloc] init];
-        for (int i = 0; i < monitors.count; i++)
-        {
-            int num = 0;
-            int index = 1;
-            
-            if (!CGDisplayIsOnline([[displays objectAtIndex:i] unsignedIntValue]))
-                continue;
-            
-            for (int j = 0; j < monitors.count; j++)
-            {
-                if ([[monitors objectAtIndex:j] caseInsensitiveCompare:[monitors objectAtIndex:i]] == NSOrderedSame)
-                {
-                    num++;
-                    if (j < i)
-                    {
-                        index++;
-                    }
-                }
-            }
-            
-            NSString *name;
-            if (num > 1)
-                name = [NSString stringWithFormat:@"%@ (%d)", [monitors objectAtIndex:i], index];
-            else
-                name = [monitors objectAtIndex:i];
-            
-            
-            DisplayIDAndName *idAndName = [[DisplayIDAndName alloc] init];
-            [idAndName setId:[[displays objectAtIndex:i] unsignedIntValue]];
-            [idAndName setName:name];
-            [retDisplays addObject:idAndName];
-        }
-        [monitors release];
-        return retDisplays;
-    }
-    else
-    {
-        return nil;
-    }
+    [statusItem setImage:statusImage];
 }
 
 +(void)ShowError:(NSString*)error
@@ -266,7 +123,13 @@ CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 
 #define ShowError(...) [DisableMonitorAppDelegate ShowError:[NSString stringWithFormat:__VA_ARGS__]];
 
-+(void)MoveAllWindows:(CGDirectDisplayID) display to:(CGDirectDisplayID*)todisplay
+/**
+ *  move all windows from one display to another
+ *
+ *  @param display   source display
+ *  @param todisplay destination display
+ */
++(void)moveAllWindows:(CGDirectDisplayID) display to:(CGDirectDisplayID*)todisplay
 {
     CFArrayRef windowList = CGWindowListCopyWindowInfo(kCGWindowListExcludeDesktopElements, kCGNullWindowID);
     CGRect bounds = CGDisplayBounds(display);
@@ -278,7 +141,7 @@ CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
         {
             CGRect windowBounds;
             CGRectMakeWithDictionaryRepresentation((CFDictionaryRef)[windowItem objectForKey:(id)kCGWindowBounds], &windowBounds);
-            if (CGRectContainsRect(bounds, windowBounds))
+            if (CGRectContainsPoint(bounds, windowBounds.origin))
             {
                 NSNumber *windowNumber = (NSNumber*)[windowItem objectForKey:(id)kCGWindowNumber];
                 NSNumber *windowOwnerPid = (NSNumber*)[windowItem objectForKey:(id)kCGWindowOwnerPID];
@@ -317,90 +180,66 @@ CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     CFRelease(windowList);
 }
 
-void BrightnessRead(IOI2CConnectRef connect)
+/**
+ *  get the currentstate of a display
+ *
+ *  @param displayID display to check
+ *
+ *  @return YES if the display is enabled
+ */
++(bool)isDisplayEnabled:(CGDirectDisplayID)displayID
 {
-    kern_return_t kr;
-    IOI2CRequest request;
-    UInt8 data[128];
-    UInt8 inData[9];
-    int i;
-    
-    bzero( &request, sizeof(request));
-    
-    request.commFlags = 0;
-    
-    request.sendAddress = 0x6E;
-    request.sendTransactionType = kIOI2CSimpleTransactionType;
-    request.sendBuffer = (vm_address_t) &data[0];
-    request.sendBytes = 5;
-    request.minReplyDelay = 6000000;
-    
-    data[0] = 0x51;
-    data[1] = 0x82;
-    data[2] = 0x01;
-    data[3] = 0x10;
-    data[4] = 0x6E ^ data[0] ^ data[1] ^ data[2] ^ data[3];
-    
-    
-    request.replyTransactionType = kIOI2CDDCciReplyTransactionType;
-    request.replyAddress = 0x6F;
-    request.replySubAddress = 0x51;
-    request.replyBuffer = (vm_address_t) &inData[0];
-    request.replyBytes = 9;
-    bzero( &inData[0], request.replyBytes );
-    
-    kr = IOI2CSendRequest( connect, kNilOptions, &request );
-    assert( kIOReturnSuccess == kr );
-    if( kIOReturnSuccess != request.result)
-        return;
-    
-    
-    for (i=0; i<9; i++) {
-        
-        printf(" 0x%x ",inData[i]);
+    if (!CGDisplayIsOnline(displayID))
+        return NO;
+     // if the display is not active, it could be in a mirrorset
+    if (CGDisplayIsActive(displayID) == NO)
+    {
+        if (CGDisplayIsInMirrorSet(displayID))
+            return YES;
+        else
+            return NO;
     }
-    printf("n");
+    return YES;
 }
-
-void SetBrightness(IOI2CConnectRef connect, int bright)
+/**
+ *  show warning if user is going to disable last monitor
+ *
+ *  @return true if the user choses to abort
+ */
++(bool) showErrorWarningIfLastMonitor:(CGDirectDisplayID)displayID
 {
-    kern_return_t kr;
-    IOI2CRequest request;
-    UInt8 data[128];
-    
-    bzero( &request, sizeof(request));
-    
-    request.commFlags = 0;
-    
-    request.sendAddress = 0x6E;
-    request.sendTransactionType = kIOI2CSimpleTransactionType;
-    request.sendBuffer = (vm_address_t) &data[0];
-    request.sendBytes = 7;
-    
-    data[0] = 0x51;
-    data[1] = 0x84;
-    data[2] = 0x03;
-    data[3] = 0x10;
-    data[4] = 0x64 ;
-    data[5] = bright;
-    data[6] = 0x6E ^ data[0] ^ data[1] ^ data[2] ^ data[3]^ data[4]^
-    data[5];
-    
-    
-    request.replyTransactionType = kIOI2CNoTransactionType;
-    request.replyBytes = 0;//128;
-    
-    kr = IOI2CSendRequest( connect, kNilOptions, &request );
-    assert( kIOReturnSuccess == kr );
-    if( kIOReturnSuccess != request.result)
-        return;
-
+    if ([DisableMonitorAppDelegate isDisplayEnabled:displayID] && displayID == CGDisplayPrimaryDisplay(displayID))
+    {
+        CGDirectDisplayID    displays[0x10];
+        CGDisplayCount  nDisplays = 0;
+        CGError err = CGGetActiveDisplayList(0x10, displays, &nDisplays);
+        
+        if (err == 0 && nDisplays - 1 == 0)
+        {
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setInformativeText:NSLocalizedString(@"ALERT_LAST_MONITOR", NULL)];
+            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
+            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
+            [alert setAlertStyle:NSCriticalAlertStyle];
+            [alert setMessageText:NSLocalizedString(@"ALERT_WARNING", NULL)];
+            if ([alert runModal] != NSAlertFirstButtonReturn)
+            {
+                [alert release];
+                return true;
+            }
+            [alert release];
+        }
+    }
+    return false;
 }
 
-extern bool DisplayServicesCanChangeBrightness(CGDirectDisplayID display);
-extern CGError DisplayServicesSetBrightness(CGDirectDisplayID display, float brightnss);
-extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brightnss);
-+(void)ToggleMonitor:(DisplayData*) displayData enabled:(Boolean) enabled mirror:(Boolean)mirror
+/**
+ *  toggle a monitor state from disabled to enabled or reverse.
+ *
+ *  @param displayID the display id of the monitor
+ *  @param enabled   should it be enabled or disabled?
+ */
++(void)toggleMonitor:(CGDirectDisplayID)displayID enabled:(Boolean) enabled
 {
     CGError err;
     CGDisplayConfigRef config;
@@ -416,14 +255,14 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             {
                 for (int i = 0; i < nDisplays; i++)
                 {
-                    if (displays[i] == [displayData display])
+                    if (displays[i] == displayID)
                         continue;
                     if (!CGDisplayIsOnline(displays[i]))
                         continue;
                     if (!CGDisplayIsActive(displays[i]))
                         continue;
                     @try {
-                        [self MoveAllWindows:[displayData display] to:displays[i]];
+                        [self moveAllWindows:displayID to:displays[i]];
                     }
                     @catch (NSException *e)
                     {
@@ -433,58 +272,8 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
                 }
             }
         }
-
-       
-       
-        /*if (DisplayServicesCanChangeBrightness([displayData display]))
-        {
-            if (enabled == false)
-            {
-                float brightness = 0.0;
-                DisplayServicesGetBrightness([displayData display], &brightness);
-                [displayData setBrightness:brightness];
-                DisplayServicesSetBrightness([displayData display], 0.0f);
-            }
-            else
-            {
-                DisplayServicesSetBrightness([displayData display], [displayData brightness]);
-            }
-        }
-        else
-        {
-            io_service_t service = CGDisplayIOServicePort([displayData display]);
-            if (service)
-            {
-                IOItemCount count;
-                io_string_t pathName;
-                if (IORegistryEntryGetPath(service, kIOServicePlane, pathName) == KERN_SUCCESS)
-                {
-                    IORegistryEntrySetCFProperty
-                    if (IOFBGetI2CInterfaceCount(service, &count) == kIOReturnSuccess)
-                    {
-                        for (int i = 0; i < count; ++i )
-                        {
-                            IOI2CConnectRef connect;
-                            io_service_t interface;
-                            if (IOFBCopyI2CInterfaceForBus(service, i, &interface) != kIOReturnSuccess)
-                                continue;
-                            kern_return_t kr = IOI2CInterfaceOpen(interface, kNilOptions, &connect );
-                            IOObjectRelease(interface);
-                            if(kIOReturnSuccess == kr)
-                            {
-                                
-                                BrightnessRead(connect);
-                                IOI2CInterfaceClose(connect, kNilOptions );
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
-    
         
-        
+        usleep(1000*1000); // sleep 1000 ms
         
         err = CGBeginDisplayConfiguration (&config);
         if (err != 0)
@@ -492,12 +281,14 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             ShowError(@"Error in CGBeginDisplayConfiguration: %d",err);
             return;
         }
-        if (mirror && enabled == false)
+        
+        bool mirror = CGDisplayIsInMirrorSet(displayID);
+        if (enabled == false && mirror)
         {
-            CGConfigureDisplayMirrorOfDisplay(config, [displayData display], kCGNullDirectDisplay);
+            CGConfigureDisplayMirrorOfDisplay(config, displayID, kCGNullDirectDisplay);
         }
         
-        err = CGSConfigureDisplayEnabled(config, [displayData display], enabled);
+        err = CGSConfigureDisplayEnabled(config, displayID, enabled);
         if (err != 0)
         {
             ShowError(@"Error in CGSConfigureDisplayEnabled: %d", err);
@@ -524,23 +315,16 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
             ShowError(@"Error in CGCompleteDisplayConfiguration: %d", err);
         }
         
-        // reset the wallpapers (Issue #10) - On hold while waiting for comment on GitHub
-        /*
-        NSArray *screens = [NSScreen screens];
-        for (NSScreen *screen in screens) {
-            NSURL *url = [[NSWorkspace sharedWorkspace] desktopImageURLForScreen:screen];
-            NSDictionary *options = [[NSWorkspace sharedWorkspace] desktopImageOptionsForScreen:screen];
-            [[NSWorkspace sharedWorkspace] setDesktopImageURL:url forScreen:screen options:options error:nil];
-        }
-        */
     }
     @catch (NSException *exception) {
-        
+        NSLog(@"Exception:" );
+        NSLog(@"Name: %@", exception.name);
+        NSLog(@"Reason: %@", exception.reason );
     }
 }
 
 
--(void)SetMonitorRes:(CGDirectDisplayID) display mode:(CGSDisplayMode) mode
+-(void)setMonitorRes:(CGDirectDisplayID) display mode:(CGSDisplayMode) mode
 {
     CGError err;
     CGDisplayConfigRef config;
@@ -550,7 +334,7 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
         ShowError(@"Error in CGBeginDisplayConfiguration: %d\n", err);
         return;
     }
-
+    
     
     err = CGSConfigureDisplayMode(config, display, mode.modeNumber);
     if (err != 0)
@@ -566,60 +350,37 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
     }
 }
 
--(void)MonitorClicked:(id) sender
+#pragma mark Menu actions
+/**
+ *  user clicked on enable / disable monitor
+ *
+ *  @param sender menuItem
+ */
+-(void)monitorClicked:(id) sender
 {
     NSMenuItem * item = (NSMenuItem*)sender;
     CGDirectDisplayID displayId = [(DisplayData*)[item representedObject] display];
-    BOOL bActive = CGDisplayIsActive(displayId);
-    BOOL bMirror = NO;
-    if (bActive == NO)
-    {
-        bMirror = CGDisplayIsInMirrorSet(displayId);
-        if (bMirror)
-        {
-            bActive = YES;
-        }
-    }
-
-    
-    if (bMirror == NO && bActive == true)
-    {
-        CGDirectDisplayID    displays[0x10];
-        CGDisplayCount  nDisplays = 0;
-        CGError err = CGGetActiveDisplayList(0x10, displays, &nDisplays);
-        
-        if (err == 0 && nDisplays - 1 == 0)
-        {
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setInformativeText:NSLocalizedString(@"ALERT_LAST_MONITOR", NULL)];
-            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
-            [alert addButtonWithTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
-            [alert setAlertStyle:NSCriticalAlertStyle];
-            [alert setMessageText:NSLocalizedString(@"ALERT_WARNING", NULL)];
-            if ([alert runModal] != NSAlertFirstButtonReturn)
-            {
-                [alert release];
-                return;
-            }
-            [alert release];
-        }
-    }
+    if ([DisableMonitorAppDelegate showErrorWarningIfLastMonitor:displayId])
+        return;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [DisableMonitorAppDelegate ToggleMonitor:(DisplayData*)[item representedObject] enabled:!bActive mirror:bMirror];
+        [DisableMonitorAppDelegate toggleMonitor:displayId enabled:![DisableMonitorAppDelegate isDisplayEnabled:displayId]];
     });
 }
 
--(void)MonitorResolution:(id) sender
+/**
+ *  user clicked on a resolution that should be changed now
+ *
+ *  @param sender menuItem
+ */
+-(void)monitorResolutionClicked:(id) sender
 {
-    NSMenuItem * item = (NSMenuItem*)sender;
+    NSMenuItem *item = (NSMenuItem*)sender;
     DisplayData *data = [item representedObject];
-    BOOL active = CGDisplayIsActive([data display]);
-    
-    if (active == true)
+    if (CGDisplayIsActive([data display]))
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self SetMonitorRes:[data display] mode:[data mode]];
+            [self setMonitorRes:[data display] mode:[data mode]];
         });
     }
     else
@@ -633,25 +394,14 @@ extern void DisplayServicesGetBrightness(CGDirectDisplayID display, float *brigh
         [alert release];
     }
 }
-/*
-void* IOFBConnectToRef( io_connect_t connect )
-{
-    return((void* ) CFDictionaryGetValue( gConnectRefDict, (void *) (uintptr_t) connect ));
-}
 
-
-extern void IOFBCreateOverrides(void* connectRef);*/
--(void)DetectMonitors:(id) sender
+/**
+ *  user clicked on detect monitors
+ *
+ *  @param sender menuItem
+ */
+-(void)detectMonitorsClicked:(id) sender
 {
-    
-    /*
-    io_connect_t			masterPort;
-    IOMasterPort(MACH_PORT_NULL, &masterPort);
-    void* connectRef = IOFBConnectToRef( masterPort );
-    IOFBCreateOverrides(connectRef);*/
-    
-   // IOFramebufferServerOpen(MACH_PORT_NULL);
-    
     CGDirectDisplayID    displays[0x10];
     CGDisplayCount  dspCount = 0;
     CGDisplayErr err = CGSGetDisplayList(0x10, displays, &dspCount);
@@ -670,7 +420,12 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     }
 }
 
--(void)TurnOffMonitors:(id) sender
+/**
+ *  user clicked on turn off monitors
+ *
+ *  @param sender menuItem
+ */
+-(void)turnOffMonitorsClicked:(id) sender
 {
     io_registry_entry_t entry = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler");
     if (entry)
@@ -690,303 +445,56 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     }
 }
 
--(void)StartScreenSaver:(id) sender
+/**
+ *  user clicked on start screensaver
+ *
+ *  @param sender menuItem
+ */
+-(void)startScreenSaverClicked:(id) sender
 {
     [[NSWorkspace sharedWorkspace] openFile:@"/System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"];
 }
 
--(void)ShowAboutDialog:(id) sender
-{
-    ProcessSerialNumber psn = { 0, kCurrentProcess };
-    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-    [about_window setTitle: NSLocalizedString(@"MENU_ABOUT", NULL)];
-    [about_window setDelegate:self];
-    [about_window makeKeyAndOrderFront:self];
-    [about_window setLevel:NSFloatingWindowLevel];
-    [about_btnUpdate setTitle:NSLocalizedString(@"CHECK_FOR_UPDATES", NULL)];
-    [about_btnUpdate sizeToFit];
-    [about_btnUpdate setFrameOrigin: NSMakePoint(
-                                                 
-                                                 [about_window frame].size.width -
-                                                 [about_btnUpdate frame].size.width
-                                                 - 13
-                                                 , [about_btnUpdate frame].origin.y)];
-    
-    NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
-    [about_lblVersion setStringValue:[infoDict objectForKey:@"CFBundleVersion"]];
-    [about_lblAppName setStringValue:[infoDict objectForKey:@"CFBundleExecutable"]];
-    [about_window makeFirstResponder: nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(CloseAboutDialog) name:NSWindowDidResignMainNotification object:about_window];
-    
-}
-
--(void)CloseAboutDialog
-{
-    [about_window close];
-}
-
--(void)Quit:(id) sender
+/**
+ *  user clicked on quit
+ *
+ *  @param sender menuItem
+ */
+-(void)quitClicked:(id) sender
 {
     [NSApp terminate: nil];
 }
 
--(IBAction)GotoHomePage:(id)sender
+
+/**
+ *  user clicked on manage
+ *
+ *  @param sender menuItem
+ */
+-(void)manageClicked:(id) sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/Eun/DisableMonitor"]];
-}
-
--(IBAction)CheckForUpdates:(id)sender
-{
-    [updater checkForUpdates:sender];
-}
-
-
-
-
--(void)ManageResolution:(id) sender
-{
-    [about_window close];
     NSMenuItem * item = (NSMenuItem*)sender;
     
     CGDirectDisplayID display = [(DisplayData*)[item representedObject] display];
-    
-    ProcessSerialNumber psn = { 0, kCurrentProcess };
-	TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-    
-    if (CGDisplayIsOnline(display) && CGDisplayIsActive(display))
+    if (CGDisplayIsOnline(display))
     {
-        window_display = display;
-        customResolution = [[CustomResolution alloc] initWithDisplayID:window_display];
-        [pref_window setTitle: [[item parentItem] title]];
-        [pref_window setDelegate:self];
-        [pref_window makeKeyAndOrderFront:self];
-        [pref_window setLevel:NSFloatingWindowLevel];
-        [pref_lstResolutions setDataSource:[[ResolutionDataSource alloc] initWithDisplay:display]];
-        [pref_lstResolutions setDelegate:self];
-        [pref_lblHeader setStringValue:NSLocalizedString(@"CUSTOM_LABEL", NULL)];
-        [pref_btnClose setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
-        [pref_btnClose sizeToFit];
-        [pref_btnClose setFrameOrigin: NSMakePoint(
-                                                     
-                                                     [pref_window frame].size.width -
-                                                     [pref_btnClose frame].size.width
-                                                     - 13
-                                                     , [pref_btnClose frame].origin.y)];
-        
-        [pref_window makeFirstResponder: nil];
+        [self showPreferencesWindow:display name:[[item parentItem] title]];
     }
     
 }
 
-- (void)windowWillClose:(NSNotification *)notification {
-    ProcessSerialNumber psn = { 0, kCurrentProcess };
-	TransformProcessType(&psn, 2 /*kProcessTransformToBackgroundApplication*/);
-    if (customResolution != nil)
-    {
-        [customResolution release];
-        customResolution = nil;
-    }
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+# pragma mark NSMenuDelegates
 
-- (IBAction)AddCustomResoultion:(id)sender
-{
-    OnlyIntegerValueFormatter *formatter = [[OnlyIntegerValueFormatter alloc] init];
-
-    [NSApp beginSheet:pref_CustomRes_window modalForWindow:pref_window modalDelegate:nil didEndSelector:nil contextInfo:nil];
-    [pref_CustomRes_lblWidth setStringValue:NSLocalizedString(@"CUSTOM_WIDTH", NULL)];
-    [pref_CustomRes_lblHeight setStringValue:NSLocalizedString(@"CUSTOM_HEIGHT", NULL)];
-    [pref_CustomRes_btnOk setTitle:NSLocalizedString(@"ALERT_OK", NULL)];
-    [pref_CustomRes_btnCancel setTitle:NSLocalizedString(@"ALERT_CANCEL", NULL)];
-    [pref_CustomRes_lblRatio setStringValue:@""];
-    [pref_CustomRes_txtHeight setStringValue:@""];
-    [pref_CustomRes_txtHeight setFormatter:formatter];
-    [pref_CustomRes_txtWidth setStringValue:@""];
-    [pref_CustomRes_txtWidth setFormatter:formatter];
-
- 
-    [pref_CustomRes_window setDefaultButtonCell:[pref_CustomRes_btnCancel cell]];
-    [pref_CustomRes_window makeFirstResponder:pref_CustomRes_txtWidth];
-    [NSApp runModalForWindow:pref_CustomRes_window];   //This call blocks the execution until [NSApp stopModal] is called
-    [NSApp endSheet:pref_CustomRes_window];
-    [pref_CustomRes_window orderOut:self];
-    
-    [formatter release];
-    
-    NSString *sHeight = [pref_CustomRes_txtHeight stringValue];
-    if ([sHeight length] == 0)
-    {
-        return;
-    }
-    
-    NSString *sWidth = [pref_CustomRes_txtWidth stringValue];
-    if ([sWidth length] == 0)
-    {
-        return;
-    }
-    
-    //todo: allready exists?
-    
-    
-
-
-    ResolutionDataItem *rdi = [[ResolutionDataItem alloc] init];
-    [rdi setWidth:[sWidth intValue]];
-    [rdi setHeight:[sHeight intValue]];
-    
-    if (![customResolution addCustomResolution: rdi])
-    {
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText: NSLocalizedString(@"ERROR_ADD", NULL)];
-        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-        [alert setMessageText:NSLocalizedString(@"ALERT_ERROR",NULL)];
-        [alert runModal];
-        [alert release];
-    }
-    else
-    {
-        // todo:
-        // Force monitor to reload overrides
-        
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText: NSLocalizedString(@"CUSTOM_ADD", NULL)];
-        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-        [alert setMessageText:NSLocalizedString(@"ALERT_WARNING", NULL)];
-        [alert runModal];
-        [alert release];
-        
-        [pref_lstResolutions reloadData];
-    }
-    
-    [rdi release];
-}
-
-- (IBAction)RemoveCustomResoultion:(id)sender
-{
-    if ([customResolution removeCustomResolution:[pref_lstResolutions itemAtRow:[pref_lstResolutions selectedRow]]] == false)
-    {
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText: NSLocalizedString(@"ERROR_DEL", NULL)];
-        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-        [alert setMessageText:NSLocalizedString(@"ALERT_ERROR", NULL)];
-        [alert runModal];
-        [alert release];
-    }
-    else
-    {
-        // todo:
-        // Force monitor to reload overrides
-        
-        NSAlert *alert = [[NSAlert alloc] init];
-        [alert setInformativeText: NSLocalizedString(@"CUSTOM_DEL", NULL)];
-        [alert addButtonWithTitle:NSLocalizedString(@"ALERT_OK", NULL)];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-        [alert setMessageText:NSLocalizedString(@"ALERT_WARNING", NULL)];
-        [alert runModal];
-        [alert release];
-        
-        [pref_lstResolutions reloadData];
-    }
-}
-
-- (IBAction)PanelOk:(id)sender
-{
-    [NSApp stopModal];
-}
-
-- (IBAction)PanelCancel:(id)sender
-{
-    [pref_CustomRes_lblRatio setStringValue:@""];
-    [pref_CustomRes_txtHeight setStringValue:@""];
-    [pref_CustomRes_txtWidth setStringValue:@""];
-    [NSApp stopModal];
-}
-
-
-- (IBAction)CloseWindow:(id)sender
-{
-    [pref_window close];
-}
-
-- (IBAction)PaneltTXTChanged:(id)sender
-{
-    NSString *sHeight = [pref_CustomRes_txtHeight stringValue];
-    NSString *sWidth = [pref_CustomRes_txtWidth stringValue];
-    if ([sHeight length] == 0 || [sWidth length] == 0)
-    {
-        [pref_CustomRes_lblRatio setStringValue:@""];
-        return;
-    }
-    
-   
-    int nWidth = [sWidth intValue];
-    int nHeight = [sHeight intValue];
-    
-    int gcd = [ResolutionDataItem gcd:nWidth height:nHeight];
-    [pref_CustomRes_lblRatio setStringValue:[NSString stringWithFormat:@"%d:%d", nWidth/gcd, nHeight/gcd]];
-}
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item
-{
-    [pref_btnDel setEnabled: ([customResolution isCustomItem: item])];
-    return true;
-}
-
-
--(size_t) getDepthFromPixelEncoding:(CFStringRef) pixelEncoding
-{
-    size_t depth = 0;
-    // my numerical representation for kIO16BitFloatPixels and kIO32bitFloatPixels
-    // are made up and possibly non-sensical
-    if (kCFCompareEqualTo == CFStringCompare(pixelEncoding, CFSTR(kIO32BitFloatPixels), kCFCompareCaseInsensitive)) {
-        depth = 96;
-    } else if (kCFCompareEqualTo == CFStringCompare(pixelEncoding, CFSTR(kIO64BitDirectPixels), kCFCompareCaseInsensitive)) {
-        depth = 64;
-    } else if (kCFCompareEqualTo == CFStringCompare(pixelEncoding, CFSTR(kIO16BitFloatPixels), kCFCompareCaseInsensitive)) {
-        depth = 48;
-    } else if (kCFCompareEqualTo == CFStringCompare(pixelEncoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive)) {
-        depth = 32;
-    } else if (kCFCompareEqualTo == CFStringCompare(pixelEncoding, CFSTR(kIO30BitDirectPixels), kCFCompareCaseInsensitive)) {
-        depth = 30;
-    } else if (kCFCompareEqualTo == CFStringCompare(pixelEncoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive)) {
-        depth = 16;
-    } else if (kCFCompareEqualTo == CFStringCompare(pixelEncoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive)) {
-        depth = 8;
-    }
-    return depth;
-    
-}
-
--(size_t) bitDepthCG:(CGDisplayModeRef) mode
-{
-    size_t depth = 0;
-	CFStringRef pixelEncoding = CGDisplayModeCopyPixelEncoding(mode);
-    depth = [self getDepthFromPixelEncoding:pixelEncoding];
-    CFRelease(pixelEncoding);
-    return depth;
-}
-
-
--(size_t) bitDepthCGS:(CGDirectDisplayID) display
-{
-    size_t depth = 0;
-    char *buffer = (char*)calloc(33, sizeof(char*));
-    CGSGetDisplayPixelEncodingOfLength(display, buffer, 32);
-    depth = [self getDepthFromPixelEncoding:(CFStringRef)[NSString stringWithFormat:@"%s", buffer]];
-    free(buffer);
-    return depth;
-}
-
-
-
+/**
+ *  NSMenuDelegate: menuNeedsUpdate
+ *
+ *  @param menu menu
+ */
 - (void)menuNeedsUpdate:(NSMenu *)menu
 {
     [self releaseMenu:menu];
     
-    NSMutableArray *dict = [DisableMonitorAppDelegate GetSortedDisplays];
+    NSMutableArray *dict = [MonitorDataSource GetSortedDisplays];
     if (dict == nil)
     {
         
@@ -1016,6 +524,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             else
                 [displayItem setState:NSOffState];
             
+            
             NSMenu *subMenu = [[NSMenu alloc] init];
             
             NSMenuItem *subItem;
@@ -1034,7 +543,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
                     ResolutionDataItem *dataItem = [dataSource outlineView:nil child:j ofItem:nil];
                     if ([dataItem visible])
                     {
-                        subItem = [[NSMenuItem alloc] initWithTitle: @"" action:@selector(MonitorResolution:)  keyEquivalent:@""];
+                        subItem = [[NSMenuItem alloc] initWithTitle: @"" action:@selector(monitorResolutionClicked:)  keyEquivalent:@""];
                         
                         DisplayData *data = [[DisplayData alloc] init];
                         [data setMode:[dataItem mode]];
@@ -1053,10 +562,9 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             
             [dataSource release];
             
-            
             if (bActive)
             {
-                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_DISABLE",NULL) action:@selector(MonitorClicked:)  keyEquivalent:@""];
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_DISABLE",NULL) action:@selector(monitorClicked:)  keyEquivalent:@""];
                 DisplayData *data = [[DisplayData alloc] init];
                 [data setDisplay:displayId];
                 [subItem setRepresentedObject: data];
@@ -1064,7 +572,7 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             }
             else
             {
-                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_ENABLE",NULL) action:@selector(MonitorClicked:)  keyEquivalent:@""];
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_ENABLE",NULL) action:@selector(monitorClicked:)  keyEquivalent:@""];
                 DisplayData *data = [[DisplayData alloc] init];
                 [data setDisplay:displayId];
                 [subItem setRepresentedObject: data];
@@ -1073,21 +581,23 @@ extern void IOFBCreateOverrides(void* connectRef);*/
             
             
             
-            if (bActive && bMirror == NO)
-            {
                 [subMenu insertItem:[[NSMenuItem separatorItem] copy] atIndex:[[subMenu itemArray] count]];
                 
-                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_MANAGE",NULL)  action:@selector(ManageResolution:)  keyEquivalent:@""];
+                subItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"MENU_MANAGE",NULL)  action:@selector(manageClicked:)  keyEquivalent:@""];
                 DisplayData *data = [[DisplayData alloc] init];
                 [data setDisplay:displayId];
                 [subItem setRepresentedObject: data];
                 [subItem setOffStateImage:[NSImage imageNamed: NSImageNameSmartBadgeTemplate]];
                 [subMenu insertItem:subItem atIndex:[[subMenu itemArray] count]];
-            }
             
             [displayItem setSubmenu:subMenu];
             [statusMenu addItem:displayItem];
             [idAndName release];
+            
+
+            //subItem = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"%u", displayId] action:nil  keyEquivalent:@""];
+            //[subMenu insertItem:subItem atIndex:0];
+
         }
         [dict release];
     }
@@ -1098,25 +608,25 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     
 
     
-    menuItemLock = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_TURNOFF",NULL) action:@selector(TurnOffMonitors:) keyEquivalent:@""];
+    menuItemLock = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_TURNOFF",NULL) action:@selector(turnOffMonitorsClicked:) keyEquivalent:@""];
     [menuItemLock setOffStateImage:[NSImage imageNamed: NSImageNameLockLockedTemplate]];
     [statusMenu addItem:menuItemLock];
     
-    menuItemScreenSaver = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_SCREENSAVER",NULL) action:@selector(StartScreenSaver:) keyEquivalent:@""];
+    menuItemScreenSaver = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_SCREENSAVER",NULL) action:@selector(startScreenSaverClicked:) keyEquivalent:@""];
     [menuItemScreenSaver setOffStateImage:[NSImage imageNamed: NSImageNameLockLockedTemplate]];
     [menuItemScreenSaver setHidden:YES];
     [statusMenu addItem:menuItemScreenSaver];
     
-    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_DETECT",NULL) action:@selector(DetectMonitors:) keyEquivalent:@""];
+    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_DETECT",NULL) action:@selector(detectMonitorsClicked:) keyEquivalent:@""];
     [menuItem setOffStateImage:[NSImage imageNamed: NSImageNameRefreshTemplate]];
     [statusMenu addItem:menuItem];
     
     [statusMenu addItem:[[NSMenuItem separatorItem] copy]];
     
-    menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_ABOUT",NULL) action:@selector(ShowAboutDialog:) keyEquivalent:@""];
+    menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_ABOUT",NULL) action:@selector(showAboutWindow) keyEquivalent:@""];
     [statusMenu addItem:menuItem];
     
-    menuItemQuit = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_QUIT",NULL) action:@selector(Quit:) keyEquivalent:@""];
+    menuItemQuit = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_QUIT",NULL) action:@selector(quitClicked:) keyEquivalent:@""];
     [menuItemQuit setHidden:YES];
     [statusMenu addItem:menuItemQuit];
 
@@ -1124,9 +634,15 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     [[NSRunLoop currentRunLoop] addTimer:t forMode:NSEventTrackingRunLoopMode];
 }
 
-- (void)updateMenu:(NSTimer *)t {
+#pragma mark Menu Helpers
+
+/**
+ *  triggers every 100ms to detect if the user has pressed the opt key.
+ *  If so enable the alternative menu items
+ *  @param timer timer
+ */
+- (void)updateMenu:(NSTimer *)timer {
     
-    // Get global modifier key flag, [[NSApp currentEvent] modifierFlags] doesn't update while menus are down
     CGEventRef event = CGEventCreate (NULL);
     CGEventFlags flags = CGEventGetFlags (event);
     BOOL optionKeyIsPressed = (flags & kCGEventFlagMaskAlternate) == kCGEventFlagMaskAlternate;
@@ -1137,6 +653,11 @@ extern void IOFBCreateOverrides(void* connectRef);*/
     [menuItemQuit setHidden:!optionKeyIsPressed];
 }
 
+/**
+ *  relase the current menu structure to build a new one.
+ *
+ *  @param menu menu that should be released.
+ */
 - (void) releaseMenu:(NSMenu*)menu
 {
     NSArray *items = [menu itemArray];
@@ -1165,69 +686,291 @@ extern void IOFBCreateOverrides(void* connectRef);*/
 }
 
 
-- (NSImage *)imageResize:(NSImage*)anImage newSize:(NSSize)newSize {
-    NSImage *sourceImage = anImage;
-    [sourceImage setScalesWhenResized:YES];
-    
-    // Report an error if the source isn't a valid image
-    if (![sourceImage isValid]){
-        NSLog(@"Invalid Image");
-    } else {
-        NSImage *smallImage = [[NSImage alloc] initWithSize: newSize];
-        [smallImage lockFocus];
-        [sourceImage setSize: newSize];
-        [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
-        [sourceImage drawAtPoint:NSZeroPoint fromRect:CGRectMake(0, 0, newSize.width, newSize.height) operation:NSCompositeCopy fraction:1.0];
-        [smallImage unlockFocus];
-        return smallImage;
-    }
-    return nil;
-}
+#pragma mark rulset
 
-
-- (BOOL)isInDarkMode
+/**
+ *  check if there is a condition that matches a rule
+ *
+ *  @param displayThatChanged display that changed
+ *  @param isAdded            was it added or removed?
+ *  @param display            displayID of the display which rules should be checked
+ *  @param dict               dict to the settings of the display
+ *  @param listToUse          which list should be used (in settings)
+ *
+ *  @return if there is a rule that matches
+ */
+bool matchesConditions(CGDirectDisplayID displayThatChanged, bool isAdded, CGDirectDisplayID display, NSMutableDictionary *dict, NSString *listToUse)
 {
-    NSDictionary *dict = [[NSUserDefaults standardUserDefaults] persistentDomainForName:NSGlobalDomain];
-    id style = [dict objectForKey:@"AppleInterfaceStyle"];
-    return ( style && [style isKindOfClass:[NSString class]] && NSOrderedSame == [style caseInsensitiveCompare:@"dark"] );
+    
+    NSMutableArray *items = [dict objectForKey:listToUse];
+    for (int i = [items count] - 1; i>= 0; --i)
+    {
+        DisplayIDAndNameCondition *store_item =[NSKeyedUnarchiver unarchiveObjectWithData:[items objectAtIndex:i]];
+        
+        bool displayOnline;
+        if ([store_item id] == displayThatChanged)
+            displayOnline  = isAdded;
+        else
+            displayOnline = CGDisplayIsOnline([store_item id]) && CGDisplayIsActive([store_item id]);
+        if (displayOnline && [store_item disabled])
+            return false;
+        if (!displayOnline && [store_item enabled])
+            return false;
+        
+    }
+    
+    return true;
 }
 
--(void)darkModeChanged:(NSNotification *)notif
+/**
+ *  trigger the rule that should be run if the specified display gets attached or removed.
+ *
+ *  @param displayThatChanged displayID of the display that gets removed
+ *  @param isAdded            was it added or removed?
+ */
+void triggerRules(CGDirectDisplayID displayThatChanged, bool isAdded)
 {
-    NSImage *statusImage = [self imageResize:[[NSImage imageNamed:@"icon.icns"] copy] newSize:NSMakeSize(20, 20)];
     
-    if ([self isInDarkMode])
+    CGDirectDisplayID    displays[0x10];
+    CGDisplayCount  nDisplays = 0;
+    
+    CGDisplayErr err = CGSGetDisplayList(0x10, displays, &nDisplays);
+    
+    if (err == 0 && nDisplays > 0)
     {
-        NSImage *normalImage = statusImage;
-        statusImage = [normalImage negativeImage];
-        [normalImage release];
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        for (int i = 0; i < nDisplays; i++)
+        {
+            if (CGDisplayIsOnline(displays[i]))
+            {
+                NSMutableDictionary *dict = [ResolutionDataSource getDictForDisplay:userDefaults display:displays[i]];
+                if ([dict count] == 0)
+                {
+                    continue;
+                }
+                if ([[dict objectForKey:@"enable_rules"] boolValue] == true)
+                {
+                    if (matchesConditions(displayThatChanged, isAdded, displays[i], dict, @"enable_ruleset"))
+                    {
+                        if (CGDisplayIsActive(displays[i]))
+                            continue;
+                        NSLog(@"ENABLE %u", displays[i]);
+                        if (![DisableMonitorAppDelegate showErrorWarningIfLastMonitor:displays[i]])
+                        {
+                            CGDirectDisplayID displayID = displays[i];
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                                [DisableMonitorAppDelegate toggleMonitor:displayID enabled:YES];
+                            });
+                        }
+                        continue;
+                    }
+                }
+                if ([[dict objectForKey:@"disable_rules"] boolValue] == true)
+                {
+                    if (matchesConditions(displayThatChanged, isAdded, displays[i], dict, @"disable_ruleset"))
+                    {
+                         if (!CGDisplayIsActive(displays[i]))
+                            continue;
+                        NSLog(@"DISABLE %u", displays[i]);
+                        if (![DisableMonitorAppDelegate showErrorWarningIfLastMonitor:displays[i]])
+                        {
+                            CGDirectDisplayID displayID = displays[i];
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                                [DisableMonitorAppDelegate toggleMonitor:displayID enabled:NO];
+                            });
+                        }
+                        
+                        continue;
+                    }
+                }
+            }
+        }
     }
+}
+
+/**
+ *  called when a display gets attached or removed
+ *
+ *  @param display  displayID of the display
+ *  @param flags    flags
+ *  @param userInfo userInfo
+ */
+void displayReconfigurationCallBack(CGDirectDisplayID display, CGDisplayChangeSummaryFlags flags, void *userInfo)
+{
+    if ((flags & kCGDisplayAddFlag) == kCGDisplayAddFlag) {
+        triggerRules(display, true);
+    }
+    else if ((flags & kCGDisplayRemoveFlag) == kCGDisplayRemoveFlag) {
+        triggerRules(display, false);
+    }
+}
+
+
+#pragma mark General Window stuff
+/**
+ *  NSWindowDelegate: will be called when about or preferences window will be closed
+ *
+ *  @param notification notification
+ */
+- (void)windowWillClose:(NSNotification *)notification {
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, 2 /*kProcessTransformToBackgroundApplication*/);
+    if ([notification object] == pref_window)
+    {
+        [[pref_lstResolutions dataSource] release];
+        [[pref_lstEnableMonitors dataSource] release];
+        [[pref_lstDisableMonitors dataSource] release];
+    }
+}
+
+#pragma mark About Window
+/**
+ *  setup the about window
+ */
+-(void)setupAboutWindow
+{
+    [about_window setTitle: NSLocalizedString(@"MENU_ABOUT", NULL)];
+    [about_window setLevel:NSFloatingWindowLevel];
+    [about_window setDelegate:self];
+    [about_btnUpdate setTitle:NSLocalizedString(@"CHECK_FOR_UPDATES", NULL)];
+    [about_btnUpdate sizeToFit];
+    [about_btnUpdate setFrameOrigin: NSMakePoint(
+                                                 
+                                                 [about_window frame].size.width -
+                                                 [about_btnUpdate frame].size.width
+                                                 - 13
+                                                 , [about_btnUpdate frame].origin.y)];
     
-    [statusItem setImage:statusImage];
+    NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
+    [about_lblVersion setStringValue:[infoDict objectForKey:@"CFBundleVersion"]];
+    [about_lblAppName setStringValue:[infoDict objectForKey:@"CFBundleExecutable"]];
+}
+
+/**
+ *  show the about window
+ */
+-(void)showAboutWindow
+{
+    [pref_window close];
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+    [about_window makeKeyAndOrderFront:self];
+    [about_window makeFirstResponder: nil];
+}
+
+/**
+ *  open the project home page
+ *
+ *  @param sender sender object
+ */
+-(IBAction)openHomePage:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/Eun/DisableMonitor"]];
+}
+
+/**
+ *  button action that checkes for updates
+ *
+ *  @param sender sender object
+ */
+-(IBAction)checkForUpdates:(id)sender
+{
+    [updater checkForUpdates:sender];
 }
 
 
 
--(void)awakeFromNib{
-    customResolution = nil;
-    statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength] retain];
-    [statusMenu setDelegate:self];
-    [statusItem setMenu:statusMenu];
-    NSImage *statusImage = [self imageResize:[[NSImage imageNamed:@"icon.icns"] copy] newSize:NSMakeSize(20, 20)];
+#pragma mark Preferences Window
+/**
+ *  initializes the preferences window
+ */
+-(void)setupPreferencesWindow
+{
+    [pref_window setLevel:NSFloatingWindowLevel];
+    [pref_window setDelegate:self];
+    [[pref_tabView tabViewItemAtIndex:0] setLabel:NSLocalizedString(@"PREF_TAB_RESOLUTIONS", NULL)];
+    [[pref_tabView tabViewItemAtIndex:1] setLabel:NSLocalizedString(@"PREF_TAB_RULES", NULL)];
+    [pref_btnClose setTitle:NSLocalizedString(@"PREF_CLOSE", NULL)];
+    [pref_btnClose sizeToFit];
+    [pref_btnClose setFrameOrigin: NSMakePoint(
+                                               
+                                               [pref_window frame].size.width -
+                                               [pref_btnClose frame].size.width
+                                               - 13
+                                               , [pref_btnClose frame].origin.y)];
     
-    if ([self isInDarkMode])
+    [pref_lblHeader setStringValue:NSLocalizedString(@"PREF_LABEL", NULL)];
+    [pref_chkEnableMonitor setTitle:NSLocalizedString(@"PREF_ENABLE_MONITOR", NULL)];
+    [pref_chkDisableMonitor setTitle:NSLocalizedString(@"PREF_DISABLE_MONITOR", NULL)];
+}
+
+/**
+ *  shows the preferences window for a specific display
+ *
+ *  @param displayID the displayID to be used
+ *  @param name      the name of the display
+ */
+-(void)showPreferencesWindow:(CGDirectDisplayID)displayID name:(NSString*)name
+{
+    [about_window close];
+    window_display = displayID;
+    [pref_window setTitle: name];
+    // Load Settings
+    [pref_lstResolutions setDataSource:[[ResolutionDataSource alloc] initWithDisplay:displayID]];
+    //[pref_lstResolutions setDelegate:self];
+    [pref_lstEnableMonitors setDataSource:[[MonitorDataSource alloc] initWithDisplay:displayID useEnableList:true]];
+    [pref_lstDisableMonitors setDataSource:[[MonitorDataSource alloc] initWithDisplay:displayID useEnableList:false]];
+    
+    
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *dict = [ResolutionDataSource getDictForDisplay:userDefaults display:displayID];
+    if ([[dict objectForKey:@"enable_rules"] boolValue] == true)
+        [pref_chkEnableMonitor setState:NSOnState];
+    else
+        [pref_chkEnableMonitor setState:NSOffState];
+    
+    if ([[dict objectForKey:@"disable_rules"] boolValue] == true)
+        [pref_chkDisableMonitor setState:NSOnState];
+    else
+        [pref_chkDisableMonitor setState:NSOffState];
+    
+    [self prefEnableDisableBoxChanged:nil];
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+    [pref_window makeKeyAndOrderFront:self];
+    [pref_window makeFirstResponder: nil];
+}
+
+/**
+ *  will be executed if the user enables / disables the ruleset
+ *
+ *  @param sender checkbox
+ */
+- (IBAction)prefEnableDisableBoxChanged:(id)sender
+{
+    [pref_lstEnableMonitors setEnabled: ([pref_chkEnableMonitor state] == NSOnState)];
+    [pref_lstDisableMonitors setEnabled: ([pref_chkDisableMonitor state] == NSOnState)];
+    
+    if (sender != nil)
     {
-        NSImage *normalImage = statusImage;
-        statusImage = [normalImage negativeImage];
-        [normalImage release];
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        NSMutableDictionary *dict = [ResolutionDataSource getDictForDisplay:userDefaults display:window_display];
+        [dict setObject:[NSNumber numberWithBool:([pref_chkEnableMonitor state] == NSOnState)] forKey:@"enable_rules"];
+        [dict setObject:[NSNumber numberWithBool:([pref_chkDisableMonitor state] == NSOnState)] forKey:@"disable_rules"];
+        [userDefaults setObject:dict forKey:[NSString stringWithFormat:@"%u", window_display]];
+        [userDefaults synchronize];
     }
     
-    [statusItem setImage:statusImage];
-    [statusItem setHighlightMode:YES];
-    [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeChanged:) name:@"AppleInterfaceThemeChangedNotification" object:nil];
+}
 
-    
-    
+/**
+ *  closes the preferences window
+ *
+ *  @param sender sender
+ */
+- (IBAction)closePrefWindow:(id)sender
+{
+    [pref_window close];
 }
 
 @end

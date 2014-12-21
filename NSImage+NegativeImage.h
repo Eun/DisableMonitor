@@ -18,11 +18,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ResolutionDataSource : NSObject  <NSOutlineViewDataSource>
-{
-    NSMutableArray *dataItems;
-}
-@property CGDirectDisplayID display;
-- (id) initWithDisplay:(CGDirectDisplayID)aDisplay;
-+ (NSMutableDictionary*) getDictForDisplay:(NSUserDefaults*)userDefaults display:(CGDirectDisplayID)display;
+@interface NSImage (NegativeImage)
+- (NSImage *)negativeImage;
++ (NSImage *)imageResize:(NSImage*)anImage newSize:(NSSize)newSize;
 @end

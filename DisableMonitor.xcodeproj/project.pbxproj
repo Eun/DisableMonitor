@@ -14,6 +14,8 @@
 		592CED8118FEBDB300FDDF65 /* GLFW.m in Sources */ = {isa = PBXBuildFile; fileRef = 592CED8018FEBDB300FDDF65 /* GLFW.m */; };
 		593E314119D445C6000B07DE /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593E314019D445C6000B07DE /* Sparkle.framework */; };
 		593E314319D445F5000B07DE /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 593E314019D445C6000B07DE /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		59426C101A4333E800001E55 /* MonitorDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 59426C0F1A4333E800001E55 /* MonitorDataSource.m */; };
+		59426C131A433E1900001E55 /* DisplayIDAndNameCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = 59426C121A433E1900001E55 /* DisplayIDAndNameCondition.m */; };
 		594D69681988D0F500D48AD7 /* OnlyIntegerValueFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */; };
 		5960567319D2E00E00B4525E /* DisplayIDAndName.m in Sources */ = {isa = PBXBuildFile; fileRef = 5960567219D2E00E00B4525E /* DisplayIDAndName.m */; };
 		598E9892193DC99B005DEB10 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 598E9891193DC99B005DEB10 /* MainMenu.xib */; };
@@ -22,10 +24,10 @@
 		59B8717A1979605C0021932B /* ResolutionDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B871791979605C0021932B /* ResolutionDataSource.m */; };
 		59B8717D197960D40021932B /* ResolutionDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B8717C197960D40021932B /* ResolutionDataItem.m */; };
 		59B87183197986BF0021932B /* ResOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59B87182197986BF0021932B /* ResOutlineView.m */; };
-		59DCF63319827F4C00FA3A21 /* CustomResolution.m in Sources */ = {isa = PBXBuildFile; fileRef = 59DCF63219827F4C00FA3A21 /* CustomResolution.m */; };
 		8D11072B0486CEB800E47090 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* Localizable.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		F674D7CA1A4726D600DCEDAE /* NSImage+NegativeImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F674D7C91A4726D600DCEDAE /* NSImage+NegativeImage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -306,6 +308,10 @@
 		592CED7D18FEB66E00FDDF65 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		592CED8018FEBDB300FDDF65 /* GLFW.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLFW.m; sourceTree = "<group>"; };
 		593E314019D445C6000B07DE /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		59426C0E1A4333E800001E55 /* MonitorDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonitorDataSource.h; sourceTree = "<group>"; };
+		59426C0F1A4333E800001E55 /* MonitorDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonitorDataSource.m; sourceTree = "<group>"; };
+		59426C111A433E1900001E55 /* DisplayIDAndNameCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayIDAndNameCondition.h; sourceTree = "<group>"; };
+		59426C121A433E1900001E55 /* DisplayIDAndNameCondition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayIDAndNameCondition.m; sourceTree = "<group>"; };
 		594D69661988D0F500D48AD7 /* OnlyIntegerValueFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlyIntegerValueFormatter.h; sourceTree = "<group>"; };
 		594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnlyIntegerValueFormatter.m; sourceTree = "<group>"; };
 		5960567119D2E00E00B4525E /* DisplayIDAndName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayIDAndName.h; sourceTree = "<group>"; };
@@ -320,12 +326,12 @@
 		59B8717C197960D40021932B /* ResolutionDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResolutionDataItem.m; sourceTree = "<group>"; };
 		59B87181197986BF0021932B /* ResOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResOutlineView.h; sourceTree = "<group>"; };
 		59B87182197986BF0021932B /* ResOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResOutlineView.m; sourceTree = "<group>"; };
-		59DCF63119827F4C00FA3A21 /* CustomResolution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomResolution.h; sourceTree = "<group>"; };
-		59DCF63219827F4C00FA3A21 /* CustomResolution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomResolution.m; sourceTree = "<group>"; };
 		59E41D2A1977C71F00FD45A6 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		59F8F440199DDC14000D066B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* DisableMonitor-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "DisableMonitor-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* DisableMonitor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DisableMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F674D7C81A4726D600DCEDAE /* NSImage+NegativeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+NegativeImage.h"; sourceTree = "<group>"; };
+		F674D7C91A4726D600DCEDAE /* NSImage+NegativeImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+NegativeImage.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -358,12 +364,16 @@
 				59B8717C197960D40021932B /* ResolutionDataItem.m */,
 				59B87181197986BF0021932B /* ResOutlineView.h */,
 				59B87182197986BF0021932B /* ResOutlineView.m */,
-				59DCF63119827F4C00FA3A21 /* CustomResolution.h */,
-				59DCF63219827F4C00FA3A21 /* CustomResolution.m */,
 				594D69661988D0F500D48AD7 /* OnlyIntegerValueFormatter.h */,
 				594D69671988D0F500D48AD7 /* OnlyIntegerValueFormatter.m */,
 				5960567119D2E00E00B4525E /* DisplayIDAndName.h */,
 				5960567219D2E00E00B4525E /* DisplayIDAndName.m */,
+				59426C0E1A4333E800001E55 /* MonitorDataSource.h */,
+				59426C0F1A4333E800001E55 /* MonitorDataSource.m */,
+				59426C111A433E1900001E55 /* DisplayIDAndNameCondition.h */,
+				59426C121A433E1900001E55 /* DisplayIDAndNameCondition.m */,
+				F674D7C81A4726D600DCEDAE /* NSImage+NegativeImage.h */,
+				F674D7C91A4726D600DCEDAE /* NSImage+NegativeImage.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -809,11 +819,13 @@
 				59B8717D197960D40021932B /* ResolutionDataItem.m in Sources */,
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				5960567319D2E00E00B4525E /* DisplayIDAndName.m in Sources */,
+				59426C101A4333E800001E55 /* MonitorDataSource.m in Sources */,
 				594D69681988D0F500D48AD7 /* OnlyIntegerValueFormatter.m in Sources */,
-				59DCF63319827F4C00FA3A21 /* CustomResolution.m in Sources */,
 				59B8717A1979605C0021932B /* ResolutionDataSource.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* DisableMonitorAppDelegate.m in Sources */,
 				592CED8118FEBDB300FDDF65 /* GLFW.m in Sources */,
+				59426C131A433E1900001E55 /* DisplayIDAndNameCondition.m in Sources */,
+				F674D7CA1A4726D600DCEDAE /* NSImage+NegativeImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -851,6 +863,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DisableMonitor_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "DisableMonitor-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = DisableMonitor;
@@ -874,6 +887,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DisableMonitor_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = "DisableMonitor-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = DisableMonitor;
