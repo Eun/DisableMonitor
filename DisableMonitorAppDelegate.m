@@ -49,6 +49,8 @@
 @synthesize window_display;
 @synthesize updater;
 
+#define UPDATE_INTERVAL 60*60*24*7
+
 
 CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
 
@@ -80,6 +82,16 @@ CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     [statusItem setHighlightMode:YES];
     [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(darkModeChanged:) name:@"AppleInterfaceThemeChangedNotification" object:nil];
     CGDisplayRegisterReconfigurationCallback(displayReconfigurationCallBack, NULL);
+    
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    unsigned long now = [[NSDate date] timeIntervalSince1970];
+    unsigned long nextCheck = [userDefaults integerForKey:@"lastUpdateCheck"] + UPDATE_INTERVAL;
+    if (nextCheck < now)
+    {
+        [updater checkForUpdatesInBackground];
+        [userDefaults setInteger:now forKey:@"lastUpdateCheck"];
+        [userDefaults synchronize];
+    }
 }
 
 

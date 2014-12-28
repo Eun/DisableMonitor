@@ -37,8 +37,6 @@
 	<key>SUEnableSystemProfiling</key>
 	<false/>
 	<key>SUAllowsAutomaticUpdates</key>
-	<true/>
-	<key>SUScheduledCheckInterval</key>
-	<integer>604800</integer>
+	<false/>
 </dict>
 </plist>
