@@ -12,22 +12,24 @@ Console Usage
 You can use DisableMonitor with the console.  
 Following switches are available:
 ```
--list           Displays a list of monitors that were detected
--enable <id>    Enables a Monitor with the matching id 
--e <id>
--disable <id>   Disables a Monitor with the matching id
--d <id>
+$ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor --help
+usage: DisableMonitor [options]
+Options:
+-l, --list         list all attached monitors
+-d, --disable ID   disable monitor with specified id
+-e, --enable ID    enable monitor with specified id
+-h, --help         show this help
 ```
 
 Example Usage:
 ```
-$ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor -list
+$ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor --list
  ID         Name
 ----------- -----------------
  188823026  SyncMaster (1)
  188834480  SyncMaster (2)
 ----------- -----------------
-$ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor -disable 188834480
+$ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor --disable 188834480
 ```
 
 (More switches might be coming)
