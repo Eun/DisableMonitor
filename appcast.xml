@@ -34,5 +34,21 @@
             <pubDate>Thu, 30 Oct 2014 11:01:00 +0000</pubDate>
             <enclosure url="https://github.com/Eun/DisableMonitor/releases/download/G1.8/DisableMonitor-G1.8.zip" sparkle:version="1.8" length="460286" type="application/octet-stream" sparkle:dsaSignature="MCwCFFbG+hvknBQgw9P2GWB0nLt5WAJkAhRFlSroChu8dEufCzw5MYAa8AlkBg==" />
          </item>
+         <item>
+            <title>Version 1.9 (0 bugs fixed; 1 new features)</title>
+            <description><![CDATA[
+              <h2>New Features for Version 1.9</h2>
+               <ul>
+                  <li>Automatic update checks</li>
+                  <li>Added posibility to disable mirrored monitor (Issue #9)</li>
+                  <li>Code cleaning</li>
+                  <li>Rules BETA (Issue #13)</li>
+                  <li>Updated console usage</li>
+               </ul> 
+            ]]>
+            </description>
+            <pubDate>Sat, 31 Feb 2015 15:23:00 +0000</pubDate>
+            <enclosure url="https://github.com/Eun/DisableMonitor/releases/download/G1.9/DisableMonitor-G1.9.zip" sparkle:version="1.8" length="460286" type="application/octet-stream" sparkle:dsaSignature="MCwCFFbG+hvknBQgw9P2GWB0nLt5WAJkAhRFlSroChu8dEufCzw5MYAa8AlkBg==" />
+         </item>
    </channel>
 </rss>
