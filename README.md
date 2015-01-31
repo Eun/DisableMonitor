@@ -37,6 +37,12 @@ $ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor --disable 18883
 Changelog
 =========
 
+1.9:
+* Automatic update checks
+* Code cleaning
+* Rules BETA (Isse #13)
+* Updated console usage
+
 1.8:
 * Added Yosemite White Icon
 * Added posibility to disable mirrored monitor (Issue #9)

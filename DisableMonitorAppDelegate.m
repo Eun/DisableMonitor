@@ -902,6 +902,14 @@ void displayReconfigurationCallBack(CGDirectDisplayID display, CGDisplayChangeSu
     [pref_window setDelegate:self];
     [[pref_tabView tabViewItemAtIndex:0] setLabel:NSLocalizedString(@"PREF_TAB_RESOLUTIONS", NULL)];
     [[pref_tabView tabViewItemAtIndex:1] setLabel:NSLocalizedString(@"PREF_TAB_RULES", NULL)];
+    // Rules are beta for now
+    {
+        NSView *view = [[pref_tabView tabViewItemAtIndex:1] view];
+        [view removeFromSuperview];
+        [[[pref_tabView tabViewItemAtIndex:0] view] addSubview:view];
+        [view setHidden:YES];
+        [pref_tabView removeTabViewItem:[pref_tabView tabViewItemAtIndex:1]];
+    }
     [pref_btnClose setTitle:NSLocalizedString(@"PREF_CLOSE", NULL)];
     [pref_btnClose sizeToFit];
     [pref_btnClose setFrameOrigin: NSMakePoint(
