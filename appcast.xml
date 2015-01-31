@@ -48,7 +48,7 @@
             ]]>
             </description>
             <pubDate>Sat, 31 Feb 2015 15:23:00 +0000</pubDate>
-            <enclosure url="https://github.com/Eun/DisableMonitor/releases/download/G1.9/DisableMonitor-G1.9.zip" sparkle:version="1.8" length="460286" type="application/octet-stream" sparkle:dsaSignature="MCwCFFbG+hvknBQgw9P2GWB0nLt5WAJkAhRFlSroChu8dEufCzw5MYAa8AlkBg==" />
+            <enclosure url="https://github.com/Eun/DisableMonitor/releases/download/G1.9/DisableMonitor-G1.9.zip" sparkle:version="1.9" length="458864" type="application/octet-stream" />
          </item>
    </channel>
 </rss>
