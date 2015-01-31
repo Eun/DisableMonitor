@@ -40,7 +40,7 @@ Changelog
 1.9:
 * Automatic update checks
 * Code cleaning
-* Rules BETA (Isse #13)
+* Rules BETA (Issue #13)
 * Updated console usage
 
 1.8:
