@@ -34,6 +34,13 @@ $ /Applications/DisableMonitor.app/Contents/MacOS/DisableMonitor --disable 18883
 
 (More switches might be coming)
 
+
+Contribution
+============
+
+You can contribute to this project! Just create a fork, do the changes and do a pull request.  
+Add new features, languages or what ever you think could enhance the app.
+
 Changelog
 =========
 
