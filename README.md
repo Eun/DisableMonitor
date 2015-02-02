@@ -7,6 +7,8 @@ Easily disable, enable or change the resolution of a monitor!
 
 ![](https://raw.githubusercontent.com/Eun/DisableMonitor/res/screenshot1.png)
 
+[![Download](https://raw.githubusercontent.com/Eun/DisableMonitor/res/download.png)] (https://github.com/Eun/DisableMonitor/releases/tag/G1.9)
+
 Console Usage
 ============
 You can use DisableMonitor with the console.  
