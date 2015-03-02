@@ -327,6 +327,13 @@ CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
             ShowError(@"Error in CGCompleteDisplayConfiguration: %d", err);
         }
         
+        // reset the wallpapers (Issue #10)
+        NSArray *screens = [NSScreen screens];
+        for (NSScreen *screen in screens) {
+            NSURL *url = [[NSWorkspace sharedWorkspace] desktopImageURLForScreen:screen];
+            NSDictionary *options = [[NSWorkspace sharedWorkspace] desktopImageOptionsForScreen:screen];
+            [[NSWorkspace sharedWorkspace] setDesktopImageURL:url forScreen:screen options:options error:nil];
+        }        
     }
     @catch (NSException *exception) {
         NSLog(@"Exception:" );
