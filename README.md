@@ -7,7 +7,7 @@ Easily disable, enable or change the resolution of a monitor!
 
 ![](https://raw.githubusercontent.com/Eun/DisableMonitor/res/screenshot1.png)
 
-[![Download](https://raw.githubusercontent.com/Eun/DisableMonitor/res/download.png)] (https://github.com/Eun/DisableMonitor/releases/)
+[![Download](https://raw.githubusercontent.com/Eun/DisableMonitor/res/download.png)](https://github.com/Eun/DisableMonitor/releases/)
 
 Console Usage
 ============
@@ -43,8 +43,16 @@ Contribution
 You can contribute to this project! Just create a fork, do the changes and do a pull request.  
 Add new features, languages or what ever you think could enhance the app.
 
+Building
+========
+
+Building requires the [OSX 10.6 Framework](https://github.com/Eun/Mac_OSX_SDKs)
+
 Changelog
 =========
+
+1.92:
+* Issue #27 Fixed
 
 1.9:
 * Automatic update checks
