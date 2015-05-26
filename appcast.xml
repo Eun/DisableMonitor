@@ -50,5 +50,17 @@
             <pubDate>Sat, 31 Feb 2015 15:23:00 +0000</pubDate>
             <enclosure url="https://github.com/Eun/DisableMonitor/releases/download/G1.9/DisableMonitor-G1.9.zip" sparkle:version="1.9" length="458864" type="application/octet-stream" />
          </item>
+         <item>
+            <title>Version 1.92 (1 bugs fixed; 0 new features)</title>
+            <description><![CDATA[
+              <h2>New Features for Version 1.92</h2>
+               <ul>
+                  <li>Fixed CLI, Enable / Disable hangs (Issue #27)</li>
+               </ul> 
+            ]]>
+            </description>
+            <pubDate>Thu, 26 Feb 2015 20:49:00 +0000</pubDate>
+            <enclosure url="https://github.com/Eun/DisableMonitor/releases/download/G1.92/DisableMonitor-G1.92.zip" sparkle:version="1.92" length="459130" type="application/octet-stream" />
+         </item>
    </channel>
 </rss>
