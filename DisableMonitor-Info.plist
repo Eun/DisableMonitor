@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.92</string>
+	<string>1.93</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.92</string>
+	<string>1.93</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>LSUIElement</key>
@@ -30,13 +30,13 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/Eun/DisableMonitor/res/appcast.xml</string>
+	<key>SUAllowsAutomaticUpdates</key>
+	<false/>
 	<key>SUEnableAutomaticChecks</key>
 	<false/>
 	<key>SUEnableSystemProfiling</key>
 	<false/>
-	<key>SUAllowsAutomaticUpdates</key>
-	<false/>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/Eun/DisableMonitor/res/appcast.xml</string>
 </dict>
 </plist>

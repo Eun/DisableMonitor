@@ -626,7 +626,7 @@ CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     
     menuItemScreenSaver = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_SCREENSAVER",NULL) action:@selector(startScreenSaverClicked:) keyEquivalent:@""];
     [menuItemScreenSaver setOffStateImage:[NSImage imageNamed: NSImageNameLockLockedTemplate]];
-    [menuItemScreenSaver setHidden:YES];
+    //[menuItemScreenSaver setHidden:YES];
     [statusMenu addItem:menuItemScreenSaver];
     
     NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_DETECT",NULL) action:@selector(detectMonitorsClicked:) keyEquivalent:@""];
@@ -639,11 +639,12 @@ CFStringRef const kDisplayBrightness = CFSTR(kIODisplayBrightnessKey);
     [statusMenu addItem:menuItem];
     
     menuItemQuit = [[NSMenuItem alloc] initWithTitle: NSLocalizedString(@"MENU_QUIT",NULL) action:@selector(quitClicked:) keyEquivalent:@""];
-    [menuItemQuit setHidden:YES];
+    //[menuItemQuit setHidden:YES];
     [statusMenu addItem:menuItemQuit];
 
-    NSTimer *t = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateMenu:) userInfo:statusMenu repeats:YES];
+    /*NSTimer *t = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(updateMenu:) userInfo:statusMenu repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:t forMode:NSEventTrackingRunLoopMode];
+     */
 }
 
 #pragma mark Menu Helpers
