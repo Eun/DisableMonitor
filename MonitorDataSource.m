@@ -125,10 +125,13 @@
             else
                 name = [monitors objectAtIndex:i];
             
-            
-            DisplayIDAndName *idAndName = [[DisplayIDAndName alloc] init];
+            DisplayIDAndNameCondition *idAndName = [[DisplayIDAndNameCondition alloc] init];
             [idAndName setId:[[displays objectAtIndex:i] unsignedIntValue]];
             [idAndName setName:[name retain]];
+            CGDirectDisplayID displayId = [idAndName id];
+            BOOL bActive = CGDisplayIsActive(displayId);
+            [idAndName setEnabled:bActive];
+            [idAndName setDisabled:!bActive];
             [retDisplays addObject:idAndName];
         }
         [monitors release];
