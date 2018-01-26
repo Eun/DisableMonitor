@@ -9,6 +9,13 @@ Easily disable, enable or change the resolution of a monitor!
 
 [![Download](https://raw.githubusercontent.com/Eun/DisableMonitor/res/download.png)](https://github.com/Eun/DisableMonitor/releases/download/G1.92/DisableMonitor-G1.92.zip)
 
+Warning
+=======
+**It has been reported that the software is able to cause irretrievable damages to your computer.**  
+**Use at your own risk!**
+
+**The project development has been stopped and won't be continued, if you want to be a maintainer consider opening an issue.**
+
 Console Usage
 ============
 You can use DisableMonitor with the console.  
